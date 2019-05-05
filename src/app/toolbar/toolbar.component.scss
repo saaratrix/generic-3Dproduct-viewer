@@ -1,0 +1,12 @@
+.toolbar-container {
+  z-index: 2;
+  position: absolute;
+  bottom: 15px;
+
+  width: 100%;
+  text-align: center;
+
+  app-toolbar-product-item {
+    margin-right: 15px;
+  }
+}
