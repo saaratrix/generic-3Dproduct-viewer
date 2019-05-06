@@ -28,9 +28,6 @@ export class ProductConfigurator {
     this.camera = new PerspectiveCamera(90, aspectRatio, 0.1, 10000);
     this.camera.position.z = 100;
 
-    // @ts-ignore
-    window.camera = this.camera;
-
     this.scene.add(this.camera);
 
     this.cameraControls = new OrbitControls( this.camera, this.renderer.domElement );
@@ -44,7 +41,7 @@ export class ProductConfigurator {
 
     this.productChanger = new ProductChanger(this);
 
-    this.productChanger.changeProduct(this.productConfigurationService.items[1]);
+    this.productChanger.changeProduct(this.productConfigurationService.items[0]);
 
     this.initEvents();
 

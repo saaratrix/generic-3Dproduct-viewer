@@ -23,22 +23,38 @@ export class ProductConfiguratorService {
   private readonly subjects: { [s: number]: Subject<any> };
 
   constructor() {
+    let id = 0;
+
     this.items.push({
+      id: id++,
       thumbnail: "assets/models/thumbnail_pot.png",
       filename: "assets/models/flowerpot.obj",
       materialInfo: {
         mtl: "assets/models/flowerpot.mtl",
         renderBackface: true
-      }
+      },
+      hasFloor: false,
     });
     this.items.push({
+      id: id++,
       thumbnail: "assets/models/thumbnail_rose.png",
       filename: "assets/models/rose.obj",
       materialInfo: {
         diffuseTexture: "assets/models/rose.png",
         normalTexture: "assets/models/rosenormal.png",
         renderBackface: false
-      }
+      },
+      hasFloor: false,
+    });
+    this.items.push({
+      id: id++,
+      thumbnail: "assets/models/thumbnail_wuffels.png",
+      filename: "assets/models/wuffels.obj",
+      materialInfo: {
+        diffuseTexture: "assets/models/wuffels.png",
+        renderBackface: false
+      },
+      hasFloor: true,
     });
 
     this.subjects = {};

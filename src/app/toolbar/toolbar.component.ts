@@ -9,6 +9,9 @@ import { ProductConfiguratorService } from "../product-configurator.service";
 })
 export class ToolbarComponent implements OnInit {
 
+  // Could read from localStorage to only show it once.
+  private hasReadInstructions = false;
+
   constructor(private productConfiguratorService: ProductConfiguratorService) {
   }
 

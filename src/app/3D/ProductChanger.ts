@@ -8,6 +8,7 @@ export class ProductChanger {
   private productConfigurator: ProductConfigurator;
   private productConfigurationService: ProductConfiguratorService;
 
+  private createdItems: Object3D[] = [];
   private lastCreatedMesh: Object3D;
 
   constructor(productConfigurator: ProductConfigurator) {
@@ -25,34 +26,49 @@ export class ProductChanger {
       return;
     }
 
+    this.productConfigurator.scene.remove(this.lastCreatedMesh);
+
     this.productConfigurationService.selectedProduct = product;
     const meshLoader = new MeshLoader();
 
-    const obj: Object3D = await meshLoader.loadMesh(product.filename, product.materialInfo, () => {
-      if (this.lastCreatedMesh) {
-        this.productConfigurator.scene.remove(this.lastCreatedMesh);
-      }
-    });
+
+    let isNewObject = false;
+    let obj: Object3D = this.createdItems[ product.id ];
+    if (!obj) {
+      obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
+      this.createdItems[ product.id ] = obj;
+      isNewObject = true;
+    }
+
     this.productConfigurator.scene.add(obj);
     this.lastCreatedMesh = obj;
 
     // Update camera position
-    this.updateCameraPosition(obj);
+    this.updateCameraPosition(obj, isNewObject, product.hasFloor);
 
     return;
   }
 
-  public updateCameraPosition(object: Object3D) {
+  /**
+   *
+   * @param object
+   * @param updateCenterPosition Updating the center position only needs to be done once.
+   */
+  public updateCameraPosition(object: Object3D, updateCenterPosition: boolean, hasFloor: boolean) {
     const camera = this.productConfigurator.camera;
     const cameraControls = this.productConfigurator.cameraControls;
 
     const box = new Box3().setFromObject(object);
     const size = box.getSize(new Vector3()).length();
-    const center = box.getCenter(new Vector3());
 
-    object.position.x += (object.position.x - center.x);
-    object.position.y += (object.position.y - center.y);
-    object.position.z += (object.position.z - center.z);
+    if (updateCenterPosition) {
+      const center = box.getCenter(new Vector3());
+
+      object.position.x += (object.position.x - center.x);
+      object.position.y += (object.position.y - center.y);
+      object.position.z += (object.position.z - center.z);
+    }
+
     camera.near = size / 100;
     camera.far = size * 100;
     camera.updateProjectionMatrix();
@@ -65,6 +81,8 @@ export class ProductChanger {
 
     cameraControls.maxDistance = size * 1.5;
     cameraControls.minDistance = size * 0.75;
+
+    cameraControls.maxPolarAngle = hasFloor ?  Math.PI * 0.5 : Math.PI;
 
     cameraControls.update();
 
