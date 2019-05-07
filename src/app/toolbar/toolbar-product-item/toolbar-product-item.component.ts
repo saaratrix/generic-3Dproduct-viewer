@@ -13,7 +13,7 @@ export class ToolbarProductItemComponent implements OnInit {
   @Input()
   public item: ProductItem;
 
-  constructor(private productConfiguratorService: ProductConfiguratorService) {
+  constructor(public productConfiguratorService: ProductConfiguratorService) {
   }
 
   ngOnInit() {

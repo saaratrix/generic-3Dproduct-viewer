@@ -1,12 +1,25 @@
+:host{
+  // Allow user to drag & rotate & zoom even while pointer is ontop of the instruction text.
+  pointer-events: none;
+}
+
 .instructions-container {
   position: absolute;
   bottom: 100px;
-  width:100%;
+  // So that the container always has a height even if the text is hidden.
+  height: 50px;
+  width: 100%;
   background-color: antiquewhite;
+  // just disable blue outline if user text selects on the X
+  user-select: none;
 }
 
 .close-button {
   cursor: pointer;
   float: right;
   margin-right: 15px;
+  // The close button still requires pointer events!!
+  pointer-events: all;
+  // Align the X better as otherwise it's slightly offset
+  line-height: 1.2em;
 }

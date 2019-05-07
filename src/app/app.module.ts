@@ -5,7 +5,8 @@ import { AppComponent } from "./app.component";
 import { ViewerThreejsComponent } from "./viewer-threejs/viewer-threejs.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { ToolbarProductItemComponent } from "./toolbar/toolbar-product-item/toolbar-product-item.component";
-import { ToolbarInstructionsComponent } from './toolbar/toolbar-instructions/toolbar-instructions.component';
+import { ToolbarInstructionsComponent } from "./toolbar/toolbar-instructions/toolbar-instructions.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ToolbarInstructionsComponent } from './toolbar/toolbar-instructions/too
     ToolbarInstructionsComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
