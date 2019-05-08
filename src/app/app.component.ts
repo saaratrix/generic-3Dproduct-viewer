@@ -13,7 +13,16 @@ import { ProductConfiguratorService } from "./product-configurator.service";
 export class AppComponent {
   title = "product-configurator";
 
+  public loadingsStarted: number = 0;
+  public loadingsFinished: number = 0;
+
   constructor(private productConfiguratorService: ProductConfiguratorService) {
+    this.productConfiguratorService.loadingStartedSubject.subscribe(() => {
+      this.loadingsStarted++;
+    });
+    this.productConfiguratorService.loadingFinishedSubject.subscribe(() => {
+      this.loadingsFinished++;
+    });
   }
 
   public onSceneInit(renderer: THREE.WebGLRenderer) {

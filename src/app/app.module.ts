@@ -7,6 +7,7 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { ToolbarProductItemComponent } from "./toolbar/toolbar-product-item/toolbar-product-item.component";
 import { ToolbarInstructionsComponent } from "./toolbar/toolbar-instructions/toolbar-instructions.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     ViewerThreejsComponent,
     ToolbarComponent,
     ToolbarProductItemComponent,
-    ToolbarInstructionsComponent
+    ToolbarInstructionsComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,

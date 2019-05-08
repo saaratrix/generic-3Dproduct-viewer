@@ -3,6 +3,8 @@ import { Subject } from "rxjs";
 import { ProductItem } from "./3D/models/ProductItem";
 
 export enum ProductConfigurationEvent {
+  Loading_Started,
+  Loading_Finished,
   Toolbar_ChangeProduct
 }
 
@@ -16,7 +18,10 @@ export class ProductConfiguratorService {
   public items: ProductItem[] = [];
   public selectedProduct: ProductItem = null;
 
-  public toolbarChangeProductSubject: Subject<any> = new Subject();
+  public loadingStartedSubject: Subject<any> = new Subject<any>();
+  public loadingFinishedSubject: Subject<any> = new Subject<any>();
+  public toolbarChangeProductSubject: Subject<any> = new Subject<any>();
+
   /**
    * The RxJs Subject objects.
    */
@@ -58,6 +63,8 @@ export class ProductConfiguratorService {
     });
 
     this.subjects = {};
+    this.subjects[ ProductConfigurationEvent.Loading_Started ] = this.loadingStartedSubject;
+    this.subjects[ ProductConfigurationEvent.Loading_Finished ] = this.loadingFinishedSubject;
     this.subjects[ ProductConfigurationEvent.Toolbar_ChangeProduct ] = this.toolbarChangeProductSubject;
   }
 

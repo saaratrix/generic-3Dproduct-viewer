@@ -1,7 +1,7 @@
 import ProductConfigurator from "./ProductConfigurator";
 import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
-import { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
 import { Box3, Object3D, Vector3 } from "three";
 
 export class ProductChanger {
@@ -35,7 +35,9 @@ export class ProductChanger {
     let isNewObject = false;
     let obj: Object3D = this.createdItems[ product.id ];
     if (!obj) {
+      this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Started);
       obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
+      this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Finished);
       this.createdItems[ product.id ] = obj;
       isNewObject = true;
     }

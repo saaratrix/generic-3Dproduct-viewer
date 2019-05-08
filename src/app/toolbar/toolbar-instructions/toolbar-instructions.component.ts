@@ -1,5 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { animate, group, query, style, transition, trigger } from "@angular/animations";
+import { animate, query, style, transition, trigger } from "@angular/animations";
+
+const textDuration = 250;
+const widthDuration = 500;
 
 @Component({
   selector: "app-toolbar-instructions",
@@ -8,10 +11,8 @@ import { animate, group, query, style, transition, trigger } from "@angular/anim
   animations: [
     trigger("close", [
       transition("open => closed", [
-        group([
-          query(":self", animate("0.5s", style({ width: "0" }))),
-          query("p", animate("0.4s", style({ opacity: "0" }))),
-        ])
+        query("p", animate(textDuration + "ms", style({ opacity: "0" }))),
+        query(":self", animate(widthDuration + "ms", style({ width: "0" }))),
       ]),
     ]),
   ],
@@ -28,6 +29,12 @@ export class ToolbarInstructionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Automatically close the instructions if user haven't closed them after a certain time.
+    setTimeout(() => {
+      if (this.isOpen) {
+        this.closeInstructions();
+      }
+    }, 15000);
   }
 
   public closeInstructions() {
@@ -35,11 +42,11 @@ export class ToolbarInstructionsComponent implements OnInit {
 
     setTimeout(() => {
       this.isTextVisible = false;
-    }, 400);
+    }, textDuration);
 
     setTimeout(() => {
       this.closed.emit();
-    }, 500);
+    }, textDuration + widthDuration);
   }
 
 }

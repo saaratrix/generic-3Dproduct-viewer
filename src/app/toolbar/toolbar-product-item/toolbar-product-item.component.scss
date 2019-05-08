@@ -1,11 +1,19 @@
+$size: 64px;
+$smallSize: 48px;
+
 .active {
   border: 1px solid cyan;
 }
 
 img {
-  width: 64px;
-  height: 64px;
+  width: $size;
+  height: $size;
   border-radius: 50%;
   cursor: pointer;
   user-select: none;
+
+  @media screen and (max-width: 480px) {
+    width: $smallSize;
+    height: $smallSize;
+  }
 }

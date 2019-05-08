@@ -1,0 +1,12 @@
+$size: 128px;
+
+.loading-spinner {
+  width: $size;
+  height: $size;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left:-($size * 0.5);
+  margin-top:-($size * 0.5);
+  z-index: 2;
+}

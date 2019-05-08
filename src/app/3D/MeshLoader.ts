@@ -27,7 +27,6 @@ export class MeshLoader {
     const promise = new Promise<Object3D>(async (resolve, reject) => {
       const object: Object3D = await this.loadObj(file, materialInfo);
       resolve(object);
-
     });
     return promise;
   }
