@@ -18,7 +18,7 @@ export class ViewerThreejsComponent implements OnInit {
 
   ngOnInit() {
     const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
-    const renderer = new THREE.WebGLRenderer({ canvas });
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.sceneInit.emit(renderer);
   }
 }

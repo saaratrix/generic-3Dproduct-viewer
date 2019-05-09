@@ -37,6 +37,18 @@ export class ToolbarInstructionsComponent implements OnInit {
     }, 15000);
   }
 
+  /**
+   * If a user clicks the X button they have read the text and we'll set a localStorage variable to make it persistent.
+  */
+  public closeInstructionsButton() {
+    // Don't show the tutorial again!
+    if (localStorage) {
+      localStorage.setItem("tutorial", "1");
+    }
+
+    this.closeInstructions();
+  }
+
   public closeInstructions() {
     this.isOpen = false;
 

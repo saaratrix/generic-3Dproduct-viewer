@@ -3,6 +3,7 @@ import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
 import { Box3, Object3D, Vector3 } from "three";
+import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 
 export class ProductChanger {
   private productConfigurator: ProductConfigurator;
@@ -11,9 +12,13 @@ export class ProductChanger {
   private createdItems: Object3D[] = [];
   private lastCreatedMesh: Object3D;
 
+  private environmentMapLoader: EnvironmentMapLoader;
+
   constructor(productConfigurator: ProductConfigurator) {
     this.productConfigurator = productConfigurator;
     this.productConfigurationService = this.productConfigurator.productConfigurationService;
+
+    this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
     this.productConfigurationService.toolbarChangeProductSubject.subscribe((product: ProductItem) => {
       this.changeProduct(product);
@@ -29,8 +34,7 @@ export class ProductChanger {
     this.productConfigurator.scene.remove(this.lastCreatedMesh);
 
     this.productConfigurationService.selectedProduct = product;
-    const meshLoader = new MeshLoader();
-
+    const meshLoader = new MeshLoader(this.environmentMapLoader);
 
     let isNewObject = false;
     let obj: Object3D = this.createdItems[ product.id ];
@@ -42,9 +46,15 @@ export class ProductChanger {
       isNewObject = true;
     }
 
+    // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!
+    if (this.productConfigurationService.selectedProduct !== product) {
+      return;
+    }
+
     this.productConfigurator.scene.add(obj);
     this.lastCreatedMesh = obj;
 
+    this.toggleGammeSpace( product.useGammaSpace );
     // Update camera position
     this.updateCameraPosition(obj, isNewObject, product.hasFloor);
 
@@ -66,9 +76,9 @@ export class ProductChanger {
     if (updateCenterPosition) {
       const center = box.getCenter(new Vector3());
 
-      object.position.x += (object.position.x - center.x);
-      object.position.y += (object.position.y - center.y);
-      object.position.z += (object.position.z - center.z);
+      object.position.x = (object.position.x - center.x);
+      object.position.y = (object.position.y - center.y);
+      object.position.z = (object.position.z - center.z);
     }
 
     camera.near = size / 100;
@@ -87,6 +97,29 @@ export class ProductChanger {
     cameraControls.maxPolarAngle = hasFloor ?  Math.PI * 0.5 : Math.PI;
 
     cameraControls.update();
+  }
 
+  /**
+   * Toggle between gamma space.
+   * Also changes the intensity of the lights because the light intensity is different between the spaces.
+   * @param value
+   */
+  public toggleGammeSpace(value): void {
+    if (this.productConfigurator.renderer.gammaOutput === value) {
+      return;
+    }
+
+    this.productConfigurator.renderer.gammaOutput = value;
+    // light.intensity * factor
+    // default is gamma -> non-gamma space
+    let factor = this.productConfigurator.lightIntensityFactor;
+    // Changing from non-gamma -> gamma
+    if (value) {
+      factor = 1 / this.productConfigurator.lightIntensityFactor;
+    }
+
+    for (const light of this.productConfigurator.lights) {
+      light.intensity *= factor;
+    }
   }
 }

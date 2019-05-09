@@ -13,6 +13,10 @@ export class ToolbarComponent implements OnInit {
   public hasReadInstructions = false;
 
   constructor(public productConfiguratorService: ProductConfiguratorService) {
+    const hasTutorialItem = localStorage && localStorage.getItem("tutorial");
+    if (hasTutorialItem && hasTutorialItem === "1") {
+      this.hasReadInstructions = true;
+    }
   }
 
   ngOnInit() {

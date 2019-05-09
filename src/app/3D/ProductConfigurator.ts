@@ -1,8 +1,9 @@
-import { WebGLRenderer, Scene, PerspectiveCamera, HemisphereLight,
-  Mesh, Color, BoxGeometry, MeshLambertMaterial,  } from "three";
+import {
+  WebGLRenderer, Scene, PerspectiveCamera, HemisphereLight,
+  Color, DirectionalLight, SpotLight, AmbientLight, Light,
+} from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { MeshLoader } from "./MeshLoader";
 import { ProductChanger } from "./ProductChanger";
 
 export class ProductConfigurator {
@@ -12,6 +13,10 @@ export class ProductConfigurator {
   public scene: Scene;
   public camera: PerspectiveCamera;
   public cameraControls: OrbitControls;
+
+  public lights: Light[] = [];
+
+  public lightIntensityFactor: number;
 
   private productChanger: ProductChanger;
 
@@ -36,8 +41,7 @@ export class ProductConfigurator {
     this.cameraControls.enablePan = false;
     this.cameraControls.update();
 
-    const light = new HemisphereLight(0xFFFFFF, 0x000000);
-    this.scene.add(light);
+    this.initLights();
 
     this.productChanger = new ProductChanger(this);
 
@@ -58,6 +62,35 @@ export class ProductConfigurator {
     };
 
     requestAnimationFrame(renderFunction);
+  }
+
+  public initLights() {
+    const height = 285; // UE4 said ~285
+
+    const intensity = 0.7;
+    const fillIntensity = intensity / 2;
+    const backIntensity = intensity / 4;
+
+    const gammaSpaceIntensity = 0.3;
+    this.lightIntensityFactor = intensity / gammaSpaceIntensity;
+
+    const keyLight = new DirectionalLight(0xFFFFFF, intensity);
+    keyLight.position.set( -247, height, 209 );
+    keyLight.position.normalize();
+    keyLight.castShadow = true;
+
+    const fillLight = new DirectionalLight(0xFFFFFF, fillIntensity);
+    fillLight.position.set( 212, height, 250 );
+    fillLight.position.normalize();
+    fillLight.castShadow = true;
+
+    const backLight = new DirectionalLight(0xFFFFFF, backIntensity);
+    backLight.position.set( -153, height, -183 );
+    backLight.position.normalize();
+    backLight.castShadow = true;
+
+    this.scene.add(keyLight, fillLight, backLight);
+    this.lights.push(keyLight, fillLight, backLight);
   }
 
   /**

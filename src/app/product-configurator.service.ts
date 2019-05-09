@@ -39,6 +39,7 @@ export class ProductConfiguratorService {
         renderBackface: true
       },
       hasFloor: false,
+      useGammaSpace: false,
     });
     this.items.push({
       id: id++,
@@ -50,6 +51,7 @@ export class ProductConfiguratorService {
         renderBackface: false
       },
       hasFloor: false,
+      useGammaSpace: false,
     });
     this.items.push({
       id: id++,
@@ -57,9 +59,50 @@ export class ProductConfiguratorService {
       filename: "assets/models/wuffels.obj",
       materialInfo: {
         diffuseTexture: "assets/models/wuffels.png",
-        renderBackface: false
+        renderBackface: false,
       },
       hasFloor: true,
+      useGammaSpace: false,
+    });
+    this.items.push({
+      id: id++,
+      thumbnail: "assets/models/pbr/thumbnail_wayfair_table.png",
+      filename: "assets/models/pbr/Waifair_table.gltf",
+      materialInfo: {
+        renderBackface: false
+      },
+      hasFloor: false,
+      useGammaSpace: true,
+    });
+    this.items.push({
+      id: id++,
+      thumbnail: "assets/models/pbr/thumbnail_wayfair_chair.png",
+      filename: "assets/models/pbr/Waifair_chair.gltf",
+      materialInfo: {
+        renderBackface: false
+      },
+      hasFloor: false,
+      useGammaSpace: true,
+    });
+    this.items.push({
+      id: id++,
+      thumbnail: "assets/models/pbr/thumbnail_ikea_chair.png",
+      filename: "assets/models/pbr/IKEA_chear.gltf",
+      materialInfo: {
+        renderBackface: false
+      },
+      hasFloor: false,
+      useGammaSpace: true,
+    });
+    this.items.push({
+      id: id++,
+      thumbnail: "assets/models/pbr/thumbnail_ikea_table.png",
+      filename: "assets/models/pbr/IKEA_table.gltf",
+      materialInfo: {
+        renderBackface: false
+      },
+      hasFloor: false,
+      useGammaSpace: true,
     });
 
     this.subjects = {};

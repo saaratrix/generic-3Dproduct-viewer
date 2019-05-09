@@ -3,20 +3,27 @@ import {
   Group,
   Material,
   Mesh,
-  MeshPhongMaterial,
+  MeshPhongMaterial, MeshStandardMaterial,
   Object3D,
   Texture,
   TextureLoader,
-  VertexColors
+  VertexColors, WebGLRenderTarget
 } from "three";
 // import { MTLLoader } from "./3rd-party/MTLLoader";
 import { MaterialCreator, MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 import { MaterialInfo } from "./models/MaterialInfo";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 
 export class MeshLoader {
 
+  environmentLoader: EnvironmentMapLoader;
+
+  constructor(environmentLoader: EnvironmentMapLoader) {
+    this.environmentLoader = environmentLoader;
+  }
   /**
    * Loads an .obj mesh with either an mtl file or raw textures.
    * @param file The filename
@@ -25,7 +32,18 @@ export class MeshLoader {
    */
   public loadMesh(file: string, materialInfo: MaterialInfo): Promise<Object3D> {
     const promise = new Promise<Object3D>(async (resolve, reject) => {
-      const object: Object3D = await this.loadObj(file, materialInfo);
+
+      const fileParts: string[] = file.split(".");
+      const fileExtension = fileParts[ fileParts.length - 1 ].toLowerCase();
+
+      let object: Object3D = null;
+      if (fileExtension === "obj") {
+        object = await this.loadObj(file, materialInfo);
+      }
+      else if (fileExtension === "gltf") {
+        object = await this.loadGlTF(file, materialInfo);
+      }
+
       resolve(object);
     });
     return promise;
@@ -56,11 +74,12 @@ export class MeshLoader {
 
             if (materialCreator.materials[ name ]) {
               mesh.material = materialCreator.materials[ name ];
-              if (materialInfo.renderBackface) {
-                mesh.material.side = DoubleSide;
-              }
             }
           });
+
+          if (materialInfo.renderBackface) {
+            this.trySetBackfaceRendering([ object ]);
+          }
 
           resolve();
         });
@@ -83,6 +102,10 @@ export class MeshLoader {
           mesh.material = material;
         });
 
+        if (materialInfo.renderBackface) {
+          this.trySetBackfaceRendering([ object ]);
+        }
+
         resolve();
       }
     });
@@ -101,10 +124,81 @@ export class MeshLoader {
       // TODO: Add error handling.
       objLoader.load( file, async (group: Group) => {
         await this.loadMaterial(group, materialInfo);
+        this.setReceiveShadows([ group ] );
         resolve(group);
       });
     });
 
     return promise;
+  }
+
+  private async loadGlTF(file: string, materialInfo: MaterialInfo): Promise<Object3D> {
+    const promise: Promise<Object3D> = new Promise(async (resolve, reject) => {
+      const loader = new GLTFLoader();
+
+      const environmentMapUrl: string = "assets/models/pbr/Soft_4TubeBank_2BlackFlags.exr";
+
+      const environmentPromise = this.environmentLoader.loadEnvironment(environmentMapUrl);
+      // TODO: Add error handling.
+      loader.load( file, async (gltfObject: GLTF) => {
+        // TODO: Check renderBackface property.
+        // Set the environment texture
+        environmentPromise.then((texture: WebGLRenderTarget) => {
+          this.setReceiveShadows(gltfObject.scene.children);
+          this.trySetEnvironmentTexture(gltfObject.scene.children, texture);
+
+          if (materialInfo.renderBackface) {
+            this.trySetBackfaceRendering(gltfObject.scene.children);
+          }
+
+          // @ts-ignore
+          window.model = gltfObject.scene.children[0];
+          resolve(gltfObject.scene.children[0]);
+
+        });
+      });
+    });
+
+    return promise;
+  }
+
+  private setReceiveShadows(children: Object3D[]): void {
+    for (const child of children) {
+      child.receiveShadow = true;
+      child.castShadow = true;
+
+      if (child.children) {
+        this.setReceiveShadows(child.children);
+      }
+    }
+  }
+
+  private trySetEnvironmentTexture( children: Object3D[], texture: WebGLRenderTarget): void {
+    for (const child of children) {
+      const mesh = child as Mesh;
+      if (mesh.material) {
+        const material = mesh.material as MeshStandardMaterial;
+        material.envMap = texture.texture;
+        material.envMapIntensity = 0.33;
+        material.needsUpdate = true;
+      }
+
+      if (child.children) {
+        this.trySetEnvironmentTexture(child.children, texture);
+      }
+    }
+  }
+
+  private trySetBackfaceRendering(children: Object3D[]) {
+    for (const child of children) {
+      const mesh = child as Mesh;
+      if (mesh.material) {
+        (mesh.material as Material).side = DoubleSide;
+      }
+
+      if (child.children) {
+        this.trySetBackfaceRendering(child.children);
+      }
+    }
   }
 }
