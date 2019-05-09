@@ -5,6 +5,10 @@ $smallSize: 48px;
   border: 1px solid cyan;
 }
 
+.product-item {
+  display: inline-block;
+}
+
 img {
   width: $size;
   height: $size;
@@ -15,5 +19,9 @@ img {
   @media screen and (max-width: 480px) {
     width: $smallSize;
     height: $smallSize;
+  }
+
+  &:hover:not(.active) {
+    border: 1px solid hsl(180, 100%, 40%);
   }
 }

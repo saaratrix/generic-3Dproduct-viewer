@@ -1,4 +1,5 @@
-<div class="instructions-container" [@close]="isOpen ? 'open' : 'closed'">
-  <p [hidden]="!isTextVisible">Drag to rotate camera. Scroll to zoom in and out.
+<div #instructionContainer class="instructions-container" [@close]="isOpen ? 'open' : 'closed'">
+  <p [hidden]="!isTextVisible">
+    <span class="close-text">Drag to rotate camera. Scroll to zoom in and out.</span>
     <span class="close-button" (click)="closeInstructionsButton()">✖</span></p>
 </div>

@@ -1,1 +1,7 @@
-<img [src]="item.thumbnail" [ngClass]="{ 'active': productConfiguratorService.selectedProduct === item }" (click)="changeProduct()">
+<div class="product-item" >
+  <img
+    [ngClass]="{ 'active': productConfiguratorService.selectedProduct === item }"
+    [src]="item.thumbnail"
+    (click)="changeProduct()">
+</div>
+
