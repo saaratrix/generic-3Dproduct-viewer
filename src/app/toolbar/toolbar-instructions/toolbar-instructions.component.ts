@@ -66,7 +66,7 @@ export class ToolbarInstructionsComponent implements OnInit {
 
     setTimeout(() => {
       this.closed.emit();
-    }, (textDuration + widthDuration) - 1);
+    }, (textDuration + widthDuration) - 16);
   }
 
 }
