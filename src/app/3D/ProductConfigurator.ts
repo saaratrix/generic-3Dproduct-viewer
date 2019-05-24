@@ -2,10 +2,14 @@ import {
   WebGLRenderer, Scene, PerspectiveCamera, HemisphereLight,
   Color, DirectionalLight, SpotLight, AmbientLight, Light,
 } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductChanger } from "./ProductChanger";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {ProductConfiguratorService} from "../product-configurator.service";
+import {ProductChanger} from "./ProductChanger";
+import {Injectable} from "@angular/core";
 
+@Injectable({
+  providedIn: "root"
+})
 export class ProductConfigurator {
   public productConfigurationService: ProductConfiguratorService;
 
@@ -25,7 +29,7 @@ export class ProductConfigurator {
     this.productConfigurationService = productConfigurationService;
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setClearColor(new Color(0x444444) );
+    this.renderer.setClearColor(new Color(0x444444));
 
     this.scene = new Scene();
 
@@ -35,7 +39,7 @@ export class ProductConfigurator {
 
     this.scene.add(this.camera);
 
-    this.cameraControls = new OrbitControls( this.camera, this.renderer.domElement );
+    this.cameraControls = new OrbitControls(this.camera, this.renderer.domElement);
     this.cameraControls.maxPolarAngle = Math.PI;
     this.cameraControls.minPolarAngle = 0;
     this.cameraControls.enablePan = false;
@@ -75,17 +79,17 @@ export class ProductConfigurator {
     this.lightIntensityFactor = intensity / gammaSpaceIntensity;
 
     const keyLight = new DirectionalLight(0xFFFFFF, intensity);
-    keyLight.position.set( -247, height, 209 );
+    keyLight.position.set(-247, height, 209);
     keyLight.position.normalize();
     keyLight.castShadow = true;
 
     const fillLight = new DirectionalLight(0xFFFFFF, fillIntensity);
-    fillLight.position.set( 212, height, 250 );
+    fillLight.position.set(212, height, 250);
     fillLight.position.normalize();
     fillLight.castShadow = true;
 
     const backLight = new DirectionalLight(0xFFFFFF, backIntensity);
-    backLight.position.set( -153, height, -183 );
+    backLight.position.set(-153, height, -183);
     backLight.position.normalize();
     backLight.castShadow = true;
 
@@ -112,5 +116,3 @@ export class ProductConfigurator {
 
   }
 }
-
-export default ProductConfigurator;

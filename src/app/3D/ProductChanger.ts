@@ -1,4 +1,4 @@
-import ProductConfigurator from "./ProductConfigurator";
+import {ProductConfigurator} from "./ProductConfigurator";
 import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
