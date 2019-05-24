@@ -1,0 +1,17 @@
+$medium-size: 32px;
+
+.sub-item-container {
+  display: inline-block;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    user-select: none;
+    border-radius: 50%;
+  }
+}
+
+.medium-icon {
+  width: $medium-size;
+  height: $medium-size;
+}

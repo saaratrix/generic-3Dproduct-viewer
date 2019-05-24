@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import * as THREE from "three";
 
 import { ProductConfigurator } from "./3D/ProductConfigurator";
-import { ProductConfiguratorService } from "./product-configurator.service";
+import { ProductConfigurationEvent, ProductConfiguratorService } from "./product-configurator.service";
 
 @Component({
   selector: "app-root",
@@ -17,12 +17,14 @@ export class AppComponent {
   public loadingsFinished: number = 0;
 
   constructor(private productConfiguratorService: ProductConfiguratorService) {
-    this.productConfiguratorService.loadingStartedSubject.subscribe(() => {
-      this.loadingsStarted++;
-    });
-    this.productConfiguratorService.loadingFinishedSubject.subscribe(() => {
-      this.loadingsFinished++;
-    });
+    this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Started)
+      .subscribe(() => {
+        this.loadingsStarted++;
+      });
+    this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Finished)
+      .subscribe(() => {
+        this.loadingsFinished++;
+      });
   }
 
   public onSceneInit(renderer: THREE.WebGLRenderer) {

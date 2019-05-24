@@ -1,10 +1,8 @@
-import {
-  WebGLRenderer, Scene, PerspectiveCamera, HemisphereLight,
-  Color, DirectionalLight, SpotLight, AmbientLight, Light,
-} from "three";
+import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, WebGLRenderer, } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
+import { TextureChanger } from "./TextureChanger";
 
 export class ProductConfigurator {
   public productConfigurationService: ProductConfiguratorService;
@@ -19,6 +17,7 @@ export class ProductConfigurator {
   public lightIntensityFactor: number;
 
   private productChanger: ProductChanger;
+  private textureChanger: TextureChanger;
 
   constructor(renderer: WebGLRenderer, productConfigurationService: ProductConfiguratorService) {
     this.renderer = renderer;
@@ -44,8 +43,9 @@ export class ProductConfigurator {
     this.initLights();
 
     this.productChanger = new ProductChanger(this);
-
     this.productChanger.changeProduct(this.productConfigurationService.items[0]);
+
+    this.textureChanger = new TextureChanger(this.productConfigurationService);
 
     this.initEvents();
 
@@ -65,7 +65,8 @@ export class ProductConfigurator {
   }
 
   public initLights() {
-    const height = 285; // UE4 said ~285
+    // UE4 said ~285, set up 3 lights using UE4 to easier visualize direction.
+    const height = 285;
 
     const intensity = 0.7;
     const fillIntensity = intensity / 2;
@@ -102,14 +103,6 @@ export class ProductConfigurator {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
     });
-
-    this.productConfigurationService.toolbarChangeProductSubject.subscribe({
-      next: (value: any) => this.changeMesh(value)
-    });
-  }
-
-  public changeMesh(value: any) {
-
   }
 }
 
