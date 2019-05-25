@@ -125,6 +125,7 @@ export class ProductConfiguratorService {
       useGammaSpace: true,
       tooltip: "",
       subItems: chearSubItems,
+      // TODO: Find a way to not hard code the selected subItem Id.
       selectedSubItem: 0
     };
 

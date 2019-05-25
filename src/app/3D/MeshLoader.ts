@@ -141,7 +141,6 @@ export class MeshLoader {
       const environmentPromise = this.environmentLoader.loadEnvironment(environmentMapUrl);
       // TODO: Add error handling.
       loader.load( file, async (gltfObject: GLTF) => {
-        // TODO: Check renderBackface property.
         // Set the environment texture
         environmentPromise.then((texture: WebGLRenderTarget) => {
           this.setReceiveShadows(gltfObject.scene.children);
