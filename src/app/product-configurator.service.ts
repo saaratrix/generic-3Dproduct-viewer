@@ -98,6 +98,7 @@ export class ProductConfiguratorService {
     // That typo... well it's fun to keep using it for this little example.
     const chearSubItems: SubProductItem[] = [];
     chearSubItems.push({
+      id: chearSubItems.length,
       // TODO: Change this into using a thumbnail.
       // 1024x1024 image scaled to ~32x32px :D - them loading times too!
       image: "assets/models/pbr/chair_mat_baseColor.png",
@@ -105,6 +106,7 @@ export class ProductConfiguratorService {
       tooltip: "White chair",
     });
     chearSubItems.push({
+      id: chearSubItems.length,
       // TODO: Change this into using a thumbnail.
       // 1024x1024 image scaled to ~32x32px :D - them loading times too!
       image: "assets/models/pbr/chair_mat_baseColor_alt.png",
@@ -123,6 +125,7 @@ export class ProductConfiguratorService {
       useGammaSpace: true,
       tooltip: "",
       subItems: chearSubItems,
+      selectedSubItem: 0
     };
 
     //

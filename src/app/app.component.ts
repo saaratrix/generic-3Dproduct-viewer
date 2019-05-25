@@ -17,13 +17,22 @@ export class AppComponent {
   public loadingsFinished: number = 0;
 
   constructor(private productConfiguratorService: ProductConfiguratorService) {
+
     this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Started)
       .subscribe(() => {
         this.loadingsStarted++;
       });
+
     this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Finished)
       .subscribe(() => {
         this.loadingsFinished++;
+
+        if (this.loadingsFinished === this.loadingsStarted) {
+          // Reset the loading states so you can show 0 / 2 models loaded etc.
+          // Instead of 6 / 7 if you've loaded them at 4 different times.
+          this.loadingsStarted = 0;
+          this.loadingsFinished = 0;
+        }
       });
   }
 

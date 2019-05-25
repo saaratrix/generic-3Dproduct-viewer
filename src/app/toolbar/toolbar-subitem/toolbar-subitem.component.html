@@ -1,3 +1,6 @@
-<div class="sub-item-container medium-icon" (click)="clicked()" [title]="this.item.tooltip" >
-  <img [src]="this.item.image" [alt]="this.item.tooltip" />
+<div class="sub-item medium-icon"
+     (click)="clicked()"
+     [title]="this.item.tooltip"
+>
+  <img [src]="this.item.image" [alt]="this.item.tooltip" [class.active]="productItem.selectedSubItem === this.item.id" />
 </div>

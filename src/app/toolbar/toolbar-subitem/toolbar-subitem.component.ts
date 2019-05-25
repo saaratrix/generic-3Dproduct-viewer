@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit } from "@angular/core";
 import { SubProductItem } from "../../3D/models/SubProductItem";
 import { ProductConfiguratorService } from "../../product-configurator.service";
+import { ProductItem } from "../../3D/models/ProductItem";
 
 @Component({
   selector: "app-toolbar-subitem",
@@ -15,6 +16,9 @@ export class ToolbarSubitemComponent implements OnInit {
   public item: SubProductItem;
 
   @Input()
+  public productItem: ProductItem;
+
+  @Input()
   public parentElementRef: ElementRef;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
@@ -25,6 +29,7 @@ export class ToolbarSubitemComponent implements OnInit {
   }
 
   public clicked(): void {
+    this.productItem.selectedSubItem = this.item.id;
     this.productConfiguratorService.dispatch(this.item.eventType, this.item.data);
   }
 

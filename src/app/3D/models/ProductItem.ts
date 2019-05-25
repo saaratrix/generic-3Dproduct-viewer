@@ -12,6 +12,8 @@ export interface ProductItem {
   useGammaSpace: boolean;
   tooltip: string;
   subItems: SubProductItem[];
+  // Could have multiple sub items selected at once, maybe!
+  selectedSubItem?: number;
 
   object3D?: Object3D;
 }

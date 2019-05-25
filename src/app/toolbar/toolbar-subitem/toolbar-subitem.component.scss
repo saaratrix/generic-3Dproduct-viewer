@@ -1,6 +1,10 @@
 $medium-size: 32px;
 
-.sub-item-container {
+.active {
+  border: 1px solid cyan;
+}
+
+.sub-item {
   display: inline-block;
   cursor: pointer;
 
@@ -8,6 +12,10 @@ $medium-size: 32px;
     width: 100%;
     user-select: none;
     border-radius: 50%;
+
+    &:hover:not(.active) {
+      border: 1px solid hsl(180, 100%, 40%);
+    }
   }
 }
 
