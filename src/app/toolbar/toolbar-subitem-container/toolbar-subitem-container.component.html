@@ -1,0 +1,9 @@
+<div #containerElement class="sub-item-container">
+  <div #subItemsElement class="sub-items">
+    <app-toolbar-subitem *ngFor="let subItem of productItem.subItems"
+      [item]="subItem"
+      [productItem]="productItem"
+    ></app-toolbar-subitem>
+  </div>
+</div>
+

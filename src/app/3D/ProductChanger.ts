@@ -1,4 +1,4 @@
-import {ProductConfigurator} from "./ProductConfigurator";
+import { ProductConfigurator } from "./ProductConfigurator";
 import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
@@ -9,9 +9,6 @@ export class ProductChanger {
   private productConfigurator: ProductConfigurator;
   private productConfigurationService: ProductConfiguratorService;
 
-  private createdItems: Object3D[] = [];
-  private lastCreatedMesh: Object3D;
-
   private environmentMapLoader: EnvironmentMapLoader;
 
   constructor(productConfigurator: ProductConfigurator) {
@@ -20,9 +17,10 @@ export class ProductChanger {
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfigurationService.toolbarChangeProductSubject.subscribe((product: ProductItem) => {
-      this.changeProduct(product);
-    });
+    this.productConfigurationService.getSubject( ProductConfigurationEvent.Toolbar_ChangeProduct )
+      .subscribe((product: ProductItem) => {
+        this.changeProduct(product);
+      });
   }
 
   public async changeProduct(product: ProductItem): Promise<void> {
@@ -31,18 +29,22 @@ export class ProductChanger {
       return;
     }
 
-    this.productConfigurator.scene.remove(this.lastCreatedMesh);
+    const oldProduct = this.productConfigurationService.selectedProduct;
+    if (oldProduct && oldProduct.object3D) {
+      this.productConfigurator.scene.remove(oldProduct.object3D);
+    }
+
 
     this.productConfigurationService.selectedProduct = product;
     const meshLoader = new MeshLoader(this.environmentMapLoader);
 
     let isNewObject = false;
-    let obj: Object3D = this.createdItems[ product.id ];
+    let obj: Object3D = product.object3D;
     if (!obj) {
       this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Started);
       obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
       this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Finished);
-      this.createdItems[ product.id ] = obj;
+      product.object3D = obj;
       isNewObject = true;
     }
 
@@ -52,7 +54,6 @@ export class ProductChanger {
     }
 
     this.productConfigurator.scene.add(obj);
-    this.lastCreatedMesh = obj;
 
     this.toggleGammeSpace( product.useGammaSpace );
     // Update camera position

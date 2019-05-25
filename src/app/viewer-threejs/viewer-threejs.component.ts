@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
-import * as THREE from "three";
+import { WebGLRenderer } from "three";
 
 @Component({
   selector: "app-viewer-threejs",
@@ -8,17 +8,18 @@ import * as THREE from "three";
 })
 export class ViewerThreejsComponent implements OnInit {
 
-  @ViewChild("canvas") canvasRef: ElementRef;
+  @ViewChild("canvas")
+  canvasRef: ElementRef;
 
   @Output()
-  public sceneInit: EventEmitter<THREE.WebGLRenderer> = new EventEmitter();
+  public sceneInit: EventEmitter<WebGLRenderer> = new EventEmitter();
 
   constructor() {
   }
 
   ngOnInit() {
     const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    const renderer = new WebGLRenderer({ canvas, antialias: true });
     this.sceneInit.emit(renderer);
   }
 }

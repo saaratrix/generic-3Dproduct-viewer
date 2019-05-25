@@ -1,0 +1,13 @@
+app-toolbar-subitem:not(:last-child) {
+  margin-right: 10px;
+}
+
+.sub-item-container {
+  position: relative;
+  text-align: left;
+}
+
+.sub-items {
+  position: relative;
+  display: inline-block;
+}

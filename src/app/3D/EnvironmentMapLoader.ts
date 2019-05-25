@@ -1,9 +1,9 @@
-import { CubeTexture, HalfFloatType, LinearEncoding, NearestFilter, WebGLRenderTarget } from "three";
+import { HalfFloatType, LinearEncoding, NearestFilter, WebGLRenderTarget } from "three";
 import { EXRLoader } from "./3rd-party/EXRLoader";
 import { EquirectangularToCubeGenerator } from "./3rd-party/EquirectangularToCubeGenerator";
 import { PMREMGenerator } from "three/examples/jsm/pmrem/PMREMGenerator";
 import { PMREMCubeUVPacker } from "three/examples/jsm/pmrem/PMREMCubeUVPacker";
-import {ProductConfigurator} from "./ProductConfigurator";
+import { ProductConfigurator } from "./ProductConfigurator";
 
 export class EnvironmentMapLoader {
   public environments: { [key: string]: Promise<WebGLRenderTarget> } = {};

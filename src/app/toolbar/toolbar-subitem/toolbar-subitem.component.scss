@@ -1,0 +1,25 @@
+$medium-size: 32px;
+
+.active {
+  border: 1px solid cyan;
+}
+
+.sub-item {
+  display: inline-block;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    user-select: none;
+    border-radius: 50%;
+
+    &:hover:not(.active) {
+      border: 1px solid hsl(180, 100%, 40%);
+    }
+  }
+}
+
+.medium-icon {
+  width: $medium-size;
+  height: $medium-size;
+}
