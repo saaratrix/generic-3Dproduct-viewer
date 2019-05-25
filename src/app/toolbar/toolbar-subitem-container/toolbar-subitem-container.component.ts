@@ -39,7 +39,7 @@ export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Calculate the position for the sub items element so it's centered ontop the selected product.
+   * Calculate the position for the sub items element so it's centered on top of the selected product.
    */
   calculatePosition() {
     const subItemsElement = this.subItemsElement.nativeElement as HTMLElement;

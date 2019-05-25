@@ -13,8 +13,6 @@ export class TextureChanger {
 
   public isChanging: boolean = false;
 
-  private lastPendingEvent: MaterialTextureSwapEventData = null;
-
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.canvas = document.createElement("canvas");
     this.context = this.canvas.getContext("2d");
@@ -38,9 +36,8 @@ export class TextureChanger {
 
   /**
    * Animate the change from texture a to texture b.
-   * @param material
+   * @param rootObject
    * @param slot
-   * @param a
    * @param newTexture
    * @param duration
    */
@@ -79,8 +76,6 @@ export class TextureChanger {
       console.log("animateTextureSwap(): Did not find originalTexture");
       return;
     }
-
-
 
     this.isChanging = true;
 

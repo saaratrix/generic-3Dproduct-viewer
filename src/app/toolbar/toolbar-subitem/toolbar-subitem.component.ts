@@ -18,9 +18,6 @@ export class ToolbarSubitemComponent implements OnInit {
   @Input()
   public productItem: ProductItem;
 
-  @Input()
-  public parentElementRef: ElementRef;
-
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
   }
@@ -29,7 +26,7 @@ export class ToolbarSubitemComponent implements OnInit {
   }
 
   public clicked(): void {
-    this.productItem.selectedSubItem = this.item.id;
+    this.productItem.selectedSubItem = this.item;
     this.productConfiguratorService.dispatch(this.item.eventType, this.item.data);
   }
 

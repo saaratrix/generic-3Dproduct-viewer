@@ -20,7 +20,6 @@ export class ToolbarComponent implements OnInit {
   public hasReadInstructions = false;
 
   ngOnInit() {
-    // On window resize reposition.
   }
 
 }

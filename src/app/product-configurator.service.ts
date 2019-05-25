@@ -20,6 +20,10 @@ export class ProductConfiguratorService {
    */
   public items: ProductItem[] = [];
   public selectedProduct: ProductItem = null;
+  /**
+   * Sometimes we need the product container element.
+   * For example to center the sub item products over the product item.
+   */
   public selectedProductElementRef: ElementRef = null;
 
   /**
@@ -126,7 +130,7 @@ export class ProductConfiguratorService {
       tooltip: "",
       subItems: chearSubItems,
       // TODO: Find a way to not hard code the selected subItem Id.
-      selectedSubItem: 0
+      selectedSubItem: chearSubItems[0]
     };
 
     //
