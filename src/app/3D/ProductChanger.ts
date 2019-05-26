@@ -34,18 +34,16 @@ export class ProductChanger {
       this.productConfigurator.scene.remove(oldProduct.object3D);
     }
 
-
     this.productConfigurationService.selectedProduct = product;
     const meshLoader = new MeshLoader(this.environmentMapLoader);
 
-    let isNewObject = false;
     let obj: Object3D = product.object3D;
     if (!obj) {
       this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Started);
       obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
       this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Finished);
       product.object3D = obj;
-      isNewObject = true;
+      this.setMeshAtOrigin(obj);
     }
 
     // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!
@@ -57,30 +55,35 @@ export class ProductChanger {
 
     this.toggleGammeSpace( product.useGammaSpace );
     // Update camera position
-    this.updateCameraPosition(obj, isNewObject, product.hasFloor);
+    this.updateCameraPosition(obj, product.hasFloor);
 
     return;
   }
 
   /**
+   * Make the center of the mesh be at origin - 0, 0, 0
+   * @param object
+   */
+  public setMeshAtOrigin(object: Object3D) {
+    const box = new Box3().setFromObject(object);
+    const center = box.getCenter(new Vector3());
+
+    object.position.x = (object.position.x - center.x);
+    object.position.y = (object.position.y - center.y);
+    object.position.z = (object.position.z - center.z);
+  }
+
+  /**
    *
    * @param object
-   * @param updateCenterPosition Updating the center position only needs to be done once.
+   * @param hasFloor If the object has a floor. Meaning camera can't look from below.
    */
-  public updateCameraPosition(object: Object3D, updateCenterPosition: boolean, hasFloor: boolean) {
+  public updateCameraPosition(object: Object3D, hasFloor: boolean) {
     const camera = this.productConfigurator.camera;
     const cameraControls = this.productConfigurator.cameraControls;
 
     const box = new Box3().setFromObject(object);
     const size = box.getSize(new Vector3()).length();
-
-    if (updateCenterPosition) {
-      const center = box.getCenter(new Vector3());
-
-      object.position.x = (object.position.x - center.x);
-      object.position.y = (object.position.y - center.y);
-      object.position.z = (object.position.z - center.z);
-    }
 
     camera.near = size / 100;
     camera.far = size * 100;
