@@ -1,9 +1,9 @@
-import { ProductConfigurator } from "./ProductConfigurator";
-import { ProductItem } from "./models/ProductItem";
-import { MeshLoader } from "./MeshLoader";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
-import { Box3, Object3D, Vector3 } from "three";
-import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import {ProductConfigurator} from "./ProductConfigurator";
+import {ProductItem} from "./models/ProductItem";
+import {MeshLoader} from "./MeshLoader";
+import {ProductConfigurationEvent, ProductConfiguratorService} from "../product-configurator.service";
+import {Box3, Object3D, Vector3} from "three";
+import {EnvironmentMapLoader} from "./EnvironmentMapLoader";
 
 export class ProductChanger {
   private productConfigurator: ProductConfigurator;
@@ -17,7 +17,7 @@ export class ProductChanger {
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfigurationService.getSubject( ProductConfigurationEvent.Toolbar_ChangeProduct )
+    this.productConfigurationService.getSubject(ProductConfigurationEvent.Toolbar_ChangeProduct)
       .subscribe((product: ProductItem) => {
         this.changeProduct(product);
       });
@@ -53,7 +53,7 @@ export class ProductChanger {
 
     this.productConfigurator.scene.add(obj);
 
-    this.toggleGammeSpace( product.useGammaSpace );
+    this.toggleGammeSpace(product.useGammaSpace);
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
 
@@ -98,7 +98,7 @@ export class ProductChanger {
     cameraControls.maxDistance = size * 1.5;
     cameraControls.minDistance = size * 0.75;
 
-    cameraControls.maxPolarAngle = hasFloor ?  Math.PI * 0.5 : Math.PI;
+    cameraControls.maxPolarAngle = hasFloor ? Math.PI * 0.5 : Math.PI;
 
     cameraControls.update();
   }
