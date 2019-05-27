@@ -10,20 +10,38 @@ import {
   VertexColors, WebGLRenderTarget
 } from "three";
 // import { MTLLoader } from "./3rd-party/MTLLoader";
-import { MaterialCreator, MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import {MaterialCreator, MTLLoader} from "three/examples/jsm/loaders/MTLLoader";
+import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader";
 
-import { MaterialInfo } from "./models/MaterialInfo";
-import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import {MaterialInfo} from "./models/MaterialInfo";
+import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {EnvironmentMapLoader} from "./EnvironmentMapLoader";
+import {ProductConfigurationEvent, ProductConfiguratorService} from "../product-configurator.service";
 
 export class MeshLoader {
-
+  onProgress;
+  onError;
   environmentLoader: EnvironmentMapLoader;
+  productConfiguratorService: ProductConfiguratorService;
 
-  constructor(environmentLoader: EnvironmentMapLoader) {
+  constructor(environmentLoader: EnvironmentMapLoader, productConfiguratorService?: ProductConfiguratorService) {
     this.environmentLoader = environmentLoader;
+    this.productConfiguratorService = productConfiguratorService;
+    this.onProgress = (xhr) => {
+      if (xhr.lengthComputable) {
+        const percentComplete = xhr.loaded / xhr.total * 100;
+        // console.log(percentComplete.toFixed(0) + "% downloaded");
+        if (this.productConfiguratorService) {
+          this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Progress, percentComplete.toFixed(0));
+
+        }
+      }
+    };
+    this.onError = (xhr) => {
+      console.log("error", xhr);
+    };
   }
+
   /**
    * Loads an .obj mesh with either an mtl file or raw textures.
    * @param file The filename
@@ -34,13 +52,12 @@ export class MeshLoader {
     const promise = new Promise<Object3D>(async (resolve, reject) => {
 
       const fileParts: string[] = file.split(".");
-      const fileExtension = fileParts[ fileParts.length - 1 ].toLowerCase();
+      const fileExtension = fileParts[fileParts.length - 1].toLowerCase();
 
       let object: Object3D = null;
       if (fileExtension === "obj") {
         object = await this.loadObj(file, materialInfo);
-      }
-      else if (fileExtension === "gltf") {
+      } else if (fileExtension === "gltf") {
         object = await this.loadGlTF(file, materialInfo);
       }
 
@@ -72,13 +89,13 @@ export class MeshLoader {
 
             const name: string = (mesh.material as Material).name;
 
-            if (materialCreator.materials[ name ]) {
-              mesh.material = materialCreator.materials[ name ];
+            if (materialCreator.materials[name]) {
+              mesh.material = materialCreator.materials[name];
             }
           });
 
           if (materialInfo.renderBackface) {
-            this.trySetBackfaceRendering([ object ]);
+            this.trySetBackfaceRendering([object]);
           }
 
           resolve();
@@ -103,7 +120,7 @@ export class MeshLoader {
         });
 
         if (materialInfo.renderBackface) {
-          this.trySetBackfaceRendering([ object ]);
+          this.trySetBackfaceRendering([object]);
         }
 
         resolve();
@@ -122,11 +139,11 @@ export class MeshLoader {
     const promise: Promise<Object3D> = new Promise(async (resolve, reject) => {
       const objLoader = new OBJLoader();
       // TODO: Add error handling.
-      objLoader.load( file, async (group: Group) => {
+      objLoader.load(file, async (group: Group) => {
         await this.loadMaterial(group, materialInfo);
-        this.setReceiveShadows([ group ] );
+        this.setReceiveShadows([group]);
         resolve(group);
-      });
+      }, this.onProgress, this.onError);
     });
 
     return promise;
@@ -140,7 +157,7 @@ export class MeshLoader {
 
       const environmentPromise = this.environmentLoader.loadEnvironment(environmentMapUrl);
       // TODO: Add error handling.
-      loader.load( file, async (gltfObject: GLTF) => {
+      loader.load(file, async (gltfObject: GLTF) => {
         // Set the environment texture
         environmentPromise.then((texture: WebGLRenderTarget) => {
           this.setReceiveShadows(gltfObject.scene.children);
@@ -155,7 +172,7 @@ export class MeshLoader {
           resolve(gltfObject.scene.children[0]);
 
         });
-      });
+      }, this.onProgress, this.onError);
     });
 
     return promise;
@@ -172,7 +189,7 @@ export class MeshLoader {
     }
   }
 
-  private trySetEnvironmentTexture( children: Object3D[], texture: WebGLRenderTarget): void {
+  private trySetEnvironmentTexture(children: Object3D[], texture: WebGLRenderTarget): void {
     for (const child of children) {
       const mesh = child as Mesh;
       if (mesh.material) {

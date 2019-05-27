@@ -16,7 +16,7 @@ export class AppComponent {
   public loadingsStarted: number = 0;
   public loadingsFinished: number = 0;
 
-  constructor(private productConfiguratorService: ProductConfiguratorService) {
+  constructor(public productConfiguratorService: ProductConfiguratorService) {
 
     this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Started)
       .subscribe(() => {

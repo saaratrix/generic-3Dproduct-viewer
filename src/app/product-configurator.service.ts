@@ -1,12 +1,13 @@
-import { ElementRef, Injectable, } from "@angular/core";
-import { Subject } from "rxjs";
-import { ProductItem } from "./3D/models/ProductItem";
-import { SubProductItem } from "./3D/models/SubProductItem";
-import { MaterialTextureSwapEventData } from "./3D/models/EventData/MaterialTextureSwapEventData";
+import {ElementRef, Injectable,} from "@angular/core";
+import {Subject} from "rxjs";
+import {ProductItem} from "./3D/models/ProductItem";
+import {SubProductItem} from "./3D/models/SubProductItem";
+import {MaterialTextureSwapEventData} from "./3D/models/EventData/MaterialTextureSwapEventData";
 
 export enum ProductConfigurationEvent {
   Loading_Started,
   Loading_Finished,
+  Loading_Progress,
   Toolbar_ChangeProduct,
   Material_TextureSwap
 }
@@ -168,7 +169,7 @@ export class ProductConfiguratorService {
     const eventKeys = Object.keys(ProductConfigurationEvent).filter(key => typeof ProductConfigurationEvent[key as any] !== "number");
 
     for (const key of eventKeys) {
-      this.subjects[ key ] = new Subject<any>();
+      this.subjects[key] = new Subject<any>();
     }
   }
 
@@ -180,7 +181,7 @@ export class ProductConfiguratorService {
     return this.subjects[type];
   }
 
-  public dispatch(type: ProductConfigurationEvent, data?: any ) {
+  public dispatch(type: ProductConfigurationEvent, data?: any) {
     if (!this.subjects[type]) {
       return;
     }

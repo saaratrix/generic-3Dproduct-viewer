@@ -6,7 +6,13 @@ $size: 128px;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left:-($size * 0.5);
-  margin-top:-($size * 0.5);
+  margin-left: -($size * 0.5);
+  margin-top: -($size * 0.5);
   z-index: 2;
+
+  .loading-progress {
+    position: relative;
+    font-size: 24px;
+    text-align: center;
+  }
 }

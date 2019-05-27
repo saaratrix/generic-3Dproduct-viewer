@@ -35,7 +35,7 @@ export class ProductChanger {
     }
 
     this.productConfigurationService.selectedProduct = product;
-    const meshLoader = new MeshLoader(this.environmentMapLoader);
+    const meshLoader = new MeshLoader(this.environmentMapLoader, this.productConfigurationService);
 
     let obj: Object3D = product.object3D;
     if (!obj) {

@@ -1,7 +1,6 @@
 <div class="container-3D">
-  <app-viewer-threejs (sceneInit)="onSceneInit($event)" ></app-viewer-threejs>
+  <app-viewer-threejs (sceneInit)="onSceneInit($event)"></app-viewer-threejs>
   <app-toolbar></app-toolbar>
-  <app-loading-spinner *ngIf="loadingsStarted !== loadingsFinished"></app-loading-spinner>
+  <app-loading-spinner [productConfiguratorService]="productConfiguratorService"
+                       *ngIf="loadingsStarted !== loadingsFinished"></app-loading-spinner>
 </div>
-
-

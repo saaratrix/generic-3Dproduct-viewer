@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit, Input} from "@angular/core";
+import {ProductConfigurationEvent, ProductConfiguratorService} from "../product-configurator.service";
 
 @Component({
   selector: "app-loading-spinner",
@@ -6,10 +7,19 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./loading-spinner.component.scss"]
 })
 export class LoadingSpinnerComponent implements OnInit {
+  @Input() productConfiguratorService: ProductConfiguratorService
+  loadingProgress;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+    this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Progress).subscribe(
+      (data: any) => {
+        console.log("Loading_Progress", data, "%");
+        this.loadingProgress = `${data}%`;
+      }
+    );
   }
 
 }
