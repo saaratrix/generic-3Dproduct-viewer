@@ -25,7 +25,7 @@ export class LoadingSpinnerComponent implements OnInit {
    */
   private loadings: LoadingData[] = [];
   // Default to 0%
-  private progressText: string = "0%";
+  public progressText: string = "0%";
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
