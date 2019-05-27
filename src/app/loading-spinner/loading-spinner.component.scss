@@ -11,6 +11,8 @@ $fontColor: #faebd7;
   margin-left: -($size * 0.5);
   margin-top: -($size * 0.5);
   z-index: 2;
+  // Otherwise if the loading-spinner stalls because of network requests you can select the image & text and it looks bad.
+  user-select: none;
 }
 
 .loading-progress {

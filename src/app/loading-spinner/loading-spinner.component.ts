@@ -60,7 +60,8 @@ export class LoadingSpinnerComponent implements OnInit {
           return;
         }
 
-        const progress = ((loaded / total) * 100).toFixed(2);
+        // 0-2 decimals is fine but 0, 1, 2, 3 does look better than 1.23% and is precise enough.
+        const progress = ((loaded / total) * 100).toFixed(0);
         this.progressText = `${progress}%`;
       });
   }
