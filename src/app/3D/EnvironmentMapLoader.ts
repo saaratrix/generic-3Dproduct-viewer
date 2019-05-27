@@ -4,6 +4,8 @@ import { EquirectangularToCubeGenerator } from "./3rd-party/EquirectangularToCub
 import { PMREMGenerator } from "three/examples/jsm/pmrem/PMREMGenerator";
 import { PMREMCubeUVPacker } from "three/examples/jsm/pmrem/PMREMCubeUVPacker";
 import { ProductConfigurator } from "./ProductConfigurator";
+import { ProductConfigurationEvent } from "../product-configurator.service";
+import { getOnProgressCallback } from "./getOnProgressCallback";
 
 export class EnvironmentMapLoader {
   public environments: { [key: string]: Promise<WebGLRenderTarget> } = {};
@@ -49,7 +51,7 @@ export class EnvironmentMapLoader {
 
         // this.productConfigurator.scene.background = exrBackground;
         resolve(exrCubeRenderTarget);
-      });
+      }, getOnProgressCallback(this.productConfigurator.productConfigurationService));
     });
 
     this.environments[file] = promise;

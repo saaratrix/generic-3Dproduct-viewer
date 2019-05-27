@@ -4,16 +4,21 @@
 import { CanvasTexture, Material, Mesh, Object3D, Texture, TextureLoader } from "three";
 import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
 import { MaterialTextureSwapEventData } from "./models/EventData/MaterialTextureSwapEventData";
+import { getOnProgressCallback } from "./getOnProgressCallback";
 
 const __showDebugCanvas: boolean = false;
 
 export class TextureChanger {
+  private productConfiguratorService: ProductConfiguratorService;
+
   public canvas: HTMLCanvasElement;
   public context: CanvasRenderingContext2D;
 
   public isChanging: boolean = false;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
+    this.productConfiguratorService = productConfiguratorService;
+
     this.canvas = document.createElement("canvas");
     this.context = this.canvas.getContext("2d");
 
@@ -28,10 +33,14 @@ export class TextureChanger {
    * @param event
    */
   public swapTexture(event: MaterialTextureSwapEventData) {
+
+    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+
     // Load the new texture
     new TextureLoader().load(event.textureUrl, (texture: Texture) => {
+      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
       this.animateTextureSwap(event.productItem.object3D, event.textureSlot, texture, 500);
-    });
+    }, getOnProgressCallback(this.productConfiguratorService));
   }
 
   /**

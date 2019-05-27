@@ -6,10 +6,10 @@ import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 
 export class ProductChanger {
-  private productConfigurator: ProductConfigurator;
-  private productConfigurationService: ProductConfiguratorService;
+  private readonly productConfigurator: ProductConfigurator;
+  private readonly productConfigurationService: ProductConfiguratorService;
 
-  private environmentMapLoader: EnvironmentMapLoader;
+  private readonly environmentMapLoader: EnvironmentMapLoader;
 
   constructor(productConfigurator: ProductConfigurator) {
     this.productConfigurator = productConfigurator;
@@ -35,7 +35,7 @@ export class ProductChanger {
     }
 
     this.productConfigurationService.selectedProduct = product;
-    const meshLoader = new MeshLoader(this.environmentMapLoader);
+    const meshLoader = new MeshLoader(this.productConfigurationService, this.environmentMapLoader);
 
     let obj: Object3D = product.object3D;
     if (!obj) {
