@@ -3,27 +3,32 @@ import {
   Group,
   Material,
   Mesh,
-  MeshPhongMaterial, MeshStandardMaterial,
+  MeshPhongMaterial,
+  MeshStandardMaterial,
   Object3D,
-  Texture,
   TextureLoader,
-  VertexColors, WebGLRenderTarget
+  WebGLRenderTarget
 } from "three";
-// import { MTLLoader } from "./3rd-party/MTLLoader";
 import { MaterialCreator, MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 import { MaterialInfo } from "./models/MaterialInfo";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
+import { getOnProgressCallback } from "./getOnProgressCallback";
+
 
 export class MeshLoader {
 
-  environmentLoader: EnvironmentMapLoader;
+  private readonly productConfiguratorService: ProductConfiguratorService;
+  private readonly environmentLoader: EnvironmentMapLoader;
 
-  constructor(environmentLoader: EnvironmentMapLoader) {
+  constructor(productConfiguratorService: ProductConfiguratorService, environmentLoader: EnvironmentMapLoader) {
+    this.productConfiguratorService = productConfiguratorService;
     this.environmentLoader = environmentLoader;
   }
+
   /**
    * Loads an .obj mesh with either an mtl file or raw textures.
    * @param file The filename
@@ -126,7 +131,7 @@ export class MeshLoader {
         await this.loadMaterial(group, materialInfo);
         this.setReceiveShadows([ group ] );
         resolve(group);
-      });
+      }, getOnProgressCallback(this.productConfiguratorService));
     });
 
     return promise;
@@ -150,12 +155,9 @@ export class MeshLoader {
             this.trySetBackfaceRendering(gltfObject.scene.children);
           }
 
-          // @ts-ignore
-          window.model = gltfObject.scene.children[0];
           resolve(gltfObject.scene.children[0]);
-
         });
-      });
+      }, getOnProgressCallback(this.productConfiguratorService));
     });
 
     return promise;

@@ -9,7 +9,7 @@ import { Injectable } from "@angular/core";
   providedIn: "root"
 })
 export class ProductConfigurator {
-  public productConfigurationService: ProductConfiguratorService;
+  public productConfiguratorService: ProductConfiguratorService;
 
   public renderer: WebGLRenderer;
   public scene: Scene;
@@ -23,9 +23,9 @@ export class ProductConfigurator {
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
 
-  constructor(renderer: WebGLRenderer, productConfigurationService: ProductConfiguratorService) {
+  constructor(renderer: WebGLRenderer, productConfiguratorService: ProductConfiguratorService) {
     this.renderer = renderer;
-    this.productConfigurationService = productConfigurationService;
+    this.productConfiguratorService = productConfiguratorService;
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(new Color(0x444444));
@@ -47,9 +47,9 @@ export class ProductConfigurator {
     this.initLights();
 
     this.productChanger = new ProductChanger(this);
-    this.productChanger.changeProduct(this.productConfigurationService.items[0]);
+    this.productChanger.changeProduct(this.productConfiguratorService.items[0]);
 
-    this.textureChanger = new TextureChanger(this.productConfigurationService);
+    this.textureChanger = new TextureChanger(this.productConfiguratorService);
 
     this.initEvents();
 
