@@ -51,7 +51,7 @@ export class EnvironmentMapLoader {
 
         // this.productConfigurator.scene.background = exrBackground;
         resolve(exrCubeRenderTarget);
-      }, getOnProgressCallback(this.productConfigurator.productConfigurationService));
+      }, getOnProgressCallback(this.productConfigurator.productConfiguratorService));
     });
 
     this.environments[file] = promise;

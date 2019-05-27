@@ -7,17 +7,17 @@ import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 
 export class ProductChanger {
   private readonly productConfigurator: ProductConfigurator;
-  private readonly productConfigurationService: ProductConfiguratorService;
+  private readonly productConfiguratorService: ProductConfiguratorService;
 
   private readonly environmentMapLoader: EnvironmentMapLoader;
 
   constructor(productConfigurator: ProductConfigurator) {
     this.productConfigurator = productConfigurator;
-    this.productConfigurationService = this.productConfigurator.productConfigurationService;
+    this.productConfiguratorService = this.productConfigurator.productConfiguratorService;
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfigurationService.getSubject( ProductConfigurationEvent.Toolbar_ChangeProduct )
+    this.productConfiguratorService.getSubject( ProductConfigurationEvent.Toolbar_ChangeProduct )
       .subscribe((product: ProductItem) => {
         this.changeProduct(product);
       });
@@ -25,29 +25,29 @@ export class ProductChanger {
 
   public async changeProduct(product: ProductItem): Promise<void> {
     // No need to do anything if the product is the same!
-    if (this.productConfigurationService.selectedProduct === product) {
+    if (this.productConfiguratorService.selectedProduct === product) {
       return;
     }
 
-    const oldProduct = this.productConfigurationService.selectedProduct;
+    const oldProduct = this.productConfiguratorService.selectedProduct;
     if (oldProduct && oldProduct.object3D) {
       this.productConfigurator.scene.remove(oldProduct.object3D);
     }
 
-    this.productConfigurationService.selectedProduct = product;
-    const meshLoader = new MeshLoader(this.productConfigurationService, this.environmentMapLoader);
+    this.productConfiguratorService.selectedProduct = product;
+    const meshLoader = new MeshLoader(this.productConfiguratorService, this.environmentMapLoader);
 
     let obj: Object3D = product.object3D;
     if (!obj) {
-      this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Started);
+      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
       obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
-      this.productConfigurationService.dispatch(ProductConfigurationEvent.Loading_Finished);
+      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
       product.object3D = obj;
       this.setMeshAtOrigin(obj);
     }
 
     // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!
-    if (this.productConfigurationService.selectedProduct !== product) {
+    if (this.productConfiguratorService.selectedProduct !== product) {
       return;
     }
 
