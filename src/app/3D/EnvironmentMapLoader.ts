@@ -1,10 +1,9 @@
 import { HalfFloatType, LinearEncoding, NearestFilter, WebGLRenderTarget } from "three";
-import { EXRLoader } from "./3rd-party/EXRLoader";
-import { EquirectangularToCubeGenerator } from "./3rd-party/EquirectangularToCubeGenerator";
+import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
+import { EquirectangularToCubeGenerator } from "three/examples/jsm/loaders/EquirectangularToCubeGenerator";
 import { PMREMGenerator } from "three/examples/jsm/pmrem/PMREMGenerator";
 import { PMREMCubeUVPacker } from "three/examples/jsm/pmrem/PMREMCubeUVPacker";
 import { ProductConfigurator } from "./ProductConfigurator";
-import { ProductConfigurationEvent } from "../product-configurator.service";
 import { getOnProgressCallback } from "./getOnProgressCallback";
 
 export class EnvironmentMapLoader {
@@ -30,10 +29,11 @@ export class EnvironmentMapLoader {
 
       new EXRLoader().load( file, ( texture ) => {
         texture.minFilter = NearestFilter;
-        // texture.magFilter = THREE.NearestFilter;
         texture.encoding = LinearEncoding;
 
         const cubemapGenerator = new EquirectangularToCubeGenerator( texture, { resolution: 512, type: HalfFloatType } );
+        // ignore ts error because the typings file doesn't declare render target.
+        // @ts-ignore
         exrBackground = cubemapGenerator.renderTarget;
         const cubeMapTexture = cubemapGenerator.update( renderer );
 

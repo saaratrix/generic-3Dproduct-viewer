@@ -15,7 +15,7 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { MaterialInfo } from "./models/MaterialInfo";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
 import { getOnProgressCallback } from "./getOnProgressCallback";
 
 
