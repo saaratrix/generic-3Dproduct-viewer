@@ -15,11 +15,11 @@ export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
   @Input()
   public productItem: ProductItem;
 
-  @ViewChild("containerElement")
-  containerRef: ElementRef;
+  @ViewChild("containerElement", {static: false})
+  containerRef !: ElementRef;
 
-  @ViewChild("subItemsElement")
-  subItemsElement: ElementRef;
+  @ViewChild("subItemsElement", {static: false})
+  subItemsElement !: ElementRef;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
