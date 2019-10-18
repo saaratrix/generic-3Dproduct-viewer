@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfigurationEvent } from "../product-configurator-events";
 import { LoadingProgressEventData } from "../3D/models/EventData/LoadingProgressEventData";
 
 interface LoadingData {

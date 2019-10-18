@@ -1,7 +1,8 @@
 import { ProductConfigurator } from "./ProductConfigurator";
 import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 
@@ -38,9 +39,11 @@ export class ProductChanger {
     const meshLoader = new MeshLoader(this.productConfiguratorService, this.environmentMapLoader);
 
     let obj: Object3D = product.object3D;
+    // TODO: Refactor the whole loading process.
     if (!obj) {
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
-      obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
+      const firstModel = product.models[0];
+      obj = await meshLoader.loadMesh(firstModel.filename, firstModel.materialInfo);
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
       product.object3D = obj;
       this.setMeshAtOrigin(obj);

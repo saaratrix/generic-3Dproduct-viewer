@@ -2,7 +2,8 @@
  * Changes a texture from One to another over time.
  */
 import { CanvasTexture, Material, Mesh, Object3D, Texture, TextureLoader } from "three";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfigurationEvent } from "../product-configurator-events";
 import { MaterialTextureSwapEventData } from "./models/EventData/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "./getOnProgressCallback";
 

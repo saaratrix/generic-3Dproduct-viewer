@@ -1,9 +1,10 @@
-import { ProductConfigurationEvent } from "../../product-configurator.service";
+import { ProductConfigurationEvent } from "../../product-configurator-events";
+import { MaterialTextureSwapEventData } from "./EventData/MaterialTextureSwapEventData";
 
 export interface SubProductItem {
   id: number;
   image: string;
   tooltip: string;
-  data?: any;
+  data?: MaterialTextureSwapEventData;
   eventType: ProductConfigurationEvent;
 }
