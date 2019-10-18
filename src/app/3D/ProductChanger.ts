@@ -5,6 +5,8 @@ import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import { Model3D } from "./models/Model3D";
+import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
 
 export class ProductChanger {
   private readonly productConfigurator: ProductConfigurator;
@@ -42,11 +44,23 @@ export class ProductChanger {
     // TODO: Refactor the whole loading process.
     if (!obj) {
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
-      const firstModel = product.models[0];
-      obj = await meshLoader.loadMesh(firstModel.filename, firstModel.materialInfo);
+
+      obj = new Object3D();
+      const promises: Promise<ModelLoadedEventData>[] = [];
+
+      for (const model of product.models) {
+        promises.push(meshLoader.loadMesh(model));
+      }
+
+      const loadedModels: ModelLoadedEventData[] = await Promise.all(promises);
+
+      for (const loadedModel of loadedModels) {
+        this.setMeshTransform(loadedModel.object, loadedModel.model);
+        obj.attach(loadedModel.object);
+      }
+
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
       product.object3D = obj;
-      this.setMeshAtOrigin(obj);
     }
 
     // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!
@@ -64,16 +78,25 @@ export class ProductChanger {
   }
 
   /**
-   * Make the center of the mesh be at origin - 0, 0, 0
-   * @param object
+   * Make the center of the mesh be at origin - 0, 0, 0 then add the transform of the model.
    */
-  public setMeshAtOrigin(object: Object3D) {
+  public setMeshTransform(object: Object3D, transform: Model3D) {
     const box = new Box3().setFromObject(object);
     const center = box.getCenter(new Vector3());
 
     object.position.x = (object.position.x - center.x);
     object.position.y = (object.position.y - center.y);
     object.position.z = (object.position.z - center.z);
+
+    if (transform.position) {
+      object.position.add(transform.position);
+    }
+    if (transform.rotation) {
+
+    }
+    if (transform.scale) {
+      object.scale.copy(transform.scale);
+    }
   }
 
   /**

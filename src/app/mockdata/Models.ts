@@ -1,54 +1,35 @@
-import { Model3D } from "../3D/models/Model";
+import { Model3D } from "../3D/models/Model3D";
+import {
+  flowerPotModelLoadInfo, ikeaChearModelLoadInfo, ikeaTableModelLoadInfo,
+  roseModelLoadInfo,
+  wayfairChairModelLoadInfo, wayfairTableModelLoadInfo,
+  wuffelsModelLoadInfo
+} from "./ModelsLoadInfo";
 
 export const flowerPotModel: Model3D = {
-  filename: "assets/models/flowerpot.obj",
-  materialInfo: {
-    mtl: "assets/models/flowerpot.mtl",
-    renderBackface: true
-  },
+  ...flowerPotModelLoadInfo,
 };
 
 export const roseModel: Model3D = {
-  filename: "assets/models/rose.obj",
-  materialInfo: {
-    diffuseTexture: "assets/models/rose.png",
-    normalTexture: "assets/models/rosenormal.png",
-    renderBackface: false
-  },
+  ...roseModelLoadInfo,
 };
 
 export const wuffelsModel: Model3D = {
- filename: "assets/models/wuffels.obj",
-  materialInfo: {
-    diffuseTexture: "assets/models/wuffels.png",
-    renderBackface: false,
-  },
+ ...wuffelsModelLoadInfo,
 };
 
 export const wayfairChairModel: Model3D = {
-  filename: "assets/models/pbr/Waifair_table.gltf",
-  materialInfo: {
-    renderBackface: false
-  },
+  ...wayfairChairModelLoadInfo,
 };
 
 export const wayfairTableModel: Model3D = {
-  filename: "assets/models/pbr/Waifair_chair.gltf",
-  materialInfo: {
-    renderBackface: false
-  },
+  ...wayfairTableModelLoadInfo,
 };
 
 export const ikeaChearModel: Model3D = {
-  filename: "assets/models/pbr/IKEA_chear.gltf",
-  materialInfo: {
-    renderBackface: false
-  },
+  ...ikeaChearModelLoadInfo,
 };
 
 export const ikeaTableModel: Model3D = {
-  filename: "assets/models/pbr/IKEA_table.gltf",
-  materialInfo: {
-    renderBackface: false
-  },
+  ...ikeaTableModelLoadInfo,
 };

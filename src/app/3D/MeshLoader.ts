@@ -17,6 +17,8 @@ import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { getOnProgressCallback } from "./getOnProgressCallback";
+import { Model3D } from "./models/Model3D";
+import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
 
 
 export class MeshLoader {
@@ -35,21 +37,24 @@ export class MeshLoader {
    * @param materialInfo The material information such as path to mtl file, textures
    * @param onMeshLoaded When the mesh has loaded.
    */
-  public loadMesh(file: string, materialInfo: MaterialInfo): Promise<Object3D> {
-    const promise = new Promise<Object3D>(async (resolve, reject) => {
+  public loadMesh(model: Model3D): Promise<ModelLoadedEventData> {
+    const promise = new Promise<ModelLoadedEventData>(async (resolve, reject) => {
 
-      const fileParts: string[] = file.split(".");
+      const fileParts: string[] = model.filename.split(".");
       const fileExtension = fileParts[ fileParts.length - 1 ].toLowerCase();
 
       let object: Object3D = null;
       if (fileExtension === "obj") {
-        object = await this.loadObj(file, materialInfo);
+        object = await this.loadObj(model.filename, model.materialInfo);
       }
       else if (fileExtension === "gltf") {
-        object = await this.loadGlTF(file, materialInfo);
+        object = await this.loadGlTF(model.filename, model.materialInfo);
       }
 
-      resolve(object);
+      resolve({
+        object,
+        model
+      });
     });
     return promise;
   }

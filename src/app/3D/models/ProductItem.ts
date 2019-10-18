@@ -1,6 +1,6 @@
 import { SubProductItem } from "./SubProductItem";
 import { Object3D } from "three";
-import { Model3D } from "./Model";
+import { Model3D } from "./Model3D";
 
 export interface ProductItem {
   id: number;
