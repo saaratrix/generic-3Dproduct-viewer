@@ -12,13 +12,10 @@ import { ToolbarSubitemComponent } from "./toolbar/toolbar-subitem/toolbar-subit
 import { ToolbarSubitemContainerComponent } from "./toolbar/toolbar-subitem-container/toolbar-subitem-container.component";
 import { RouterModule } from "@angular/router";
 import { ProductViewerComponent } from "./product-viewer/product-viewer.component";
+import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
 
 const rootRouting: ModuleWithProviders = RouterModule.forRoot([
-  { path: "model/:name", component: ProductViewerComponent },
-  { path: "model/:name/:subname", component: ProductViewerComponent },
-  { path: "", component: ProductViewerComponent },
-  // We don't want any pesky route errors! Wuff!
-  { path: "**", component: ProductViewerComponent }
+  { component: ProductViewerComponent, matcher: productViewerPageMatcher },
 ]);
 
 @NgModule({

@@ -81,11 +81,11 @@ export class ProductChanger {
 
     const urlParts = ["model", product.name];
     if (product.selectedSubItem) {
-      urlParts.push((product.selectedSubItem as SubProductItem).id.toString());
+      const selectedSubItem = product.selectedSubItem as SubProductItem;
+      urlParts.push(selectedSubItem.id.toString());
     }
 
     this.productConfigurator.router.navigate(urlParts);
-
     return;
   }
 

@@ -43,7 +43,8 @@ export function createIkeaChear(id: number): ProductItem {
     selectedSubItem: null
   };
 
-  const chearSubItems: SubProductItem[] = [];
+  const chearSubItems = ikeaChearProduct.subItems;
+
   chearSubItems.push({
     id: chearSubItems.length,
     // TODO: Change this into using a thumbnail.
@@ -70,7 +71,6 @@ export function createIkeaChear(id: number): ProductItem {
       textureUrl: "assets/models/pbr/chair_mat_baseColor_alt.png",
     }
   });
-
   ikeaChearProduct.selectedSubItem = chearSubItems[0];
 
   return ikeaChearProduct;
