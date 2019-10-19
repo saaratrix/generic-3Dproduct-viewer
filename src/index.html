@@ -17,11 +17,10 @@
 
       delete sessionStorage.redirect;
       if (redirect && redirect != location.href) {
-        history.replaceState(null, null, redirect);
+        location.href = redirect;
       }
     })();
   </script>
-
   <app-root></app-root>
 </body>
 </html>
