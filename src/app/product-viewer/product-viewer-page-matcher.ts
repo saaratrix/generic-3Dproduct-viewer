@@ -37,8 +37,8 @@ function githubPages404Hack(params) {
       if (matches.length > 1) {
         params.name = matches[1];
       }
-      if (matches.length > 2) {
-        params.name = matches[2];
+      if (matches.length > 2 && matches[2].length > 0) {
+        params.subname = matches[2];
       }
 
       return true;
