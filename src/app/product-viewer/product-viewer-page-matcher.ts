@@ -3,9 +3,12 @@ import { UrlMatchResult, UrlSegment } from "@angular/router";
 export function productViewerPageMatcher(segments: UrlSegment[]): UrlMatchResult {
   const params: any = {};
 
-  githubPages404Hack(params);
+  const githubHack = githubPages404Hack(params);
 
-  if (segments.length > 0 && segments[0].path === "model") {
+  console.log("params", params);
+  console.log("segments", segments);
+
+  if (!githubHack && segments.length > 0 && segments[0].path === "model") {
     if (segments.length > 1) {
       params.name = segments[1];
     }
@@ -37,6 +40,10 @@ function githubPages404Hack(params) {
       if (matches.length > 2) {
         params.name = matches[2];
       }
+
+      return true;
     }
   }
+
+  return false;
 }
