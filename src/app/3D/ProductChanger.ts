@@ -108,8 +108,6 @@ export class ProductChanger {
     object.position.z = (object.position.z - center.z);
   }
 
-
-
   /**
    *
    * @param object
