@@ -92,7 +92,7 @@ export class ProductChanger {
       object.position.add(transform.position);
     }
     if (transform.rotation) {
-
+      object.rotation.copy(transform.rotation);
     }
     if (transform.scale) {
       object.scale.copy(transform.scale);

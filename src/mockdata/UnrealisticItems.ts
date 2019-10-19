@@ -1,11 +1,11 @@
-import { ProductItem } from "../3D/models/ProductItem";
-import { flowerPotModel, roseModel, wuffelsModel } from "./Models";
+import { ProductItem } from "../app/3D/models/ProductItem";
+import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
     id,
     thumbnail: "assets/models/thumbnail_pot.png",
-    models: [ flowerPotModel ],
+    models: [ getFlowerPotModel() ],
     hasFloor: false,
     useGammaSpace: false,
     tooltip: "",
@@ -17,7 +17,7 @@ export function createRose(id: number): ProductItem {
   return {
     id,
     thumbnail: "assets/models/thumbnail_rose.png",
-    models: [ roseModel ],
+    models: [ getRoseModel() ],
     hasFloor: false,
     useGammaSpace: false,
     tooltip: "",
@@ -29,7 +29,7 @@ export function createWuffels(id: number): ProductItem {
   return {
     id,
     thumbnail: "assets/models/thumbnail_wuffels.png",
-    models: [ wuffelsModel ],
+    models: [ getWuffelsModel() ],
     hasFloor: true,
     useGammaSpace: false,
     tooltip: "",

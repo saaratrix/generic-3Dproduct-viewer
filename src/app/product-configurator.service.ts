@@ -1,8 +1,8 @@
 import { ElementRef, Injectable, } from "@angular/core";
 import { Subject } from "rxjs";
 import { ProductItem } from "./3D/models/ProductItem";
-import { createFlowerPot, createRose, createWuffels } from "./mockdata/UnrealisticItems";
-import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "./mockdata/RealisticItems";
+import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
+import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "../mockdata/RealisticItems";
 import { ProductConfigurationEvent } from "./product-configurator-events";
 
 @Injectable({

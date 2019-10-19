@@ -1,13 +1,13 @@
-import { ProductItem } from "../3D/models/ProductItem";
-import { SubProductItem } from "../3D/models/SubProductItem";
-import { ikeaChearModel, ikeaTableModel, wayfairChairModel, wayfairTableModel } from "./Models";
-import { ProductConfigurationEvent } from "../product-configurator-events";
+import { ProductItem } from "../app/3D/models/ProductItem";
+import { SubProductItem } from "../app/3D/models/SubProductItem";
+import { getIkeaChearModel, getIkeaTableModel, getWayfairChairModel, getWayfairTableModel } from "./Models";
+import { ProductConfigurationEvent } from "../app/product-configurator-events";
 
 export function createWayfairTable(id: number): ProductItem {
   return {
     id,
     thumbnail: "assets/models/pbr/thumbnail_wayfair_table.png",
-    models: [ wayfairTableModel ],
+    models: [ getWayfairTableModel() ],
     hasFloor: false,
     useGammaSpace: true,
     tooltip: "",
@@ -19,7 +19,7 @@ export function createWayfairChair(id: number): ProductItem {
   return {
     id,
     thumbnail: "assets/models/pbr/thumbnail_wayfair_chair.png",
-    models: [ wayfairChairModel ],
+    models: [ getWayfairChairModel() ],
     hasFloor: false,
     useGammaSpace: true,
     tooltip: "",
@@ -32,7 +32,7 @@ export function createIkeaChear(id: number): ProductItem {
   const ikeaChearProduct = {
     id,
     thumbnail: "assets/models/pbr/thumbnail_ikea_chair.png",
-    models: [ ikeaChearModel ],
+    models: [ getIkeaChearModel() ],
     hasFloor: false,
     useGammaSpace: true,
     tooltip: "",
@@ -77,7 +77,7 @@ export function createIkeaTable(id: number): ProductItem {
   return {
     id,
     thumbnail: "assets/models/pbr/thumbnail_ikea_table.png",
-    models: [ ikeaTableModel ],
+    models: [ getIkeaTableModel() ],
     hasFloor: false,
     useGammaSpace: true,
     tooltip: "",

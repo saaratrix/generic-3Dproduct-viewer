@@ -1,4 +1,4 @@
-import { MaterialInfo } from "../3D/models/MaterialInfo";
+import { MaterialInfo } from "../app/3D/models/MaterialInfo";
 
 export interface Model3DLoadInfo {
   filename: string;
@@ -31,14 +31,14 @@ export const wuffelsModelLoadInfo: Model3DLoadInfo = {
 };
 
 export const wayfairChairModelLoadInfo: Model3DLoadInfo = {
-  filename: "assets/models/pbr/Waifair_table.gltf",
+  filename: "assets/models/pbr/Waifair_chair.gltf",
   materialInfo: {
     renderBackface: false
   },
 };
 
 export const wayfairTableModelLoadInfo: Model3DLoadInfo = {
-  filename: "assets/models/pbr/Waifair_chair.gltf",
+  filename: "assets/models/pbr/Waifair_table.gltf",
   materialInfo: {
     renderBackface: false
   },
