@@ -25,7 +25,11 @@ function githubPages404Hack(params) {
     const redirect: string = sessionStorage.redirect;
     delete sessionStorage.redirect;
 
+    console.log("redirect", redirect);
+
     const matches = redirect.match(/\/model\/([^\s\/]+)\/?([^\s\/]*)\/?/);
+
+    console.log("matches", matches);
     if (matches) {
       if (matches.length > 1) {
         params.name = matches[1];
