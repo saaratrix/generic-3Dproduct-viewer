@@ -1,9 +1,12 @@
 import { ProductConfigurator } from "./ProductConfigurator";
 import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import { Model3D } from "./models/Model3D";
+import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
 
 export class ProductChanger {
   private readonly productConfigurator: ProductConfigurator;
@@ -23,6 +26,9 @@ export class ProductChanger {
       });
   }
 
+  /**
+   * Change the visible product to the input product.
+   */
   public async changeProduct(product: ProductItem): Promise<void> {
     // No need to do anything if the product is the same!
     if (this.productConfiguratorService.selectedProduct === product) {
@@ -40,10 +46,25 @@ export class ProductChanger {
     let obj: Object3D = product.object3D;
     if (!obj) {
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
-      obj = await meshLoader.loadMesh(product.filename, product.materialInfo);
+
+      obj = new Object3D();
+      const promises: Promise<ModelLoadedEventData>[] = [];
+
+      for (const model of product.models) {
+        promises.push(meshLoader.loadMesh(model));
+      }
+
+      const loadedModels: ModelLoadedEventData[] = await Promise.all(promises);
+
+      for (const loadedModel of loadedModels) {
+        this.setMeshTransform(loadedModel.object, loadedModel.model);
+        obj.attach(loadedModel.object);
+      }
+      // Finally set the whole object at origin.
+      this.setObjectAtOrigin(obj);
+
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
       product.object3D = obj;
-      this.setMeshAtOrigin(obj);
     }
 
     // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!
@@ -61,10 +82,24 @@ export class ProductChanger {
   }
 
   /**
-   * Make the center of the mesh be at origin - 0, 0, 0
-   * @param object
+   * Set position, rotation and scale for the object.
    */
-  public setMeshAtOrigin(object: Object3D) {
+  public setMeshTransform(object: Object3D, model: Model3D) {
+    if (model.position) {
+      object.position.add(model.position);
+    }
+    if (model.rotation) {
+      object.rotation.copy(model.rotation);
+    }
+    if (model.scale) {
+      object.scale.copy(model.scale);
+    }
+  }
+
+  /**
+   * Position the object at 0, 0, 0
+   */
+  public  setObjectAtOrigin(object: Object3D) {
     const box = new Box3().setFromObject(object);
     const center = box.getCenter(new Vector3());
 

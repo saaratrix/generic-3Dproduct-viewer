@@ -1,18 +1,17 @@
-import { MaterialInfo } from "./MaterialInfo";
 import { SubProductItem } from "./SubProductItem";
 import { Object3D } from "three";
+import { Model3D } from "./Model3D";
 
 export interface ProductItem {
   id: number;
   thumbnail: string;
-  filename: string;
-  materialInfo: MaterialInfo;
+  models: Model3D[];
   // If true, the camera can't look at the underside of the model.
   hasFloor: boolean;
   useGammaSpace: boolean;
   tooltip: string;
   subItems: SubProductItem[];
-  selectedSubItem?: SubProductItem;
-
+  selectedSubItem?: SubProductItem | number | null;
+  // The root object3D
   object3D?: Object3D;
 }

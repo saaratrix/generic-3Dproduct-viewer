@@ -3,7 +3,8 @@ import { Component } from "@angular/core";
 import * as THREE from "three";
 
 import { ProductConfigurator } from "./3D/ProductConfigurator";
-import { ProductConfigurationEvent, ProductConfiguratorService } from "./product-configurator.service";
+import { ProductConfiguratorService } from "./product-configurator.service";
+import { ProductConfigurationEvent } from "./product-configurator-events";
 
 @Component({
   selector: "app-root",
