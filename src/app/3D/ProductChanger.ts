@@ -26,6 +26,9 @@ export class ProductChanger {
       });
   }
 
+  /**
+   * Change the visible product to the input product.
+   */
   public async changeProduct(product: ProductItem): Promise<void> {
     // No need to do anything if the product is the same!
     if (this.productConfiguratorService.selectedProduct === product) {
@@ -41,7 +44,6 @@ export class ProductChanger {
     const meshLoader = new MeshLoader(this.productConfiguratorService, this.environmentMapLoader);
 
     let obj: Object3D = product.object3D;
-    // TODO: Refactor the whole loading process.
     if (!obj) {
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
 
@@ -58,6 +60,8 @@ export class ProductChanger {
         this.setMeshTransform(loadedModel.object, loadedModel.model);
         obj.attach(loadedModel.object);
       }
+      // Finally set the whole object at origin.
+      this.setObjectAtOrigin(obj);
 
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
       product.object3D = obj;
@@ -78,26 +82,33 @@ export class ProductChanger {
   }
 
   /**
-   * Make the center of the mesh be at origin - 0, 0, 0 then add the transform of the model.
+   * Set position, rotation and scale for the object.
    */
-  public setMeshTransform(object: Object3D, transform: Model3D) {
+  public setMeshTransform(object: Object3D, model: Model3D) {
+    if (model.position) {
+      object.position.add(model.position);
+    }
+    if (model.rotation) {
+      object.rotation.copy(model.rotation);
+    }
+    if (model.scale) {
+      object.scale.copy(model.scale);
+    }
+  }
+
+  /**
+   * Position the object at 0, 0, 0
+   */
+  public  setObjectAtOrigin(object: Object3D) {
     const box = new Box3().setFromObject(object);
     const center = box.getCenter(new Vector3());
 
     object.position.x = (object.position.x - center.x);
     object.position.y = (object.position.y - center.y);
     object.position.z = (object.position.z - center.z);
-
-    if (transform.position) {
-      object.position.add(transform.position);
-    }
-    if (transform.rotation) {
-      object.rotation.copy(transform.rotation);
-    }
-    if (transform.scale) {
-      object.scale.copy(transform.scale);
-    }
   }
+
+
 
   /**
    *
