@@ -5,11 +5,12 @@ import { Euler, Vector3 } from "three";
 export function createFlowerPot(id: number): ProductItem {
   return {
     id,
+    name: "flowerpot",
     thumbnail: "assets/models/thumbnail_pot.png",
     models: [ getFlowerPotModel() ],
     hasFloor: false,
     useGammaSpace: false,
-    tooltip: "",
+    tooltip: "A very good looking flower pot.",
     subItems: [],
   };
 }
@@ -33,11 +34,12 @@ export function createRose(id: number): ProductItem {
 
   return {
     id,
+    name: "roses",
     thumbnail: "assets/models/thumbnail_rose.png",
     models: [ rose1, rose2, centerRose, rose4, rose5 ],
     hasFloor: false,
     useGammaSpace: false,
-    tooltip: "",
+    tooltip: "A bouquet of roses.",
     subItems: [],
   };
 }
@@ -45,11 +47,12 @@ export function createRose(id: number): ProductItem {
 export function createWuffels(id: number): ProductItem {
   return {
     id,
+    name: "Wuffels",
     thumbnail: "assets/models/thumbnail_wuffels.png",
     models: [ getWuffelsModel() ],
     hasFloor: true,
     useGammaSpace: false,
-    tooltip: "",
+    tooltip: "Wuffels! Wuff!",
     subItems: [],
   };
 }

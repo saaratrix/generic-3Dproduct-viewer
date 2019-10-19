@@ -7,6 +7,7 @@ import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
 import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
+import { SubProductItem } from "./models/SubProductItem";
 
 export class ProductChanger {
   private readonly productConfigurator: ProductConfigurator;
@@ -77,6 +78,13 @@ export class ProductChanger {
     this.toggleGammeSpace( product.useGammaSpace );
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
+
+    const urlParts = ["model", product.name];
+    if (product.selectedSubItem) {
+      urlParts.push((product.selectedSubItem as SubProductItem).id.toString());
+    }
+
+    this.productConfigurator.router.navigate(urlParts);
 
     return;
   }

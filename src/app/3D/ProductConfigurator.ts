@@ -4,12 +4,15 @@ import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
 import { TextureChanger } from "./TextureChanger";
 import { Injectable } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
 })
 export class ProductConfigurator {
   public productConfiguratorService: ProductConfiguratorService;
+  public activatedRouter: ActivatedRoute;
+  public router: Router;
 
   public renderer: WebGLRenderer;
   public scene: Scene;
@@ -23,9 +26,14 @@ export class ProductConfigurator {
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
 
-  constructor(renderer: WebGLRenderer, productConfiguratorService: ProductConfiguratorService) {
+  constructor(renderer: WebGLRenderer,
+              productConfiguratorService: ProductConfiguratorService,
+              activatedRoute: ActivatedRoute,
+              router: Router) {
     this.renderer = renderer;
     this.productConfiguratorService = productConfiguratorService;
+    this.activatedRouter = activatedRoute;
+    this.router = router;
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(new Color(0x444444));
@@ -47,7 +55,13 @@ export class ProductConfigurator {
     this.initLights();
 
     this.productChanger = new ProductChanger(this);
-    this.productChanger.changeProduct(this.productConfiguratorService.items[0]);
+
+    const snapshot = this.activatedRouter.snapshot;
+
+    const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name").toLowerCase() : "";
+    const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
+
+    this.productChanger.changeProduct(selectedItem);
 
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
 

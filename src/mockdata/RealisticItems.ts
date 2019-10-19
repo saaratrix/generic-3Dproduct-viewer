@@ -6,6 +6,7 @@ import { ProductConfigurationEvent } from "../app/product-configurator-events";
 export function createWayfairTable(id: number): ProductItem {
   return {
     id,
+    name: "table1",
     thumbnail: "assets/models/pbr/thumbnail_wayfair_table.png",
     models: [ getWayfairTableModel() ],
     hasFloor: false,
@@ -18,6 +19,7 @@ export function createWayfairTable(id: number): ProductItem {
 export function createWayfairChair(id: number): ProductItem {
   return {
     id,
+    name: "chair",
     thumbnail: "assets/models/pbr/thumbnail_wayfair_chair.png",
     models: [ getWayfairChairModel() ],
     hasFloor: false,
@@ -29,8 +31,9 @@ export function createWayfairChair(id: number): ProductItem {
 
 // That typo... well it's fun to keep using it for this little example.
 export function createIkeaChear(id: number): ProductItem {
-  const ikeaChearProduct = {
+  const ikeaChearProduct: ProductItem = {
     id,
+    name: "chear",
     thumbnail: "assets/models/pbr/thumbnail_ikea_chair.png",
     models: [ getIkeaChearModel() ],
     hasFloor: false,
@@ -76,6 +79,7 @@ export function createIkeaChear(id: number): ProductItem {
 export function createIkeaTable(id: number): ProductItem {
   return {
     id,
+    name: "table2",
     thumbnail: "assets/models/pbr/thumbnail_ikea_table.png",
     models: [ getIkeaTableModel() ],
     hasFloor: false,
