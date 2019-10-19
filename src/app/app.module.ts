@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { ModuleWithProviders, NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 import { ViewerThreejsComponent } from "./viewer-threejs/viewer-threejs.component";
@@ -10,6 +10,13 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { ToolbarSubitemComponent } from "./toolbar/toolbar-subitem/toolbar-subitem.component";
 import { ToolbarSubitemContainerComponent } from "./toolbar/toolbar-subitem-container/toolbar-subitem-container.component";
+import { RouterModule } from "@angular/router";
+import { ProductViewerComponent } from "./product-viewer/product-viewer.component";
+import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
+
+const rootRouting: ModuleWithProviders = RouterModule.forRoot([
+  { component: ProductViewerComponent, matcher: productViewerPageMatcher },
+]);
 
 @NgModule({
   declarations: [
@@ -20,11 +27,13 @@ import { ToolbarSubitemContainerComponent } from "./toolbar/toolbar-subitem-cont
     ToolbarInstructionsComponent,
     LoadingSpinnerComponent,
     ToolbarSubitemComponent,
-    ToolbarSubitemContainerComponent
+    ToolbarSubitemContainerComponent,
+    ProductViewerComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    rootRouting,
   ],
   providers: [],
   bootstrap: [AppComponent]
