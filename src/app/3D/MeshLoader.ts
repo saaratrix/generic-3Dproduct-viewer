@@ -153,14 +153,19 @@ export class MeshLoader {
       loader.load( file, async (gltfObject: GLTF) => {
         // Set the environment texture
         environmentPromise.then((texture: WebGLRenderTarget) => {
-          this.setReceiveShadows(gltfObject.scene.children);
-          this.trySetEnvironmentTexture(gltfObject.scene.children, texture);
-
-          if (materialInfo.renderBackface) {
-            this.trySetBackfaceRendering(gltfObject.scene.children);
+          const rootObject = new Group();
+          for (const scene of gltfObject.scenes) {
+              rootObject.add(...scene.children);
           }
 
-          resolve(gltfObject.scene.children[0]);
+          this.setReceiveShadows(rootObject.children);
+          this.trySetEnvironmentTexture(rootObject.children, texture);
+
+          if (materialInfo.renderBackface) {
+            this.trySetBackfaceRendering(rootObject.children);
+          }
+
+          resolve(rootObject);
         });
       }, getOnProgressCallback(this.productConfiguratorService));
     });
