@@ -9,7 +9,7 @@ import {
   TextureLoader,
   WebGLRenderTarget
 } from "three";
-import { MaterialCreator, MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 import { MaterialInfo } from "./models/MaterialInfo";
@@ -69,8 +69,7 @@ export class MeshLoader {
       if (materialInfo.mtl) {
         const mtlLoader = new MTLLoader();
         // Load the MTL file.
-        mtlLoader.load(materialInfo.mtl, (materialCreator: MaterialCreator) => {
-
+        mtlLoader.load(materialInfo.mtl, (materialCreator: MTLLoader.MaterialCreator) => {
           // Load the materials
           materialCreator.preload();
 
@@ -190,7 +189,7 @@ export class MeshLoader {
       if (mesh.material) {
         const material = mesh.material as MeshStandardMaterial;
         material.envMap = texture.texture;
-        material.envMapIntensity = 0.33;
+        material.envMapIntensity = 0.0625;
         material.needsUpdate = true;
       }
 

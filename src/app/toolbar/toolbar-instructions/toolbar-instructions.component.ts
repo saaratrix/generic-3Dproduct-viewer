@@ -21,7 +21,7 @@ export class ToolbarInstructionsComponent implements OnInit {
   public isOpen = true;
   public isTextVisible = true;
 
-  @ViewChild("instructionContainer", {static: false})
+  @ViewChild("instructionContainer")
   instructionContainerRef !: ElementRef;
 
   @Output()

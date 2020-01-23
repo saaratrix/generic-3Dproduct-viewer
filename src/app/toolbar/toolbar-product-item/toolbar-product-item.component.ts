@@ -13,7 +13,7 @@ export class ToolbarProductItemComponent implements OnInit {
   @Input()
   public item: ProductItem;
 
-  @ViewChild("containerElement", {static: false})
+  @ViewChild("containerElement")
   containerRef !: ElementRef;
 
   constructor(public productConfiguratorService: ProductConfiguratorService) {

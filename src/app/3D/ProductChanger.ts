@@ -3,7 +3,7 @@ import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
-import { Box3, Object3D, Vector3 } from "three";
+import { Box3, LinearEncoding, Object3D, sRGBEncoding, TextureEncoding, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
 import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
@@ -73,9 +73,9 @@ export class ProductChanger {
       return;
     }
 
-    this.productConfigurator.scene.add(obj);
+    this.productConfigurator.scene.add(obj)
 
-    this.toggleGammeSpace( product.useGammaSpace );
+    this.toggleGammeSpace(product.useGammaSpace);
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
 
@@ -151,12 +151,13 @@ export class ProductChanger {
    * Also changes the intensity of the lights because the light intensity is different between the spaces.
    * @param value
    */
-  public toggleGammeSpace(value): void {
-    if (this.productConfigurator.renderer.gammaOutput === value) {
+  public toggleGammeSpace(value: boolean): void {
+    const textureEncoding = value ? sRGBEncoding : LinearEncoding;
+    if (this.productConfigurator.renderer.outputEncoding === textureEncoding) {
       return;
     }
 
-    this.productConfigurator.renderer.gammaOutput = value;
+    this.productConfigurator.renderer.outputEncoding = textureEncoding;
     // light.intensity * factor
     // default is gamma -> non-gamma space
     let factor = this.productConfigurator.lightIntensityFactor;
