@@ -56,13 +56,6 @@ export class ProductConfigurator {
 
     this.productChanger = new ProductChanger(this);
 
-    const snapshot = this.activatedRouter.snapshot;
-
-    const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name").toLowerCase() : "";
-    const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
-
-    this.productChanger.changeProduct(selectedItem);
-
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
 
     this.initEvents();
@@ -121,5 +114,12 @@ export class ProductConfigurator {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
     });
+  }
+
+  public loadInitialItem() {
+    const snapshot = this.activatedRouter.snapshot;
+    const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name").toLowerCase() : "";
+    const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
+    this.productChanger.changeProduct(selectedItem);
   }
 }

@@ -1,7 +1,7 @@
 <div class="toolbar-container">
   <app-toolbar-instructions *ngIf="!hasReadInstructions" (closed)="hasReadInstructions = true;" ></app-toolbar-instructions>
   <app-toolbar-subitem-container
-    *ngIf="productConfiguratorService.selectedProduct.subItems.length > 0 && productConfiguratorService.selectedProduct.object3D"
+    *ngIf="productConfiguratorService.selectedProduct?.subItems.length > 0 && productConfiguratorService.selectedProduct?.object3D"
     [productItem]="productConfiguratorService.selectedProduct"
   >
   </app-toolbar-subitem-container>

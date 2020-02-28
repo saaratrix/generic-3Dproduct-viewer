@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProductConfigurationEvent } from "../product-configurator-events";
@@ -16,7 +16,8 @@ export class ProductViewerComponent implements OnInit {
 
   constructor(private productConfiguratorService: ProductConfiguratorService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private zone: NgZone) {
 
     this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Started)
       .subscribe(() => {
@@ -40,7 +41,14 @@ export class ProductViewerComponent implements OnInit {
   }
 
   public onSceneInit(renderer: THREE.WebGLRenderer) {
-    const productConfigurator = new ProductConfigurator(renderer, this.productConfiguratorService, this.activatedRoute, this.router);
+    let productConfigurator: ProductConfigurator;
+    this.zone.runOutsideAngular(() => {
+      productConfigurator = new ProductConfigurator(renderer, this.productConfiguratorService, this.activatedRoute, this.router);
+    });
+    // Need a set timeout or it is stuck on loading 0% on page load.
+    setTimeout(() => {
+      productConfigurator.loadInitialItem();
+    }, 1);
   }
 
 }
