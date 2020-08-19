@@ -61,8 +61,6 @@ export class MeshLoader {
 
   /**
    * Loads the material based on the MaterialInfo input.
-   * @param object
-   * @param materialInfo
    */
   public async loadMaterial(object: Object3D, materialInfo: any): Promise<void> {
     const promise = new Promise<void>((resolve, reject) => {

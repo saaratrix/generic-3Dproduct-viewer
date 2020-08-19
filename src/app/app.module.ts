@@ -14,7 +14,7 @@ import { RouterModule } from "@angular/router";
 import { ProductViewerComponent } from "./product-viewer/product-viewer.component";
 import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
 
-const rootRouting: ModuleWithProviders = RouterModule.forRoot([
+const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
   { component: ProductViewerComponent, matcher: productViewerPageMatcher },
 ]);
 
