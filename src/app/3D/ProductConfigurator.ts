@@ -50,6 +50,9 @@ export class ProductConfigurator {
     this.cameraControls.maxPolarAngle = Math.PI;
     this.cameraControls.minPolarAngle = 0;
     this.cameraControls.enablePan = false;
+    this.cameraControls.enableDamping = true;
+    this.cameraControls.dampingFactor = 0.05;
+    this.cameraControls.rotateSpeed *= 0.67;
     this.cameraControls.update();
 
     this.initLights();
