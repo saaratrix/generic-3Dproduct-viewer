@@ -16,10 +16,10 @@ export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
   public productItem: ProductItem;
 
   @ViewChild("containerElement")
-  containerRef !: ElementRef;
+  containerRef !: ElementRef<HTMLElement>;
 
   @ViewChild("subItemsElement")
-  subItemsElement !: ElementRef;
+  subItemsElement !: ElementRef<HTMLElement>;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
@@ -42,10 +42,14 @@ export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
    * Calculate the position for the sub items element so it's centered on top of the selected product.
    */
   calculatePosition() {
-    const subItemsElement = this.subItemsElement.nativeElement as HTMLElement;
+    if (!this.productConfiguratorService.selectedProductElementRef) {
+      return;
+    }
+
+    const subItemsElement = this.subItemsElement.nativeElement;
     const subItemContainerWidth = subItemsElement.offsetWidth;
 
-    const containerElement = this.containerRef.nativeElement as HTMLElement;
+    const containerElement = this.containerRef.nativeElement;
     const containerWidth = containerElement.offsetWidth;
 
     // If the subItemContainerWidth is larger than the container then don't manually place it.

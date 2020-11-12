@@ -15,8 +15,8 @@ import { ProductViewerComponent } from "./product-viewer/product-viewer.componen
 import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
-  { component: ProductViewerComponent, matcher: productViewerPageMatcher },
-]);
+    { component: ProductViewerComponent, matcher: productViewerPageMatcher },
+], { relativeLinkResolution: "legacy" });
 
 @NgModule({
   declarations: [

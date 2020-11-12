@@ -13,12 +13,12 @@ export class ProductConfiguratorService {
    * The product items that you can choose between.
    */
   public items: ProductItem[] = [];
-  public selectedProduct: ProductItem = null;
+  public selectedProduct: ProductItem | null = null;
   /**
    * Sometimes we need the product container element.
    * For example to center the sub item products over the product item.
    */
-  public selectedProductElementRef: ElementRef = null;
+  public selectedProductElementRef: ElementRef<HTMLElement> | null = null;
 
   /**
    * The RxJs Subject objects.

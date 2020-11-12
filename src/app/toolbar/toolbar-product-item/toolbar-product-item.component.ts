@@ -8,22 +8,22 @@ import { ProductConfigurationEvent } from "../../product-configurator-events";
   templateUrl: "./toolbar-product-item.component.html",
   styleUrls: ["./toolbar-product-item.component.scss"]
 })
-export class ToolbarProductItemComponent implements OnInit {
+export class ToolbarProductItemComponent implements OnInit, AfterViewInit {
 
   @Input()
   public item: ProductItem;
 
   @ViewChild("containerElement")
-  containerRef !: ElementRef;
+  containerRef !: ElementRef<HTMLElement>;
 
   constructor(public productConfiguratorService: ProductConfiguratorService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // We need to only do this for the selectedProduct.
     // Otherwise the last product would be the selectedProductELementRef.
     // It's only an issue if the start item has subproducts, otherwise it'd fix itself in the changeProduct() method.
