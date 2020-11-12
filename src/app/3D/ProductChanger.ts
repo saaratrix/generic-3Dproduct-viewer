@@ -73,7 +73,7 @@ export class ProductChanger {
       return;
     }
 
-    this.productConfigurator.scene.add(obj)
+    this.productConfigurator.scene.add(obj);
 
     this.toggleGammeSpace(product.useGammaSpace);
     // Update camera position

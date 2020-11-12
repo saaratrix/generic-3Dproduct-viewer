@@ -9,15 +9,17 @@ import { ProductConfiguratorService } from "../product-configurator.service";
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor(public productConfiguratorService: ProductConfiguratorService) {
+  // Could read from localStorage to only show it once.
+  public hasReadInstructions = false;
+
+  constructor(
+    public productConfiguratorService: ProductConfiguratorService
+  ) {
     const hasTutorialItem = localStorage && localStorage.getItem("tutorial");
     if (hasTutorialItem && hasTutorialItem === "1") {
       this.hasReadInstructions = true;
     }
   }
-
-  // Could read from localStorage to only show it once.
-  public hasReadInstructions = false;
 
   ngOnInit() {
   }
