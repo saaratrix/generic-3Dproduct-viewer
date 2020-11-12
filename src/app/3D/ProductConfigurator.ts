@@ -26,10 +26,12 @@ export class ProductConfigurator {
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
 
-  constructor(renderer: WebGLRenderer,
-              productConfiguratorService: ProductConfiguratorService,
-              activatedRoute: ActivatedRoute,
-              router: Router) {
+  constructor(
+    renderer: WebGLRenderer,
+    productConfiguratorService: ProductConfiguratorService,
+    activatedRoute: ActivatedRoute,
+    router: Router,
+  ) {
     this.renderer = renderer;
     this.productConfiguratorService = productConfiguratorService;
     this.activatedRouter = activatedRoute;

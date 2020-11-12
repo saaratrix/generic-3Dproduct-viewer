@@ -13,12 +13,11 @@ export class ProductConfiguratorService {
    * The product items that you can choose between.
    */
   public items: ProductItem[] = [];
-  public selectedProduct: ProductItem = null;
   /**
-   * Sometimes we need the product container element.
-   * For example to center the sub item products over the product item.
+   * The HTML element associated with an item id.
    */
-  public selectedProductElementRef: ElementRef = null;
+  public itemElements: { [key: string]: HTMLElement } = {};
+  public selectedProduct: ProductItem | null = null;
 
   /**
    * The RxJs Subject objects.
@@ -63,5 +62,13 @@ export class ProductConfiguratorService {
     }
 
     this.subjects[type].next(data);
+  }
+
+  public getSelectedProductElement(product: ProductItem): HTMLElement | undefined {
+    if (!product) {
+      return undefined;
+    }
+
+    return this.itemElements[product.name];
   }
 }

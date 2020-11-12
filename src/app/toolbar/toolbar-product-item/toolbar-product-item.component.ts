@@ -8,33 +8,28 @@ import { ProductConfigurationEvent } from "../../product-configurator-events";
   templateUrl: "./toolbar-product-item.component.html",
   styleUrls: ["./toolbar-product-item.component.scss"]
 })
-export class ToolbarProductItemComponent implements OnInit {
+export class ToolbarProductItemComponent implements OnInit, AfterViewInit {
 
   @Input()
-  public item: ProductItem;
+  public item!: ProductItem;
 
   @ViewChild("containerElement")
-  containerRef !: ElementRef;
+  containerRef!: ElementRef<HTMLElement>;
 
-  constructor(public productConfiguratorService: ProductConfiguratorService) {
+  constructor(
+    public productConfiguratorService: ProductConfiguratorService,
+  ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
   }
 
-  ngAfterViewInit() {
-    // We need to only do this for the selectedProduct.
-    // Otherwise the last product would be the selectedProductELementRef.
-    // It's only an issue if the start item has subproducts, otherwise it'd fix itself in the changeProduct() method.
-    // TODO: Improve this flow by passing this component's element to the sub items somehow? So selectedProductElementRef is obsolete.
-    if (this.productConfiguratorService.selectedProduct === this.item) {
-      this.productConfiguratorService.selectedProductElementRef = this.containerRef;
-    }
+  public ngAfterViewInit() {
+    this.productConfiguratorService.itemElements[this.item.name] = this.containerRef.nativeElement;
   }
 
   changeProduct() {
-    this.productConfiguratorService.selectedProductElementRef = this.containerRef;
     this.productConfiguratorService.dispatch(ProductConfigurationEvent.Toolbar_ChangeProduct, this.item);
   }
 }

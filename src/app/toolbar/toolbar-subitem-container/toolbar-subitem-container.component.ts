@@ -1,4 +1,14 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges
+} from "@angular/core";
 import { SubProductItem } from "../../3D/models/SubProductItem";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductItem } from "../../3D/models/ProductItem";
@@ -8,28 +18,31 @@ import { ProductItem } from "../../3D/models/ProductItem";
   templateUrl: "./toolbar-subitem-container.component.html",
   styleUrls: ["./toolbar-subitem-container.component.scss"]
 })
-export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
+export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewInit {
+  @ViewChild("containerElement") containerRef !: ElementRef<HTMLElement>;
+  @ViewChild("subItemsElement") subItemsElement !: ElementRef<HTMLElement>;
 
-  private productConfiguratorService: ProductConfiguratorService;
+  @Input() public productItem!: ProductItem;
 
-  @Input()
-  public productItem: ProductItem;
+  private isViewInit = false;
+  private productItemElement: HTMLElement;
 
-  @ViewChild("containerElement")
-  containerRef !: ElementRef;
-
-  @ViewChild("subItemsElement")
-  subItemsElement !: ElementRef;
-
-  constructor(productConfiguratorService: ProductConfiguratorService) {
+  constructor(
+    private productConfiguratorService: ProductConfiguratorService
+  ) {
     this.productConfiguratorService = productConfiguratorService;
   }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.isViewInit && changes.productItem) {
+      this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
+      this.calculatePosition();
+    }
   }
 
-  // Need to wait until after viewInit or the subItemsElement's width is 0.
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
+    this.isViewInit = true;
+    this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
     this.calculatePosition();
   }
 
@@ -42,10 +55,10 @@ export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
    * Calculate the position for the sub items element so it's centered on top of the selected product.
    */
   calculatePosition() {
-    const subItemsElement = this.subItemsElement.nativeElement as HTMLElement;
+    const subItemsElement = this.subItemsElement.nativeElement;
     const subItemContainerWidth = subItemsElement.offsetWidth;
 
-    const containerElement = this.containerRef.nativeElement as HTMLElement;
+    const containerElement = this.containerRef.nativeElement;
     const containerWidth = containerElement.offsetWidth;
 
     // If the subItemContainerWidth is larger than the container then don't manually place it.
@@ -54,10 +67,7 @@ export class ToolbarSubitemContainerComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const productElementRef = this.productConfiguratorService.selectedProductElementRef;
-
-    const element = productElementRef.nativeElement as HTMLElement;
-    const productRect: ClientRect = element.getBoundingClientRect();
+    const productRect: ClientRect = this.productItemElement.getBoundingClientRect();
 
     let positionX = (productRect.left + productRect.width * 0.5) - subItemContainerWidth * 0.5;
 
