@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
 import { ProductConfigurationEvent } from "../product-configurator-events";
@@ -10,7 +10,7 @@ import { ProductItem } from "../3D/models/ProductItem";
   templateUrl: "./toolbar.component.html",
   styleUrls: ["./toolbar.component.scss"]
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnDestroy {
 
   public hasReadInstructions: boolean = false;
   public selectedProduct: ProductItem | undefined;
@@ -32,7 +32,11 @@ export class ToolbarComponent implements OnInit {
     }));
   }
 
-  ngOnInit() {
+  public ngOnDestroy(): void {
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
+    this.subscriptions = [];
   }
 
 }
