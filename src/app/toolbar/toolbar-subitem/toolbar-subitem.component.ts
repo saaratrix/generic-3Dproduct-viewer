@@ -12,11 +12,9 @@ export class ToolbarSubitemComponent implements OnInit {
 
   private productConfiguratorService: ProductConfiguratorService;
 
-  @Input()
-  public item: SubProductItem;
+  @Input() public item!: SubProductItem;
 
-  @Input()
-  public productItem: ProductItem;
+  @Input() public productItem!: ProductItem;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;

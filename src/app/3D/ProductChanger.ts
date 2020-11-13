@@ -3,7 +3,7 @@ import { ProductItem } from "./models/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
-import { Box3, LinearEncoding, Object3D, sRGBEncoding, TextureEncoding, Vector3 } from "three";
+import { Box3, LinearEncoding, Object3D, sRGBEncoding, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
 import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
@@ -44,7 +44,7 @@ export class ProductChanger {
     this.productConfiguratorService.selectedProduct = product;
     const meshLoader = new MeshLoader(this.productConfiguratorService, this.environmentMapLoader);
 
-    let obj: Object3D = product.object3D;
+    let obj: Object3D | undefined = product.object3D;
     if (!obj) {
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
 
@@ -58,6 +58,10 @@ export class ProductChanger {
       const loadedModels: ModelLoadedEventData[] = await Promise.all(promises);
 
       for (const loadedModel of loadedModels) {
+        if (!loadedModel.object) {
+          continue;
+        }
+
         this.setMeshTransform(loadedModel.object, loadedModel.model);
         obj.attach(loadedModel.object);
       }
@@ -84,6 +88,8 @@ export class ProductChanger {
       const selectedSubItem = product.selectedSubItem as SubProductItem;
       urlParts.push(selectedSubItem.id.toString());
     }
+
+    this.productConfiguratorService.dispatch(ProductConfigurationEvent.ChangedSelectedProduct, this.productConfiguratorService.selectedProduct);
 
     this.productConfigurator.router.navigate(urlParts);
     return;

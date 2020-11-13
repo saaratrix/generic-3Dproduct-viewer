@@ -22,7 +22,7 @@ export class ProductConfiguratorService {
   /**
    * The RxJs Subject objects.
    */
-  private readonly subjects: { [s: number]: Subject<any> };
+  private readonly subjects: { [key: string]: Subject<any> };
 
   constructor() {
     let id = 0;
@@ -44,7 +44,7 @@ export class ProductConfiguratorService {
     const eventKeys = Object.keys(ProductConfigurationEvent).filter(key => typeof ProductConfigurationEvent[key as any] !== "number");
 
     for (const key of eventKeys) {
-      this.subjects[ key ] = new Subject<any>();
+      this.subjects[key] = new Subject<any>();
     }
   }
 

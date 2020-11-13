@@ -9,6 +9,10 @@ import { getOnProgressCallback } from "./getOnProgressCallback";
 
 const __showDebugCanvas: boolean = false;
 
+interface MaterialMap {
+  [key: string]: any;
+}
+
 export class TextureChanger {
   private productConfiguratorService: ProductConfiguratorService;
 
@@ -21,7 +25,7 @@ export class TextureChanger {
     this.productConfiguratorService = productConfiguratorService;
 
     this.canvas = document.createElement("canvas");
-    this.context = this.canvas.getContext("2d");
+    this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
     productConfiguratorService.getSubject( ProductConfigurationEvent.Material_TextureSwap )
       .subscribe((event: MaterialTextureSwapEventData) => {
@@ -33,14 +37,18 @@ export class TextureChanger {
    * Swap a texture from a -> b over time.
    * @param event
    */
-  public swapTexture(event: MaterialTextureSwapEventData) {
+  private swapTexture(event: MaterialTextureSwapEventData) {
+    if (!event.productItem.object3D) {
+      return;
+    }
+
 
     this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
 
     // Load the new texture
     new TextureLoader().load(event.textureUrl, (texture: Texture) => {
       this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
-      this.animateTextureSwap(event.productItem.object3D, event.textureSlot, texture, 500);
+      this.animateTextureSwap(event.productItem.object3D as Object3D, event.textureSlot, texture, 500);
     }, getOnProgressCallback(this.productConfiguratorService));
   }
 
@@ -51,7 +59,7 @@ export class TextureChanger {
    * @param newTexture
    * @param duration
    */
-  public animateTextureSwap(rootObject: Object3D, slot: string, newTexture: Texture, duration: number) {
+  private animateTextureSwap(rootObject: Object3D, slot: string, newTexture: Texture, duration: number) {
     // TODO: Improve swapping handle logic, for example if a new swap event fires then finish the existing one.
     if (this.isChanging) {
       return;
@@ -60,21 +68,22 @@ export class TextureChanger {
     const start: number = Date.now();
 
     const tmpTexture = new CanvasTexture(this.canvas);
-    const materials: Material[] = [];
-    let originalImage: HTMLImageElement;
+    const materials: MaterialMap[] = [];
+    let originalImage: HTMLImageElement | undefined;
 
     rootObject.traverse((object: Object3D) => {
       const mesh = object as Mesh;
-      const material: Material = mesh.material as Material;
-      if (material && material[slot]) {
+      const material = mesh.material as Material;
+      const materialMap = material as MaterialMap;
+      if (material && materialMap[slot]) {
         if (!originalImage) {
-          originalImage = material[slot].image;
+          originalImage = materialMap[slot].image;
           // Need to have same flipY as the original texture or bad things will happen!
-          const flipY = material[slot].flipY;
+          const flipY = materialMap[slot].flipY;
           tmpTexture.flipY = flipY;
           newTexture.flipY = flipY;
 
-          material[slot] = tmpTexture;
+          materialMap[slot] = tmpTexture;
           if (materials.indexOf(material) === -1) {
             materials.push(material);
           }
@@ -100,8 +109,8 @@ export class TextureChanger {
     this.context.clearRect(0, 0, width, height);
     this.context.drawImage(originalImage, 0, 0);
 
-    let debugCanvasElement: HTMLCanvasElement = null;
-    let debugCanvasContext: CanvasRenderingContext2D = null;
+    let debugCanvasElement: HTMLCanvasElement;
+    let debugCanvasContext: CanvasRenderingContext2D;
     if (__showDebugCanvas) {
       debugCanvasElement = document.getElementById("debugCanvas") as HTMLCanvasElement;
       if (!debugCanvasElement) {
@@ -113,10 +122,9 @@ export class TextureChanger {
 
       debugCanvasElement.width = this.canvas.width;
       debugCanvasElement.height = this.canvas.height;
-      debugCanvasContext = debugCanvasElement.getContext("2d");
+      debugCanvasContext = debugCanvasElement.getContext("2d") as CanvasRenderingContext2D;
       debugCanvasContext.drawImage(this.canvas, 0, 0);
     }
-
 
     const frameCallback = () => {
       // Get progress from 0 -> 1 and make sure progress isn't larger than 1.
@@ -125,7 +133,7 @@ export class TextureChanger {
       if (progress < 1) {
         // Do the texture update
         this.context.clearRect(0, 0, width, height);
-        this.context.drawImage(originalImage, 0, 0);
+        this.context.drawImage(originalImage as HTMLImageElement, 0, 0);
         //
         this.context.save();
         this.context.beginPath();
@@ -135,7 +143,7 @@ export class TextureChanger {
         this.context.drawImage(bImage, 0, 0, width, height);
         this.context.restore();
 
-        if (__showDebugCanvas) {
+        if (debugCanvasContext) {
           debugCanvasContext.drawImage(this.canvas, 0, 0);
         }
 
@@ -148,7 +156,7 @@ export class TextureChanger {
           material[slot] = newTexture;
         }
 
-        if (__showDebugCanvas) {
+        if (debugCanvasContext) {
           debugCanvasContext.drawImage(bImage, 0, 0);
         }
 
