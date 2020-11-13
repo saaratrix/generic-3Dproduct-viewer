@@ -21,7 +21,7 @@ export class ProductConfigurator {
 
   public lights: Light[] = [];
 
-  public lightIntensityFactor: number;
+  public lightIntensityFactor: number = 1;
 
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
@@ -123,7 +123,7 @@ export class ProductConfigurator {
 
   public loadInitialItem() {
     const snapshot = this.activatedRouter.snapshot;
-    const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name").toLowerCase() : "";
+    const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
     this.productChanger.changeProduct(selectedItem);
   }

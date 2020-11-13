@@ -19,13 +19,13 @@ import { ProductItem } from "../../3D/models/ProductItem";
   styleUrls: ["./toolbar-subitem-container.component.scss"]
 })
 export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewInit {
-  @ViewChild("containerElement") containerRef !: ElementRef<HTMLElement>;
-  @ViewChild("subItemsElement") subItemsElement !: ElementRef<HTMLElement>;
+  @ViewChild("containerElement") containerRef!: ElementRef<HTMLElement>;
+  @ViewChild("subItemsElement") subItemsElement!: ElementRef<HTMLElement>;
 
   @Input() public productItem!: ProductItem;
 
-  private isViewInit = false;
-  private productItemElement: HTMLElement;
+  private isViewInitialized = false;
+  private productItemElement: HTMLElement | undefined;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService
@@ -34,27 +34,31 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.isViewInit && changes.productItem) {
+    if (this.isViewInitialized && changes.productItem) {
       this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
       this.calculatePosition();
     }
   }
 
   public ngAfterViewInit() {
-    this.isViewInit = true;
+    this.isViewInitialized = true;
     this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
     this.calculatePosition();
   }
 
-  @HostListener("window:resize", ["$event"])
-  onResize(event) {
+  @HostListener("window:resize", [])
+  onResize() {
     this.calculatePosition();
   }
 
   /**
    * Calculate the position for the sub items element so it's centered on top of the selected product.
    */
-  calculatePosition() {
+  calculatePosition(): void {
+    if (!this.productItemElement) {
+      return;
+    }
+
     const subItemsElement = this.subItemsElement.nativeElement;
     const subItemContainerWidth = subItemsElement.offsetWidth;
 

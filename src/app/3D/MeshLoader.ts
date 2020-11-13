@@ -43,7 +43,7 @@ export class MeshLoader {
       const fileParts: string[] = model.filename.split(".");
       const fileExtension = fileParts[ fileParts.length - 1 ].toLowerCase();
 
-      let object: Object3D = null;
+      let object: Object3D | undefined;
       if (fileExtension === "obj") {
         object = await this.loadObj(model.filename, model.materialInfo);
       }
