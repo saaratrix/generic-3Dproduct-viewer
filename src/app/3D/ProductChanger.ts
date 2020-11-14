@@ -89,7 +89,7 @@ export class ProductChanger {
       urlParts.push(selectedSubItem.id.toString());
     }
 
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.ChangedSelectedProduct, this.productConfiguratorService.selectedProduct);
+    this.productConfiguratorService.dispatch(ProductConfigurationEvent.SelectedProduct_Changed, this.productConfiguratorService.selectedProduct);
 
     this.productConfigurator.router.navigate(urlParts);
     return;

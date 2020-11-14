@@ -26,7 +26,7 @@ export class ToolbarComponent implements OnDestroy {
       this.hasReadInstructions = true;
     }
 
-    this.subscriptions.push(this.productConfiguratorService.getSubject(ProductConfigurationEvent.ChangedSelectedProduct).subscribe((product) => {
+    this.subscriptions.push(this.productConfiguratorService.getSubject(ProductConfigurationEvent.SelectedProduct_Changed).subscribe((product) => {
       this.selectedProduct = product;
       this.hasSubItems = !!(product.subItems?.length > 0 && product.object3D);
     }));

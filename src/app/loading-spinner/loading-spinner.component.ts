@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
 import { LoadingProgressEventData } from "../3D/models/EventData/LoadingProgressEventData";
+import { Subscription } from "rxjs";
 
 interface LoadingData {
   loaded: number;
@@ -13,9 +14,7 @@ interface LoadingData {
   templateUrl: "./loading-spinner.component.html",
   styleUrls: ["./loading-spinner.component.scss"]
 })
-export class LoadingSpinnerComponent implements OnInit {
-
-  private productConfiguratorService: ProductConfiguratorService;
+export class LoadingSpinnerComponent implements OnInit, OnDestroy {
   /**
    * This is to map the array with a key to easily check if it exists or not.
    */
@@ -27,10 +26,14 @@ export class LoadingSpinnerComponent implements OnInit {
   // Default to 0%
   public progressText: string = "0%";
 
-  constructor(productConfiguratorService: ProductConfiguratorService) {
-    this.productConfiguratorService = productConfiguratorService;
+  private progressSubscription: Subscription | undefined;
 
-    this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Progress)
+  constructor(
+    private productConfiguratorService: ProductConfiguratorService,
+  ) {}
+
+  ngOnInit() {
+    this.progressSubscription = this.productConfiguratorService.getSubject<LoadingProgressEventData>(ProductConfigurationEvent.Loading_Progress)
       .subscribe((event: LoadingProgressEventData) => {
 
         let loadingData: LoadingData = this.loadingsMap[ event.id ];
@@ -66,7 +69,8 @@ export class LoadingSpinnerComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  public ngOnDestroy(): void {
+    this.progressSubscription?.unsubscribe();
   }
 
 }

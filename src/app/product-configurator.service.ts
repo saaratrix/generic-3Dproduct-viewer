@@ -52,7 +52,7 @@ export class ProductConfiguratorService {
    * Get a subject corresponding to the type.
    * @param type
    */
-  public getSubject(type: ProductConfigurationEvent): Subject<any> {
+  public getSubject<T = any>(type: ProductConfigurationEvent): Subject<T> {
     return this.subjects[type];
   }
 

@@ -1,0 +1,24 @@
+$width: 300px;
+:host {
+  // The host element needs to be a position absolute or the child content adds scrollbars when it's off screen.
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: $width;
+  overflow: hidden;
+
+  --sidebar-closed-right: -#{$width};
+}
+
+.configurator-sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+
+  width: $width;
+  background-color: hsl(0, 0%, 22%);
+  border-left: 1px solid hsl(0, 0%, 50%);
+}

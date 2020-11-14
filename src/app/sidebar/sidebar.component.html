@@ -1,0 +1,10 @@
+<div
+  class="configurator-sidebar"
+  [@openClosed]="isOpened ? 'open' : 'closed'"
+  (@openClosed.start)="openClosedStart($event)"
+  (@openClosed.done)="openClosedDone($event)"
+>
+  <div *ngIf="isContentVisible">
+    Sidebar!
+  </div>
+</div>

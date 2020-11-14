@@ -5,6 +5,7 @@ import { ProductChanger } from "./ProductChanger";
 import { TextureChanger } from "./TextureChanger";
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { PointerEventHandler } from "./PointerEventHandler";
 
 @Injectable({
   providedIn: "root"
@@ -25,6 +26,7 @@ export class ProductConfigurator {
 
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
+  private pointerEventHandler: PointerEventHandler;
 
   constructor(
     renderer: WebGLRenderer,
@@ -60,9 +62,10 @@ export class ProductConfigurator {
     this.initLights();
 
     this.productChanger = new ProductChanger(this);
-
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
+    this.pointerEventHandler = new PointerEventHandler(this.productConfiguratorService);
 
+    this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
 
     this.startRenderLoop();
