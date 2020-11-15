@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
@@ -18,7 +18,7 @@ import { Mesh } from "three";
         right: "var(--sidebar-closed-right)",
       })),
       transition("open <=> closed", [
-        animate("0.5s"),
+        animate("0.15s"),
       ])
     ]),
   ],
