@@ -63,7 +63,7 @@ export class ProductConfigurator {
 
     this.productChanger = new ProductChanger(this);
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
-    this.pointerEventHandler = new PointerEventHandler(this.productConfiguratorService);
+    this.pointerEventHandler = new PointerEventHandler(this.scene, this.camera, this.productConfiguratorService);
 
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
