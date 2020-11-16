@@ -4,21 +4,27 @@
  */
 export function throttle(callback: (...args: any[]) => void, interval: number): (...args: any[]) => void {
   let timerId: number | null = null;
-  let callCount = 0;
+  let nextAllowedCall: number = 0;
 
+  // We need to store the lastArgs so we always execute the last callback when throttling.
+  let lastArgs: any[];
   return function(...args: any[]): void {
+    lastArgs = args;
     if (timerId !== null) {
       return;
-      callCount++;
     }
 
-    timerId = setTimeout(() => {
-      if (callCount !== 0) {
-        callback(...args);
-      }
-      timerId = null;
-      callCount = 0;
-    }, interval) as any; // Because it wants to use the Node.js typing for setTimeout we just cast it to any.
-    callback(...args);
+    const now = Date.now();
+    if (now >= nextAllowedCall) {
+      callback(...args);
+    } else {
+      timerId = setTimeout(() => {
+        nextAllowedCall = Date.now() + interval;
+        callback(...lastArgs);
+        timerId = null;
+      }, nextAllowedCall - now);
+    }
+
+    nextAllowedCall = now + interval;
   };
 }
