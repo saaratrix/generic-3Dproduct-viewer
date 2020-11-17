@@ -1,22 +1,24 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Subscription } from "rxjs";
-import { Color, DoubleSide, Mesh, MeshStandardMaterial } from "three";
+import {
+  Mesh,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer
+} from "three";
+import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect";
+
 
 export class SelectedProductHighlighter {
 
   private subscriptions: Subscription[] = [];
 
-  private hoverMaterial: MeshStandardMaterial;
+  private isHovering: boolean = false;
+  public outlineEffect!: OutlineEffect;
 
-
-  constructor(private productConfiguratorService: ProductConfiguratorService) {
-    // TODO: Add an outline effect instead of change colour as that would probably look much better.
-    this.hoverMaterial = new MeshStandardMaterial({
-      color: Color.NAMES["purple"],
-      side: DoubleSide,
-    });
-
+  constructor(renderer: WebGLRenderer, private productConfiguratorService: ProductConfiguratorService) {
+    this.createOutlineEffect(renderer);
     this.subscriptions.push(
       this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerEnter).subscribe((mesh) => {
         this.setHoverMaterial(mesh);
@@ -31,21 +33,31 @@ export class SelectedProductHighlighter {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  setHoverMaterial(mesh: Mesh) {
-    if (mesh.material !== this.hoverMaterial) {
-      mesh.userData.originalMaterial = mesh.material;
+  public renderOutline(scene: Scene, camera: PerspectiveCamera) {
+    if (!this.isHovering) {
+      return;
     }
-    if (Array.isArray(mesh.material)) {
-      mesh.material = new Array<MeshStandardMaterial>(mesh.material.length);
-      for (let i = 0; i < mesh.material.length; i++) {
-        mesh.material[i] = this.hoverMaterial;
-      }
-    } else {
-      mesh.material = this.hoverMaterial;
-    }
+
+    camera.layers.set(1);
+    this.outlineEffect.renderOutline(scene, camera);
+    camera.layers.set(0);
   }
 
-  clearHoverMaterial(mesh: Mesh) {
-    mesh.material = mesh.userData.originalMaterial;
+  private createOutlineEffect(renderer: WebGLRenderer): void {
+    this.outlineEffect = new OutlineEffect(renderer, {
+      // #b591c7
+      defaultColor: [181 / 255,   145 / 255,   199 / 255],  // default: [0, 0, 0],
+      defaultThickness: 0.005,                              // default: 0.003
+    });
+  }
+
+  private setHoverMaterial(mesh: Mesh) {
+    this.isHovering = true;
+    mesh.layers.enable(1);
+  }
+
+  private clearHoverMaterial(mesh: Mesh) {
+    this.isHovering = false;
+    mesh.layers.disable(1);
   }
 }

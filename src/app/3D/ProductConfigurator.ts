@@ -66,7 +66,7 @@ export class ProductConfigurator {
     this.productChanger = new ProductChanger(this);
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
     this.pointerEventHandler = new PointerEventHandler(this.scene, this.camera, this.productConfiguratorService);
-    this.selectedProductHighlighter = new SelectedProductHighlighter(this.productConfiguratorService);
+    this.selectedProductHighlighter = new SelectedProductHighlighter(this.renderer, this.productConfiguratorService);
 
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
@@ -79,6 +79,7 @@ export class ProductConfigurator {
       this.cameraControls.update();
 
       this.renderer.render(this.scene, this.camera);
+      this.selectedProductHighlighter.renderOutline(this.scene, this.camera);
 
       requestAnimationFrame(renderFunction);
     };
