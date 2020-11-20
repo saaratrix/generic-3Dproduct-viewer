@@ -1,4 +1,4 @@
-<div #containerElement class="product-item" >
+<div #containerElement class="product-item" [title]="item.tooltip" >
   <img
     [ngClass]="{ 'active': productConfiguratorService.selectedProduct === item }"
     [src]="item.thumbnail"

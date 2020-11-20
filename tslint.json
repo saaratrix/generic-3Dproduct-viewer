@@ -93,6 +93,12 @@
     },
     "trailing-comma": false,
     "no-output-on-prefix": true,
+    "typedef": [
+      true,
+      "call-signature",
+      "property-declaration",
+      "parameter"
+    ],
     "typedef-whitespace": {
       "options": [
         {
