@@ -1,4 +1,4 @@
-A generic 3D product viewer made with three.js and angular. 
+A 3D product viewer made with three.js and angular. 
 There is support to change textures which is animated for the white chair.
 
 How the application looks like:
