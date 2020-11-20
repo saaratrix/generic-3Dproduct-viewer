@@ -45,6 +45,7 @@ export class PointerEventHandler {
     this.element.removeEventListener("pointerleave", this.onPointerLeave);
   }
 
+  // Creating lambdas so we don't have to do .bind() on the methods.
   private onPointerDown = (event: PointerEvent): void => {
     this.pointerdownPosition = { x: event.clientX, y: event.clientY };
   }
@@ -65,13 +66,12 @@ export class PointerEventHandler {
   }
 
   /** Pointer Move **/
-  // Creating lambdas so we don't have to do .bind() on the methods.
   private onPointerMove = throttle((event: PointerEvent): void => {
     if (this.pointerdownPosition) {
       return;
     }
 
-    this.trySetSelectedMesh(event, ProductConfigurationEvent.Mesh_PointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
+    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.Mesh_PointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
@@ -87,11 +87,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetSelectedMesh(event, ProductConfigurationEvent.Mesh_Selected, "currentSelectedMesh", this.deselectCurrentMesh);
+    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.Mesh_Selected, "currentSelectedMesh", this.deselectCurrentMesh);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
-  private trySetSelectedMesh(pointerEvent: PointerEvent, selectedEvent: ProductConfigurationEvent, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
+  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, selectedEvent: ProductConfigurationEvent, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
     const intersections = this.getIntersections(pointerEvent);
 
     if (intersections.length === 0) {

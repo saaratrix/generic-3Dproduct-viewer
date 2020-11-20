@@ -14,10 +14,12 @@ export class ProductViewerComponent implements OnInit {
   public loadingsStarted: number = 0;
   public loadingsFinished: number = 0;
 
-  constructor(private productConfiguratorService: ProductConfiguratorService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private zone: NgZone) {
+  constructor(
+    private productConfiguratorService: ProductConfiguratorService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private zone: NgZone,
+  ) {
 
     this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Started)
       .subscribe(() => {
@@ -40,7 +42,7 @@ export class ProductViewerComponent implements OnInit {
   public ngOnInit(): void {
   }
 
-  public onSceneInit(renderer: THREE.WebGLRenderer) {
+  public onSceneInit(renderer: THREE.WebGLRenderer): void {
     let productConfigurator: ProductConfigurator;
     this.zone.runOutsideAngular(() => {
       productConfigurator = new ProductConfigurator(renderer, this.productConfiguratorService, this.activatedRoute, this.router);
