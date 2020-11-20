@@ -89,7 +89,7 @@ export class ProductChanger {
       urlParts.push(selectedSubItem.id.toString());
     }
 
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.ChangedSelectedProduct, this.productConfiguratorService.selectedProduct);
+    this.productConfiguratorService.dispatch(ProductConfigurationEvent.SelectedProduct_Changed, this.productConfiguratorService.selectedProduct);
 
     this.productConfigurator.router.navigate(urlParts);
     return;
@@ -98,7 +98,7 @@ export class ProductChanger {
   /**
    * Set position, rotation and scale for the object.
    */
-  public setMeshTransform(object: Object3D, model: Model3D) {
+  public setMeshTransform(object: Object3D, model: Model3D): void {
     if (model.position) {
       object.position.add(model.position);
     }
@@ -113,7 +113,7 @@ export class ProductChanger {
   /**
    * Position the object at 0, 0, 0
    */
-  public  setObjectAtOrigin(object: Object3D) {
+  public setObjectAtOrigin(object: Object3D): void {
     const box = new Box3().setFromObject(object);
     const center = box.getCenter(new Vector3());
 
@@ -127,7 +127,7 @@ export class ProductChanger {
    * @param object
    * @param hasFloor If the object has a floor. Meaning camera can't look from below.
    */
-  public updateCameraPosition(object: Object3D, hasFloor: boolean) {
+  public updateCameraPosition(object: Object3D, hasFloor: boolean): void {
     const camera = this.productConfigurator.camera;
     const cameraControls = this.productConfigurator.cameraControls;
 
@@ -145,7 +145,7 @@ export class ProductChanger {
     cameraControls.update();
 
     cameraControls.maxDistance = size * 1.5;
-    cameraControls.minDistance = size * 0.75;
+    cameraControls.minDistance = size * 0.55;
 
     cameraControls.maxPolarAngle = hasFloor ?  Math.PI * 0.5 : Math.PI;
 

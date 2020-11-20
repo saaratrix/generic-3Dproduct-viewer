@@ -5,6 +5,8 @@ import { ProductChanger } from "./ProductChanger";
 import { TextureChanger } from "./TextureChanger";
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { PointerEventHandler } from "./PointerEventHandler";
+import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 
 @Injectable({
   providedIn: "root"
@@ -25,6 +27,8 @@ export class ProductConfigurator {
 
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
+  private pointerEventHandler: PointerEventHandler;
+  private selectedProductHighlighter: SelectedProductHighlighter;
 
   constructor(
     renderer: WebGLRenderer,
@@ -60,9 +64,11 @@ export class ProductConfigurator {
     this.initLights();
 
     this.productChanger = new ProductChanger(this);
-
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
+    this.pointerEventHandler = new PointerEventHandler(this.scene, this.camera, this.productConfiguratorService);
+    this.selectedProductHighlighter = new SelectedProductHighlighter(this.renderer, this.productConfiguratorService);
 
+    this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
 
     this.startRenderLoop();
@@ -73,6 +79,7 @@ export class ProductConfigurator {
       this.cameraControls.update();
 
       this.renderer.render(this.scene, this.camera);
+      this.selectedProductHighlighter.renderOutline(this.scene, this.camera);
 
       requestAnimationFrame(renderFunction);
     };

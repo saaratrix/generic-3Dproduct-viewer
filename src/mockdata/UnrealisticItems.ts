@@ -39,7 +39,7 @@ export function createRose(id: number): ProductItem {
     models: [ rose1, rose2, centerRose, rose4, rose5 ],
     hasFloor: false,
     useGammaSpace: false,
-    tooltip: "A bouquet of roses.",
+    tooltip: "A special gift a long time ago.",
     subItems: [],
   };
 }

@@ -1,5 +1,4 @@
 import { ProductItem } from "../app/3D/models/ProductItem";
-import { SubProductItem } from "../app/3D/models/SubProductItem";
 import { getIkeaChearModel, getIkeaTableModel, getWayfairChairModel, getWayfairTableModel } from "./Models";
 import { ProductConfigurationEvent } from "../app/product-configurator-events";
 
@@ -11,7 +10,7 @@ export function createWayfairTable(id: number): ProductItem {
     models: [ getWayfairTableModel() ],
     hasFloor: false,
     useGammaSpace: true,
-    tooltip: "",
+    tooltip: "A table.",
     subItems: [],
   };
 }
@@ -24,7 +23,7 @@ export function createWayfairChair(id: number): ProductItem {
     models: [ getWayfairChairModel() ],
     hasFloor: false,
     useGammaSpace: true,
-    tooltip: "",
+    tooltip: "A hard chair.",
     subItems: [],
   };
 }
@@ -38,7 +37,7 @@ export function createIkeaChear(id: number): ProductItem {
     models: [ getIkeaChearModel() ],
     hasFloor: false,
     useGammaSpace: true,
-    tooltip: "",
+    tooltip: "A soft chair.",
     subItems: [],
     selectedSubItem: null
   };
@@ -84,7 +83,7 @@ export function createIkeaTable(id: number): ProductItem {
     models: [ getIkeaTableModel() ],
     hasFloor: false,
     useGammaSpace: true,
-    tooltip: "",
+    tooltip: "A quite plastic looking table, but it's wood!!",
     subItems: [],
   };
 }

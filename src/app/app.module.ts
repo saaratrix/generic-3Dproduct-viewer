@@ -13,6 +13,7 @@ import { ToolbarSubitemContainerComponent } from "./toolbar/toolbar-subitem-cont
 import { RouterModule } from "@angular/router";
 import { ProductViewerComponent } from "./product-viewer/product-viewer.component";
 import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     { component: ProductViewerComponent, matcher: productViewerPageMatcher },
@@ -28,7 +29,8 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     LoadingSpinnerComponent,
     ToolbarSubitemComponent,
     ToolbarSubitemContainerComponent,
-    ProductViewerComponent
+    ProductViewerComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

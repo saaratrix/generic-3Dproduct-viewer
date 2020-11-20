@@ -29,6 +29,7 @@
       ]
     },
     "interface-name": false,
+    "jsdoc-format": false,
     "max-classes-per-file": false,
     "max-line-length": [
       false,
@@ -70,6 +71,7 @@
     ],
     "object-literal-sort-keys": false,
     "one-line": false,
+    "only-arrow-functions": false,
     "ordered-imports": false,
     "quotemark": [
       true,
@@ -91,6 +93,12 @@
     },
     "trailing-comma": false,
     "no-output-on-prefix": true,
+    "typedef": [
+      true,
+      "call-signature",
+      "property-declaration",
+      "parameter"
+    ],
     "typedef-whitespace": {
       "options": [
         {
