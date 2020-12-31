@@ -1,6 +1,7 @@
 import { ProductItem } from "../app/3D/models/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
+import { SelectableOptionsType } from "../app/3D/models/SelectableOptionsType";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -12,6 +13,9 @@ export function createFlowerPot(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "A very good looking flower pot.",
     subItems: [],
+    selectableOptions: {
+      type: SelectableOptionsType.Single,
+    },
   };
 }
 
@@ -41,6 +45,9 @@ export function createRose(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "A special gift a long time ago.",
     subItems: [],
+    selectableOptions: {
+      type: SelectableOptionsType.All,
+    },
   };
 }
 
@@ -54,6 +61,9 @@ export function createWuffels(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "Wuffels! Wuff!",
     subItems: [],
+    selectableOptions: {
+      type: SelectableOptionsType.NotSelectable,
+    },
   };
 }
 

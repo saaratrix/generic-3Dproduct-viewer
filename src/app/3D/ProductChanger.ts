@@ -21,10 +21,9 @@ export class ProductChanger {
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfiguratorService.getSubject( ProductConfigurationEvent.Toolbar_ChangeProduct )
-      .subscribe((product: ProductItem) => {
-        this.changeProduct(product);
-      });
+    this.productConfiguratorService.toolbar_ChangeProduct.subscribe(product => {
+      this.changeProduct(product);
+    });
   }
 
   /**

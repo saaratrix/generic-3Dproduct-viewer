@@ -1,6 +1,7 @@
 import { SubProductItem } from "./SubProductItem";
 import { Object3D } from "three";
 import { Model3D } from "./Model3D";
+import { SelectableOptions } from "./SelectableOptions";
 
 export interface ProductItem {
   id: number;
@@ -14,6 +15,7 @@ export interface ProductItem {
   tooltip: string;
   subItems: SubProductItem[];
   selectedSubItem?: SubProductItem | number | null;
+  selectableOptions?: SelectableOptions;
   // The root object3D
   object3D?: Object3D;
 }

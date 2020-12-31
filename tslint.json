@@ -47,6 +47,7 @@
         ]
       }
     ],
+    "no-angle-bracket-type-assertion": false,
     "no-consecutive-blank-lines": false,
     "no-console": [
       true,

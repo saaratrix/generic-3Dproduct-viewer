@@ -7,7 +7,7 @@ import { ProductConfigurationEvent } from "../product-configurator-events";
 import { MaterialTextureSwapEventData } from "./models/EventData/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "./getOnProgressCallback";
 
-const __showDebugCanvas: boolean = false;
+const _showDebugCanvas: boolean = false;
 
 interface MaterialMap {
   [key: string]: any;
@@ -27,21 +27,19 @@ export class TextureChanger {
     this.canvas = document.createElement("canvas");
     this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    productConfiguratorService.getSubject( ProductConfigurationEvent.Material_TextureSwap )
-      .subscribe((event: MaterialTextureSwapEventData) => {
-        this.swapTexture(event);
-      });
+    productConfiguratorService.material_TextureSwap.subscribe(event => {
+      this.swapTexture(event);
+    });
   }
 
   /**
    * Swap a texture from a -> b over time.
    * @param event
    */
-  private swapTexture(event: MaterialTextureSwapEventData) {
+  private swapTexture(event: MaterialTextureSwapEventData): void {
     if (!event.productItem.object3D) {
       return;
     }
-
 
     this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
 
@@ -59,7 +57,7 @@ export class TextureChanger {
    * @param newTexture
    * @param duration
    */
-  private animateTextureSwap(rootObject: Object3D, slot: string, newTexture: Texture, duration: number) {
+  private animateTextureSwap(rootObject: Object3D, slot: string, newTexture: Texture, duration: number): void {
     // TODO: Improve swapping handle logic, for example if a new swap event fires then finish the existing one.
     if (this.isChanging) {
       return;
@@ -111,7 +109,7 @@ export class TextureChanger {
 
     let debugCanvasElement: HTMLCanvasElement;
     let debugCanvasContext: CanvasRenderingContext2D;
-    if (__showDebugCanvas) {
+    if (_showDebugCanvas) {
       debugCanvasElement = document.getElementById("debugCanvas") as HTMLCanvasElement;
       if (!debugCanvasElement) {
         debugCanvasElement = document.createElement("canvas");

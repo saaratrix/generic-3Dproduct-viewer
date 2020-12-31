@@ -7,6 +7,7 @@ import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
+import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 
 @Injectable({
   providedIn: "root"
@@ -27,6 +28,7 @@ export class ProductConfigurator {
 
   private productChanger: ProductChanger;
   private textureChanger: TextureChanger;
+  private selectedProductMeshIntersector: SelectedProductMeshIntersector;
   private pointerEventHandler: PointerEventHandler;
   private selectedProductHighlighter: SelectedProductHighlighter;
 
@@ -65,7 +67,8 @@ export class ProductConfigurator {
 
     this.productChanger = new ProductChanger(this);
     this.textureChanger = new TextureChanger(this.productConfiguratorService);
-    this.pointerEventHandler = new PointerEventHandler(this.scene, this.camera, this.productConfiguratorService);
+    this.selectedProductMeshIntersector = new SelectedProductMeshIntersector(this.camera, this.productConfiguratorService);
+    this.pointerEventHandler = new PointerEventHandler(this.productConfiguratorService, this.selectedProductMeshIntersector);
     this.selectedProductHighlighter = new SelectedProductHighlighter(this.renderer, this.productConfiguratorService);
 
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
@@ -74,8 +77,8 @@ export class ProductConfigurator {
     this.startRenderLoop();
   }
 
-  public startRenderLoop() {
-    const renderFunction = () => {
+  public startRenderLoop(): void {
+    const renderFunction = (): void => {
       this.cameraControls.update();
 
       this.renderer.render(this.scene, this.camera);
@@ -87,7 +90,7 @@ export class ProductConfigurator {
     requestAnimationFrame(renderFunction);
   }
 
-  public initLights() {
+  public initLights(): void {
     // UE4 said ~285, set up 3 lights using UE4 to easier visualize direction.
     const height = 285;
 
@@ -120,7 +123,7 @@ export class ProductConfigurator {
   /**
    * Init events like window.resize
    */
-  public initEvents() {
+  public initEvents(): void {
     window.addEventListener("resize", () => {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -128,7 +131,7 @@ export class ProductConfigurator {
     });
   }
 
-  public loadInitialItem() {
+  public loadInitialItem(): void {
     const snapshot = this.activatedRouter.snapshot;
     const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];

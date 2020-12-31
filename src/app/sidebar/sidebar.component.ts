@@ -1,9 +1,7 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Subscription } from "rxjs";
-import { Mesh } from "three";
 
 @Component({
   selector: "app-sidebar",
@@ -38,12 +36,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // TODO: Performance Improvement - Currently it triggers 2 animations which triggers detectChanges so I think we ideally should have Mesh_SelectedNew, Mesh_SelectedChanged so we don't have to trigger both states.
     this.subscriptions.push(
-      this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_Deselected).subscribe((mesh) => {
+      this.productConfiguratorService.mesh_Deselected.subscribe(mesh => {
         this.zone.run(() => {
           this.isOpened = false;
         });
       }),
-      this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_Selected).subscribe((mesh) => {
+      this.productConfiguratorService.mesh_Selected.subscribe(mesh => {
         this.zone.run(() => {
           this.isOpened = true;
         });
