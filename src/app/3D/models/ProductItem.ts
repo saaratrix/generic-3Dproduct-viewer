@@ -1,7 +1,7 @@
 import { SubProductItem } from "./SubProductItem";
-import { Object3D } from "three";
+import { Mesh, Object3D } from "three";
 import { Model3D } from "./Model3D";
-import { SelectableOptions } from "./SelectableOptions";
+import { SelectableMeshesOption } from "./SelectableMeshesOptions/SelectableMeshesOption";
 
 export interface ProductItem {
   id: number;
@@ -15,7 +15,9 @@ export interface ProductItem {
   tooltip: string;
   subItems: SubProductItem[];
   selectedSubItem?: SubProductItem | number | null;
-  selectableOptions?: SelectableOptions;
+  selectableMeshesOptions?: SelectableMeshesOption[];
+  // The cached intersections from parsing selectableMeshesOptions so we only have to do it once.
+  selectableMeshIntersections?: Mesh[];
   // The root object3D
   object3D?: Object3D;
 }

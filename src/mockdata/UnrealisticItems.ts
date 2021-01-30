@@ -1,7 +1,7 @@
 import { ProductItem } from "../app/3D/models/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
-import { SelectableOptionsType } from "../app/3D/models/SelectableOptionsType";
+import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -13,9 +13,12 @@ export function createFlowerPot(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "A very good looking flower pot.",
     subItems: [],
-    selectableOptions: {
-      type: SelectableOptionsType.Single,
-    },
+    selectableMeshesOptions: [{
+      includedMeshes: ["Cylinder.002_Cylinder.006_M_flower"],
+      options: {
+        type: SelectedOptionsType.Dummy,
+      },
+    }],
   };
 }
 
@@ -45,9 +48,11 @@ export function createRose(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "A special gift a long time ago.",
     subItems: [],
-    selectableOptions: {
-      type: SelectableOptionsType.All,
-    },
+    selectableMeshesOptions: [{
+      options: {
+        type: SelectedOptionsType.Dummy,
+      },
+    }],
   };
 }
 
@@ -61,9 +66,7 @@ export function createWuffels(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "Wuffels! Wuff!",
     subItems: [],
-    selectableOptions: {
-      type: SelectableOptionsType.NotSelectable,
-    },
+    selectableMeshesOptions: [],
   };
 }
 
