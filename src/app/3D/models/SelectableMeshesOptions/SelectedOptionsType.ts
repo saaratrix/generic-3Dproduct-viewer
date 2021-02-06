@@ -1,3 +1,5 @@
 export enum SelectedOptionsType {
-    Dummy,
+  None,
+  FreeColor,
+  SpecificColors,
 }

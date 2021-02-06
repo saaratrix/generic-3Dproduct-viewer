@@ -1,7 +1,8 @@
 import { SubProductItem } from "./SubProductItem";
 import { Mesh, Object3D } from "three";
-import { Model3D } from "./Model3D";
-import { SelectableMeshesOption } from "./SelectableMeshesOptions/SelectableMeshesOption";
+import { Model3D } from "../Model3D";
+import { SelectableMeshesOption } from "../SelectableMeshesOptions/SelectableMeshesOption";
+import { ActiveProductItemEvent } from "./ActiveProductItemEvent";
 
 export interface ProductItem {
   id: number;
@@ -16,8 +17,12 @@ export interface ProductItem {
   subItems: SubProductItem[];
   selectedSubItem?: SubProductItem | number | null;
   selectableMeshesOptions?: SelectableMeshesOption[];
-  // The cached intersections from parsing selectableMeshesOptions so we only have to do it once.
-  selectableMeshIntersections?: Mesh[];
+
+  // Variables generated at runtime:
+
+  activeEvents: ActiveProductItemEvent[];
   // The root object3D
   object3D?: Object3D;
+  // The cached intersections from parsing selectableMeshesOptions so we only have to do it once.
+  selectableMeshIntersections?: Mesh[];
 }

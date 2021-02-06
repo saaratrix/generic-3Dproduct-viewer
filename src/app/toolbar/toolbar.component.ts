@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
 import { ProductConfigurationEvent } from "../product-configurator-events";
-import { ProductItem } from "../3D/models/ProductItem";
+import { ProductItem } from "../3D/models/ProductItem/ProductItem";
 
 
 @Component({

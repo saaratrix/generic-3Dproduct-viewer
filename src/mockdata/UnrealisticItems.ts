@@ -1,4 +1,4 @@
-import { ProductItem } from "../app/3D/models/ProductItem";
+import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
 import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
@@ -16,9 +16,11 @@ export function createFlowerPot(id: number): ProductItem {
     selectableMeshesOptions: [{
       includedMeshes: ["Cylinder.002_Cylinder.006_M_flower"],
       options: {
-        type: SelectedOptionsType.Dummy,
+        type: SelectedOptionsType.FreeColor,
       },
     }],
+
+    activeEvents: [],
   };
 }
 
@@ -50,9 +52,11 @@ export function createRose(id: number): ProductItem {
     subItems: [],
     selectableMeshesOptions: [{
       options: {
-        type: SelectedOptionsType.Dummy,
+        type: SelectedOptionsType.SpecificColors,
       },
     }],
+
+    activeEvents: [],
   };
 }
 
@@ -67,6 +71,8 @@ export function createWuffels(id: number): ProductItem {
     tooltip: "Wuffels! Wuff!",
     subItems: [],
     selectableMeshesOptions: [],
+
+    activeEvents: [],
   };
 }
 

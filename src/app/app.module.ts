@@ -14,6 +14,8 @@ import { RouterModule } from "@angular/router";
 import { ProductViewerComponent } from "./product-viewer/product-viewer.component";
 import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { SidebarFreeColorComponent } from './sidebar/sidebar-free-color/sidebar-free-color.component';
+import { SidebarSpecificColorsComponent } from './sidebar/sidebar-specific-colors/sidebar-specific-colors.component';
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     { component: ProductViewerComponent, matcher: productViewerPageMatcher },
@@ -30,7 +32,9 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     ToolbarSubitemComponent,
     ToolbarSubitemContainerComponent,
     ProductViewerComponent,
-    SidebarComponent
+    SidebarComponent,
+    SidebarFreeColorComponent,
+    SidebarSpecificColorsComponent,
   ],
   imports: [
     BrowserModule,

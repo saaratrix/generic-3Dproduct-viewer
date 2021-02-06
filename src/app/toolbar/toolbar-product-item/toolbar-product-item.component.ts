@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from "@angular/core";
-import { ProductItem } from "../../3D/models/ProductItem";
+import { ProductItem } from "../../3D/models/ProductItem/ProductItem";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductConfigurationEvent } from "../../product-configurator-events";
 

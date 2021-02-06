@@ -2,6 +2,9 @@ import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angula
 import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
+import { SelectedOptionsType } from "../3D/models/SelectableMeshesOptions/SelectedOptionsType";
+import { SelectableObject3DUserData } from "../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
+import { Mesh } from "three";
 
 @Component({
   selector: "app-sidebar",
@@ -22,8 +25,11 @@ import { Subscription } from "rxjs";
   ],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  public SelectedOptionsType = SelectedOptionsType;
   public isOpened: boolean = false;
   public isContentVisible: boolean = this.isOpened;
+  public type: SelectedOptionsType = SelectedOptionsType.None;
+  public activeMesh: Mesh | undefined;
 
   private subscriptions: Subscription[] = [];
 
@@ -39,11 +45,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.productConfiguratorService.mesh_Deselected.subscribe(mesh => {
         this.zone.run(() => {
           this.isOpened = false;
+          this.activeMesh = undefined;
+          this.type = SelectedOptionsType.None;
         });
       }),
       this.productConfiguratorService.mesh_Selected.subscribe(mesh => {
         this.zone.run(() => {
           this.isOpened = true;
+          const userData = mesh.userData as SelectableObject3DUserData;
+          this.activeMesh = mesh;
+          this.type = userData.selectableMeshesOption.type;
         });
       }),
     );

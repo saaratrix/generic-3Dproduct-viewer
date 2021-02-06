@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, } from "@angular/core";
 import { Subject } from "rxjs";
-import { ProductItem } from "./3D/models/ProductItem";
+import { ProductItem } from "./3D/models/ProductItem/ProductItem";
 import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
 import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "../mockdata/RealisticItems";
 import { ProductConfigurationEvent } from "./product-configurator-events";
@@ -20,6 +20,9 @@ export class ProductConfiguratorService implements OnDestroy {
    * The HTML element associated with an item id.
    */
   public itemElements: { [key: string]: HTMLElement } = {};
+  /**
+   * The currently selected product.
+   */
   public selectedProduct: ProductItem | null = null;
 
   private subjects: Record<ProductConfigurationEvent, Subject<any>> = <any> {};

@@ -1,9 +1,9 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Intersection, Mesh, Object3D, PerspectiveCamera, Raycaster, Vector2 } from "three";
 import { Subscription } from "rxjs";
-import { SelectableObject3DUserData } from "./models/SelectableObject3DUserData";
+import { SelectableObject3DUserData } from "./models/SelectableMeshesOptions/SelectableObject3DUserData";
 import { SelectableMeshesOption } from "./models/SelectableMeshesOptions/SelectableMeshesOption";
-import { ProductItem } from "./models/ProductItem";
+import { ProductItem } from "./models/ProductItem/ProductItem";
 
 export class SelectedProductMeshIntersector {
   private raycaster: Raycaster = new Raycaster();
@@ -67,7 +67,8 @@ export class SelectedProductMeshIntersector {
       if (Array.isArray(option.includedMeshes) && !option.includedMeshes.includes(mesh.name)) {
         return;
       }
-
+      const userData = mesh.userData as SelectableObject3DUserData;
+      userData.selectableMeshesOption = option.options;
       intersectableObjects.push(mesh);
     });
 
