@@ -1,4 +1,5 @@
 $width: 300px;
+
 :host {
   // The host element needs to be a position absolute or the child content adds scrollbars when it's off screen.
   position: absolute;
@@ -22,4 +23,6 @@ $width: 300px;
   padding: 0.5em;
   background-color: hsl(0, 0%, 22%);
   border-left: 1px solid hsl(0, 0%, 50%);
+
+  color: snow;
 }

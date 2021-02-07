@@ -2,6 +2,7 @@ import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
 import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
+import { SelectedSpecificColorAnimationType } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificColorAnimationType";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -13,12 +14,23 @@ export function createFlowerPot(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: "A very good looking flower pot.",
     subItems: [],
-    selectableMeshesOptions: [{
-      includedMeshes: ["Cylinder.002_Cylinder.006_M_flower"],
-      options: {
-        type: SelectedOptionsType.FreeColor,
-      },
-    }],
+    selectableMeshesOptions: [
+      {
+        includedMeshes: ["Cylinder.002_Cylinder.006_M_flower"],
+        options: {
+          type: SelectedOptionsType.FreeColor,
+        },
+      }, {
+        includedMeshes: ["Cylinder.002_Cylinder.006_M_pot"],
+        options: {
+          type: SelectedOptionsType.SpecificColors,
+          value: {
+            animationType: SelectedSpecificColorAnimationType.Linear,
+            colors: ["#ff7f00", "#badbad", "#ffc0cb"],
+          },
+        }
+      }
+    ],
 
     activeEvents: [],
   };

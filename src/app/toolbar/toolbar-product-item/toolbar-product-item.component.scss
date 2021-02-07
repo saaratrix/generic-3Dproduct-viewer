@@ -1,8 +1,10 @@
+@import "./src/styles/vars";
+
 $size: 64px;
 $smallSize: 48px;
 
 .active {
-  border: 1px solid cyan;
+  border: 1px solid $active-color;
 }
 
 .product-item {
@@ -22,6 +24,6 @@ img {
   }
 
   &:hover:not(.active) {
-    border: 1px solid hsl(180, 100%, 40%);
+    border: 1px solid $active-hover-color;
   }
 }

@@ -1,0 +1,29 @@
+@import "./src/styles/vars";
+@import "./src/styles/_mixins.scss";
+
+.specific-color-values {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-block;
+
+  width: $input-color-size;
+  max-width: 100%;
+  height: $input-color-size;
+
+  padding: 0;
+  cursor: pointer;
+}
+
+.item-content {
+  height: 100%;
+}
+
+.active {
+  border: 1px solid $active-color;
+}
+
+@include remove-input-color-border();

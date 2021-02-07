@@ -12,6 +12,7 @@
       ></sidebar-free-color>
       <sidebar-specific-colors
         *ngSwitchCase="SelectedOptionsType.SpecificColors"
+        [mesh]="activeMesh"
       ></sidebar-specific-colors>
     </ng-container>
   </div>

@@ -1,0 +1,13 @@
+@import "./src/styles/vars";
+@import "./src/styles/_mixins.scss";
+
+input[type="color"] {
+  width: $input-color-size;
+  max-width: 100%;
+  height: $input-color-size;
+  padding: 0;
+  border: none;
+}
+
+@include remove-input-color-border();
+

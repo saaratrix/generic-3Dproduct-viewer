@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Color, Mesh } from "three";
 import { throttle } from "../../utility/throttle-decorator";
-import { isMeshPhongMaterial, isMeshStandardMaterial } from "../../3D/utility/MaterialUtility";
+import {
+  getMaterials,
+  setMaterialParameters
+} from "../../3D/utility/MaterialUtility";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
 import { ActiveProductItemEventType } from "../../3D/models/ProductItem/ActiveProductItemEventType";
@@ -14,11 +17,21 @@ import { ActiveProductItemEventType } from "../../3D/models/ProductItem/ActivePr
 export class SidebarFreeColorComponent implements OnInit {
   @Input() mesh!: Mesh;
 
+  initialColor: string = "";
+
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
   ) { }
 
   ngOnInit(): void {
+    const materials = getMaterials(this.mesh);
+    for (const material of materials) {
+      const color = material["color"] as Color;
+      if (color) {
+        this.initialColor = `#${color.getHexString()}`;
+        break;
+      }
+    }
   }
 
   @throttle(100)
@@ -27,11 +40,8 @@ export class SidebarFreeColorComponent implements OnInit {
     const hexColor = (<HTMLInputElement> event.target).value;
     clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
-    const materials = Array.isArray(this.mesh.material) ? this.mesh.material : [this.mesh.material];
-    for (const material of materials) {
-      if (isMeshStandardMaterial(material) || isMeshPhongMaterial(material)) {
-        material.color = new Color(hexColor);
-      }
-    }
+    setMaterialParameters(this.mesh, {
+      color: new Color(hexColor),
+    });
   }
 }

@@ -1,1 +1,8 @@
-<p>sidebar-predefined-colors works!</p>
+<p>
+  Edit {{ isColorValues ? 'color' : 'texture' }}:
+</p>
+<ul class="specific-color-values">
+  <li *ngFor="let value of values" class="item" [class.active]="currentValue === value">
+    <div *ngIf="isColorValues" class="item-content" [ngStyle]="{ backgroundColor: value }"></div>
+  </li>
+</ul>

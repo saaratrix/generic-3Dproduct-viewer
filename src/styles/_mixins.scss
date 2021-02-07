@@ -1,0 +1,11 @@
+@mixin remove-input-color-border {
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+  }
+  input[type="color"]::-moz-color-swatch {
+    border: none;
+  }
+}
