@@ -7,6 +7,7 @@ import { ProductConfigurationEvent } from "./product-configurator-events";
 import { LoadingProgressEventData } from "./3D/models/EventData/LoadingProgressEventData";
 import { MaterialTextureSwapEventData } from "./3D/models/EventData/MaterialTextureSwapEventData";
 import { Mesh } from "three";
+import { MaterialColorSwapEventData } from "./3D/models/EventData/MaterialColorSwapEventData";
 
 @Injectable({
   providedIn: "root"
@@ -31,6 +32,7 @@ export class ProductConfiguratorService implements OnDestroy {
   public loading_Progress: Subject<LoadingProgressEventData>;
   public loading_Finished: Subject<void>;
 
+  public material_ColorSwap: Subject<MaterialColorSwapEventData>;
   public material_TextureSwap: Subject<MaterialTextureSwapEventData>;
 
   public mesh_Selected: Subject<Mesh>;
@@ -58,6 +60,7 @@ export class ProductConfiguratorService implements OnDestroy {
     this.loading_Progress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.Loading_Progress);
     this.loading_Finished = this.createSubject<void>(ProductConfigurationEvent.Loading_Finished);
 
+    this.material_ColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap);
     this.material_TextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.Material_TextureSwap);
 
     this.mesh_Selected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Selected);
@@ -84,7 +87,7 @@ export class ProductConfiguratorService implements OnDestroy {
     }
   }
 
-  public dispatch(eventType: ProductConfigurationEvent, data?: any): void {
+  public dispatch<T = any>(eventType: ProductConfigurationEvent, data?: T): void {
     if (!this.subjects[eventType]) {
       return;
     }

@@ -2,12 +2,13 @@ import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, WebGLRenderer
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
-import { TextureChanger } from "./TextureChanger";
+import { MaterialTextureChanger } from "./MaterialAnimators/MaterialTextureChanger";
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
+import { MaterialColorChanger } from "./MaterialAnimators/MaterialColorChanger";
 
 @Injectable({
   providedIn: "root"
@@ -27,7 +28,8 @@ export class ProductConfigurator {
   public lightIntensityFactor: number = 1;
 
   private productChanger: ProductChanger;
-  private textureChanger: TextureChanger;
+  private materialColorChanger: MaterialColorChanger;
+  private textureChanger: MaterialTextureChanger;
   private selectedProductMeshIntersector: SelectedProductMeshIntersector;
   private pointerEventHandler: PointerEventHandler;
   private selectedProductHighlighter: SelectedProductHighlighter;
@@ -66,7 +68,8 @@ export class ProductConfigurator {
     this.initLights();
 
     this.productChanger = new ProductChanger(this);
-    this.textureChanger = new TextureChanger(this.productConfiguratorService);
+    this.materialColorChanger = new MaterialColorChanger(this.productConfiguratorService);
+    this.textureChanger = new MaterialTextureChanger(this.productConfiguratorService);
     this.selectedProductMeshIntersector = new SelectedProductMeshIntersector(this.camera, this.productConfiguratorService);
     this.pointerEventHandler = new PointerEventHandler(this.productConfiguratorService, this.selectedProductMeshIntersector);
     this.selectedProductHighlighter = new SelectedProductHighlighter(this.renderer, this.productConfiguratorService);

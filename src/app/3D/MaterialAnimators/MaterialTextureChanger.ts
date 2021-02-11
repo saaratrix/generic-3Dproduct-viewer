@@ -2,10 +2,10 @@
  * Changes a texture from One to another over time.
  */
 import { CanvasTexture, Material, Mesh, Object3D, Texture, TextureLoader } from "three";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
-import { MaterialTextureSwapEventData } from "./models/EventData/MaterialTextureSwapEventData";
-import { getOnProgressCallback } from "./getOnProgressCallback";
+import { ProductConfiguratorService } from "../../product-configurator.service";
+import { ProductConfigurationEvent } from "../../product-configurator-events";
+import { MaterialTextureSwapEventData } from "../models/EventData/MaterialTextureSwapEventData";
+import { getOnProgressCallback } from "../getOnProgressCallback";
 
 const _showDebugCanvas: boolean = false;
 
@@ -13,7 +13,7 @@ interface MaterialMap {
   [key: string]: any;
 }
 
-export class TextureChanger {
+export class MaterialTextureChanger {
   private productConfiguratorService: ProductConfiguratorService;
 
   public canvas: HTMLCanvasElement;

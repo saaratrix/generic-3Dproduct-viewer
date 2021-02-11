@@ -1,8 +1,12 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, NgZone, OnInit } from "@angular/core";
 import { Color, Mesh } from "three";
 import { SelectableObject3DUserData } from "../../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
 import { SelectedSpecificColorsValue } from "../../3D/models/SelectableMeshesOptions/SelectedSpecificColorsValue";
-import { getMaterials } from "../../3D/utility/MaterialUtility";
+import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
+import { MaterialAnimationType } from "../../3D/MaterialAnimators/MaterialAnimationType";
+import { ProductConfiguratorService } from "../../product-configurator.service";
+import { ProductConfigurationEvent } from "../../product-configurator-events";
+import { MaterialColorSwapEventData } from "../../3D/models/EventData/MaterialColorSwapEventData";
 
 @Component({
   selector: "sidebar-specific-colors",
@@ -14,9 +18,17 @@ export class SidebarSpecificColorsComponent implements OnInit {
 
   isColorValues: boolean = true;
   currentValue: string = "";
+  // The color or texture values.
+  // Color values are in hex form #badbad
+  // Texture values are the texture urls.
   values: string[] = [];
 
-  constructor() { }
+  private animationType: MaterialAnimationType = MaterialAnimationType.None;
+
+  constructor(
+    private productConfigurationService: ProductConfiguratorService,
+    private ngZone: NgZone,
+  ) { }
 
   ngOnInit(): void {
     const userdata = this.mesh.userData as SelectableObject3DUserData;
@@ -33,10 +45,12 @@ export class SidebarSpecificColorsComponent implements OnInit {
     } else {
       this.values = [];
     }
+
+    this.animationType = values.animationType;
   }
 
   private setCurrentColorValue(): void {
-    const materials = getMaterials(this.mesh);
+    const materials = getMaterialsFromMesh(this.mesh);
     for (const material of materials) {
       const color = material["color"] as Color;
       if (color) {
@@ -50,4 +64,36 @@ export class SidebarSpecificColorsComponent implements OnInit {
 
   }
 
+  /**
+   * Color value in hexadecimal form.
+   * @param value
+   */
+  public changeCurrentColor(value: string): void {
+    if (value === this.currentValue) {
+      return;
+    }
+
+    const userData = this.mesh.userData as SelectableObject3DUserData;
+    const meshes = [this.mesh];
+    if (userData.siblings) {
+      meshes.push(...userData.siblings);
+    }
+
+    const materials = getMaterialsFromMeshes(meshes);
+
+    this.currentValue = value;
+    // Run this outside angular or it'll do angular things calls before & after each animation frame.
+    this.ngZone.runOutsideAngular(() => {
+      this.productConfigurationService.dispatch<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap, {
+        animationType: this.animationType,
+        materials,
+        targetColor: new Color(value),
+        productItem: this.productConfigurationService.selectedProduct!,
+      });
+    });
+  }
+
+  public changeCurrentTexture(value: string): void {
+
+  }
 }

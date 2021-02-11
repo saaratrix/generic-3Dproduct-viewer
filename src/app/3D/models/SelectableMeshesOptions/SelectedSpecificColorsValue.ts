@@ -1,7 +1,7 @@
-import { SelectedSpecificColorAnimationType } from "./SelectedSpecificColorAnimationType";
+import { MaterialAnimationType } from "../../MaterialAnimators/MaterialAnimationType";
 
 export interface SelectedSpecificColorsValue {
-  animationType: SelectedSpecificColorAnimationType,
+  animationType: MaterialAnimationType;
   colors?: string[];
   textures?: string[];
 }

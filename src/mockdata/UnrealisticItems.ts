@@ -2,7 +2,7 @@ import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
 import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
-import { SelectedSpecificColorAnimationType } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificColorAnimationType";
+import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -25,7 +25,8 @@ export function createFlowerPot(id: number): ProductItem {
         options: {
           type: SelectedOptionsType.SpecificColors,
           value: {
-            animationType: SelectedSpecificColorAnimationType.Linear,
+            animationType: MaterialAnimationType.Linear,
+            // ffc0cb = CSS Color 'pink'
             colors: ["#ff7f00", "#badbad", "#ffc0cb"],
           },
         }

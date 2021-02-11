@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Color, Mesh } from "three";
 import { throttle } from "../../utility/throttle-decorator";
 import {
-  getMaterials,
+  getMaterialsFromMesh,
   setMaterialParameters
 } from "../../3D/utility/MaterialUtility";
 import { ProductConfiguratorService } from "../../product-configurator.service";
@@ -24,7 +24,7 @@ export class SidebarFreeColorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const materials = getMaterials(this.mesh);
+    const materials = getMaterialsFromMesh(this.mesh);
     for (const material of materials) {
       const color = material["color"] as Color;
       if (color) {

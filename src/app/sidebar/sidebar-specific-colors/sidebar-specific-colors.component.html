@@ -3,6 +3,11 @@
 </p>
 <ul class="specific-color-values">
   <li *ngFor="let value of values" class="item" [class.active]="currentValue === value">
-    <div *ngIf="isColorValues" class="item-content" [ngStyle]="{ backgroundColor: value }"></div>
+    <div
+      *ngIf="isColorValues"
+      class="item-content"
+      [ngStyle]="{ backgroundColor: value }"
+      (click)="changeCurrentColor(value)"
+    ></div>
   </li>
 </ul>
