@@ -16,14 +16,8 @@ interface AnimatableColorItem {
 export class MaterialColorChanger {
   private productConfiguratorService: ProductConfiguratorService;
 
-  public canvas: HTMLCanvasElement;
-  public context: CanvasRenderingContext2D;
-
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
-
-    this.canvas = document.createElement("canvas");
-    this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
     productConfiguratorService.material_ColorSwap.subscribe(event => {
       switch (event.animationType) {
