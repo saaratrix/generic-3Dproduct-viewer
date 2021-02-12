@@ -15,7 +15,8 @@ import { ProductViewerComponent } from "./product-viewer/product-viewer.componen
 import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarFreeColorComponent } from './sidebar/sidebar-free-color/sidebar-free-color.component';
-import { SidebarSpecificColorsComponent } from './sidebar/sidebar-specific-colors/sidebar-specific-colors.component';
+import { SidebarSpecificColorComponent } from './sidebar/sidebar-specific-color/sidebar-specific-color.component';
+import { SidebarSpecificTextureComponent } from './sidebar/sidebar-specific-texture/sidebar-specific-texture.component';
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     { component: ProductViewerComponent, matcher: productViewerPageMatcher },
@@ -34,7 +35,8 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     ProductViewerComponent,
     SidebarComponent,
     SidebarFreeColorComponent,
-    SidebarSpecificColorsComponent,
+    SidebarSpecificColorComponent,
+    SidebarSpecificTextureComponent,
   ],
   imports: [
     BrowserModule,

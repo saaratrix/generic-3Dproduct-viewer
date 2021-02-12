@@ -3,5 +3,4 @@ import { MaterialAnimationType } from "../../MaterialAnimators/MaterialAnimation
 export interface SelectedSpecificColorsValue {
   animationType: MaterialAnimationType;
   colors?: string[];
-  textures?: string[];
 }

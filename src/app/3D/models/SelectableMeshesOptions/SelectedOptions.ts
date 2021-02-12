@@ -1,6 +1,7 @@
 import { SelectedOptionsType } from "./SelectedOptionsType";
+import { SelectedSpecificColorsValue } from "./SelectedSpecificColorsValue";
 
-export interface SelectedOptions<T = any> {
+export interface SelectedOptions {
     type: SelectedOptionsType;
-    value?: T;
+    value?: SelectedSpecificColorsValue | any;
 }

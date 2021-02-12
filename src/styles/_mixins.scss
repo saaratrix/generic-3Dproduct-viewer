@@ -9,3 +9,10 @@
     border: none;
   }
 }
+
+@mixin inline-spinner-size($size) {
+  .inline-spinner:after {
+    width: $size;
+    height: $size;
+  }
+}

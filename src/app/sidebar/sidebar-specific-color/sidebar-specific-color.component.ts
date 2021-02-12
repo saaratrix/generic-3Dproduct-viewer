@@ -7,16 +7,17 @@ import { MaterialAnimationType } from "../../3D/MaterialAnimators/MaterialAnimat
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductConfigurationEvent } from "../../product-configurator-events";
 import { MaterialColorSwapEventData } from "../../3D/models/EventData/MaterialColorSwapEventData";
+import { clearEvents } from "../../3D/utility/ProductItemUtility";
+import { ActiveProductItemEventType } from "../../3D/models/ProductItem/ActiveProductItemEventType";
 
 @Component({
-  selector: "sidebar-specific-colors",
-  templateUrl: "./sidebar-specific-colors.component.html",
-  styleUrls: ["./sidebar-specific-colors.component.scss"],
+  selector: "sidebar-specific-color",
+  templateUrl: "./sidebar-specific-color.component.html",
+  styleUrls: ["./sidebar-specific-color.component.scss"],
 })
-export class SidebarSpecificColorsComponent implements OnInit {
+export class SidebarSpecificColorComponent implements OnInit {
   @Input() mesh!: Mesh;
 
-  isColorValues: boolean = true;
   currentValue: string = "";
   // The color or texture values.
   // Color values are in hex form #badbad
@@ -26,7 +27,7 @@ export class SidebarSpecificColorsComponent implements OnInit {
   private animationType: MaterialAnimationType = MaterialAnimationType.None;
 
   constructor(
-    private productConfigurationService: ProductConfiguratorService,
+    private productConfiguratorService: ProductConfiguratorService,
     private ngZone: NgZone,
   ) { }
 
@@ -35,22 +36,18 @@ export class SidebarSpecificColorsComponent implements OnInit {
     const values = userdata.selectableMeshesOption.value as SelectedSpecificColorsValue;
 
     if (values.colors) {
-      this.isColorValues = true;
       this.values = values.colors;
-      this.setCurrentColorValue();
-    } else if (values.textures) {
-      this.isColorValues = false;
-      this.values = values.textures;
-      this.setCurrentTextureValue();
     } else {
       this.values = [];
     }
 
+    this.setCurrentColorValue();
     this.animationType = values.animationType;
   }
 
   private setCurrentColorValue(): void {
     const materials = getMaterialsFromMesh(this.mesh);
+    this.currentValue = "";
     for (const material of materials) {
       const color = material["color"] as Color;
       if (color) {
@@ -58,10 +55,6 @@ export class SidebarSpecificColorsComponent implements OnInit {
         break;
       }
     }
-  }
-
-  private setCurrentTextureValue(): void {
-
   }
 
   /**
@@ -72,6 +65,7 @@ export class SidebarSpecificColorsComponent implements OnInit {
     if (value === this.currentValue) {
       return;
     }
+    clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
     const userData = this.mesh.userData as SelectableObject3DUserData;
     const meshes = [this.mesh];
@@ -84,16 +78,12 @@ export class SidebarSpecificColorsComponent implements OnInit {
     this.currentValue = value;
     // Run this outside angular or it'll do angular things calls before & after each animation frame.
     this.ngZone.runOutsideAngular(() => {
-      this.productConfigurationService.dispatch<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap, {
+      this.productConfiguratorService.dispatch<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap, {
         animationType: this.animationType,
         materials,
         targetColor: new Color(value),
-        productItem: this.productConfigurationService.selectedProduct!,
+        productItem: this.productConfiguratorService.selectedProduct!,
       });
     });
-  }
-
-  public changeCurrentTexture(value: string): void {
-
   }
 }

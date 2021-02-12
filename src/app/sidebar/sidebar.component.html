@@ -10,10 +10,14 @@
         *ngSwitchCase="SelectedOptionsType.FreeColor"
         [mesh]="activeMesh"
       ></sidebar-free-color>
-      <sidebar-specific-colors
+      <sidebar-specific-color
         *ngSwitchCase="SelectedOptionsType.SpecificColors"
         [mesh]="activeMesh"
-      ></sidebar-specific-colors>
+      ></sidebar-specific-color>
+      <sidebar-specific-texture
+        *ngSwitchCase="SelectedOptionsType.SpecificTextures"
+        [mesh]="activeMesh"
+      ></sidebar-specific-texture>
     </ng-container>
   </div>
 </div>

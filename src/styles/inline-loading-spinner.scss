@@ -1,0 +1,15 @@
+@import "vars";
+
+.inline-spinner:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: $inline-spinner-default-size;
+  height: $inline-spinner-default-size;
+
+  background-image: url("../assets/loading.svg");
+  background-repeat: no-repeat;
+}

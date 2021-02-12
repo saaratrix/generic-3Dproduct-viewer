@@ -1,9 +1,34 @@
 import { ProductItem } from "../models/ProductItem/ProductItem";
-import { OnProgressCallback } from "./OnProgressCallback";
+import { OnAnimationProgressCallback } from "./OnAnimationProgressCallback";
 import { CancelActiveEventCallback } from "../models/ProductItem/CancelActiveEventCallback";
 import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
+import { ActiveProductItemEvent } from "../models/ProductItem/ActiveProductItemEvent";
 
-export function createAnimation(productItem: ProductItem, duration: number, onProgress: OnProgressCallback, easingMethod?: (progress: number) => number): () => void {
+// TODO: Try and refactor all this into a better system at some point (so never!) or maybe take a promise as input to continue the promise?
+
+export function addActiveEventItem(productItem: ProductItem, eventType: ActiveProductItemEventType) {
+  const item: ActiveProductItemEvent = {
+    cancelEvent: () => {
+      const index = productItem.activeEvents.indexOf(item);
+      if (index !== -1) {
+        productItem.activeEvents.splice(index);
+      }
+    },
+    type: eventType,
+  };
+
+  productItem.activeEvents.push(item);
+  return item;
+}
+
+export function createAnimation(
+  productItem: ProductItem,
+  eventType: ActiveProductItemEventType,
+  duration: number,
+  onProgress: OnAnimationProgressCallback,
+  onFinish?: (cancelled: boolean, complete: boolean) => void,
+  easingMethod?: (progress: number) => number
+): () => void {
   let isCancelled: boolean = false;
   let lastFrame: number = Date.now();
   let elapsed: number = 0;
@@ -29,7 +54,7 @@ export function createAnimation(productItem: ProductItem, duration: number, onPr
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      onAnimationFinished();
+      onAnimationFinished(true);
     }
   };
 
@@ -39,21 +64,24 @@ export function createAnimation(productItem: ProductItem, duration: number, onPr
       onProgress(1);
     }
 
-    onAnimationFinished();
+    onAnimationFinished(complete);
   };
 
-  const onAnimationFinished = () => {
+  const onAnimationFinished = (complete: boolean) => {
     const index = productItem.activeEvents.indexOf(activeEvent);
     if (index !== -1) {
       productItem.activeEvents.splice(index, 1);
     }
+
+    onFinish?.(isCancelled, complete);
   };
 
   // Create the event so we have a reference to it when we need to remove it.
-  const activeEvent = {
+  const activeEvent: ActiveProductItemEvent = {
     cancelEvent,
-    type: ActiveProductItemEventType.ColorChange,
+    type: eventType,
   };
   productItem.activeEvents.push(activeEvent);
+
   return animate;
 }

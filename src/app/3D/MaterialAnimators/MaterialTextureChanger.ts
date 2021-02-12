@@ -1,32 +1,34 @@
 /**
  * Changes a texture from One to another over time.
  */
-import { CanvasTexture, Material, Mesh, Object3D, Texture, TextureLoader } from "three";
+import { CanvasTexture, Material, Mesh, Texture, TextureLoader } from "three";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductConfigurationEvent } from "../../product-configurator-events";
 import { MaterialTextureSwapEventData } from "../models/EventData/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "../getOnProgressCallback";
+import { MaterialAnimationType } from "./MaterialAnimationType";
+import { addActiveEventItem, createAnimation } from "./CreateAnimation";
+import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
+import { clearEvents } from "../utility/ProductItemUtility";
 
 const _showDebugCanvas: boolean = false;
 
-interface MaterialMap {
-  [key: string]: any;
+interface DebugCanvas {
+  debugCanvasElement: HTMLCanvasElement | undefined;
+  debugCanvasContext: CanvasRenderingContext2D | undefined;
+}
+
+interface AnimatedMaterial {
+  material: Material;
+  originalTexture: Texture;
 }
 
 export class MaterialTextureChanger {
   private productConfiguratorService: ProductConfiguratorService;
 
-  public canvas: HTMLCanvasElement;
-  public context: CanvasRenderingContext2D;
-
-  public isChanging: boolean = false;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
-
-    this.canvas = document.createElement("canvas");
-    this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D;
-
     productConfiguratorService.material_TextureSwap.subscribe(event => {
       this.swapTexture(event);
     });
@@ -38,77 +40,208 @@ export class MaterialTextureChanger {
    */
   private swapTexture(event: MaterialTextureSwapEventData): void {
     if (!event.productItem.object3D) {
+      event.onLoaded?.();
       return;
     }
+    // This is probably not necessary, it seems to handle it just fine with multiple events at once.
+    clearEvents(event.productItem, [ActiveProductItemEventType.TextureChange], true);
 
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+    switch (event.animationType) {
+      case MaterialAnimationType.None:
+        this.changeTexture(event, 0);
+        break;
+      case MaterialAnimationType.Linear:
+        this.changeTexture(event, 250);
+        break;
+      case MaterialAnimationType.FromTopToBottom:
+        this.changeTexture(event, 500);
+        break;
+    }
+  }
+
+  private loadTexture(event: MaterialTextureSwapEventData, onLoaded: (texture: Texture) => void): void {
+    if (event.addGlobalLoadingEvent) {
+      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+    }
+
+    const onProgressCallback = event.addGlobalLoadingEvent ? getOnProgressCallback(this.productConfiguratorService) : undefined;
 
     // Load the new texture
     new TextureLoader().load(event.textureUrl, (texture: Texture) => {
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
-      this.animateTextureSwap(event.productItem.object3D as Object3D, event.textureSlot, texture, 500);
-    }, getOnProgressCallback(this.productConfiguratorService));
+      if (event.addGlobalLoadingEvent) {
+        this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
+      }
+      // For example to stop a loading spinner!
+      event.onLoaded?.();
+
+      onLoaded(texture);
+    }, onProgressCallback);
   }
 
-  /**
-   * Animate the change from texture a to texture b.
-   * @param rootObject
-   * @param slot
-   * @param newTexture
-   * @param duration
-   */
-  private animateTextureSwap(rootObject: Object3D, slot: string, newTexture: Texture, duration: number): void {
-    // TODO: Improve swapping handle logic, for example if a new swap event fires then finish the existing one.
-    if (this.isChanging) {
-      return;
-    }
+  private changeTexture(event: MaterialTextureSwapEventData, duration: number): void {
+    const activeAnimationEvent = addActiveEventItem(event.productItem, ActiveProductItemEventType.TextureChange);
 
-    const start: number = Date.now();
+    this.loadTexture(event, (texture) => {
+      const indexOf = event.productItem.activeEvents.indexOf(activeAnimationEvent);
+      // If the item can't be found it was removed.
+      if (indexOf === -1) {
+        return;
+      }
+      // We remove the activeAnimation event because we're going to create a second one!
+      // TODO: Try and merge the two active events? This system got a bit complex, should look into a better one most likely.
+      event.productItem.activeEvents.splice(indexOf, 1);
 
-    const tmpTexture = new CanvasTexture(this.canvas);
-    const materials: MaterialMap[] = [];
-    let originalImage: HTMLImageElement | undefined;
+      const animatedMaterials = this.getMaterials(event, texture);
+      // If duration is 0 just instantly set the new texture.
+      // Or if length is 0, to be lazy and use the same early exit!
+      if (duration === 0 || animatedMaterials.length === 0) {
+        for (const animatedMaterial of animatedMaterials) {
+          animatedMaterial.material[event.textureSlot] = texture;
+        }
+        return;
+      }
 
-    rootObject.traverse((object: Object3D) => {
-      const mesh = object as Mesh;
-      const material = mesh.material as Material;
-      const materialMap = material as MaterialMap;
-      if (material && materialMap[slot]) {
-        if (!originalImage) {
-          originalImage = materialMap[slot].image;
-          // Need to have same flipY as the original texture or bad things will happen!
-          const flipY = materialMap[slot].flipY;
-          tmpTexture.flipY = flipY;
-          newTexture.flipY = flipY;
+      let canvas: HTMLCanvasElement | undefined = document.createElement("canvas");
+      let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-          materialMap[slot] = tmpTexture;
-          if (materials.indexOf(material) === -1) {
-            materials.push(material);
+      const onFinish = (isCancelled: boolean, complete: boolean): void => {
+        canvas!.width = 1;
+        canvas!.height = 1;
+        context?.clearRect(0, 0, 1, 1);
+
+        canvas = undefined;
+        context = null;
+        tmpTexture?.dispose();
+
+        if (isCancelled && !complete) {
+          for (const animatedMaterial of animatedMaterials) {
+            animatedMaterial.material[event.textureSlot] = animatedMaterial.originalTexture;
           }
+          return;
+        }
+
+        if (debugCanvasContext) {
+          debugCanvasContext.drawImage(targetImage, 0, 0);
+        }
+
+        for (const animatedMaterial of animatedMaterials) {
+          animatedMaterial.material[event.textureSlot] = texture;
+        }
+      };
+
+      if (!context) {
+        onFinish(false, true);
+      }
+
+      const tmpTexture = new CanvasTexture(canvas);
+      const firstTexture = animatedMaterials[0].originalTexture;
+      tmpTexture.flipY = firstTexture.flipY;
+      const originalImage = firstTexture.image as HTMLImageElement;
+      const targetImage = texture.image as HTMLImageElement;
+
+      const width = originalImage.naturalWidth || originalImage.width;
+      const height = originalImage.naturalHeight || originalImage.height;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const { debugCanvasElement, debugCanvasContext } = this.trySetupDebugCanvas(canvas);
+      const renderMethod = this.getRenderMethod(event.animationType);
+
+      const onProgress = (progress: number): void => {
+        renderMethod(context!, progress, width, height, originalImage, targetImage);
+
+        if (debugCanvasContext) {
+          debugCanvasContext.drawImage(canvas!, 0, 0);
+        }
+
+        tmpTexture.needsUpdate = true;
+      };
+
+      // Draw the original image once so it doesn't flicker when changing.
+      context!.drawImage(originalImage, 0, 0);
+      for (const animatedMaterial of animatedMaterials) {
+        animatedMaterial.material[event.textureSlot] = tmpTexture;
+      }
+
+      const animate = createAnimation(event.productItem, ActiveProductItemEventType.TextureChange, duration, onProgress, onFinish);
+      requestAnimationFrame(animate);
+    });
+  }
+
+  private getMaterials(event: MaterialTextureSwapEventData, newTexture: Texture): AnimatedMaterial[] {
+    const materials: AnimatedMaterial[] = [];
+
+    if (event.materials) {
+      for (const material of event.materials) {
+        if (material[event.textureSlot]) {
+          materials.push({
+            material,
+            originalTexture: material[event.textureSlot],
+          });
+          newTexture.flipY = material[event.textureSlot].flipY;
         }
       }
-    });
+    } else {
+      event.productItem.object3D!.traverse(o => {
+        const mesh = o as Mesh;
+        if (!mesh.isMesh) {
+          return;
+        }
 
-    if (!originalImage) {
-      console.log("animateTextureSwap(): Did not find originalTexture");
-      return;
+        const meshMaterials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        for (const material of meshMaterials) {
+          if (material[event.textureSlot]) {
+            materials.push({
+              material,
+              originalTexture: material[event.textureSlot],
+            });
+            newTexture.flipY = material[event.textureSlot].flipY;
+          }
+        }
+      });
     }
 
-    this.isChanging = true;
+    return materials;
+  }
 
-    const bImage: HTMLImageElement = newTexture.image;
+  private getRenderMethod(animationType: MaterialAnimationType): (context: CanvasRenderingContext2D, progress: number, width: number, height: number, a: HTMLImageElement, b: HTMLImageElement) => void {
+    switch (animationType) {
+      case MaterialAnimationType.Linear:
+        return this.renderLinearly;
+      case MaterialAnimationType.FromTopToBottom:
+        return this.renderFromTopToBottom;
+      default:
+        return () => {};
+    }
+  }
 
-    const width = originalImage.naturalWidth;
-    const height = originalImage.naturalHeight;
+  private renderLinearly(context: CanvasRenderingContext2D, progress: number, width: number, height: number, a: HTMLImageElement, b: HTMLImageElement): void {
+    context.clearRect(0, 0, width, height);
+    context.globalAlpha = 1 - progress;
+    context.drawImage(a, 0, 0);
 
-    this.canvas.width = width;
-    this.canvas.height = height;
+    context.globalAlpha = progress;
+    context.drawImage(b, 0, 0);
+  }
 
-    this.context.clearRect(0, 0, width, height);
-    this.context.drawImage(originalImage, 0, 0);
+  private renderFromTopToBottom(context: CanvasRenderingContext2D, progress: number, width: number, height: number, a: HTMLImageElement, b: HTMLImageElement): void {
+    context.clearRect(0, 0, width, height);
+    context.drawImage(a, 0, 0);
 
-    let debugCanvasElement: HTMLCanvasElement;
-    let debugCanvasContext: CanvasRenderingContext2D;
+    context.save();
+    context.beginPath();
+    context.rect(0, 0, progress * width, progress * height);
+    context.clip();
+
+    context.drawImage(b, 0, 0, width, height);
+    context.restore();
+  }
+
+  private trySetupDebugCanvas(canvas: HTMLCanvasElement): DebugCanvas {
+    let debugCanvasElement: HTMLCanvasElement | undefined;
+    let debugCanvasContext: CanvasRenderingContext2D | undefined;
+
     if (_showDebugCanvas) {
       debugCanvasElement = document.getElementById("debugCanvas") as HTMLCanvasElement;
       if (!debugCanvasElement) {
@@ -118,55 +251,14 @@ export class MaterialTextureChanger {
         debugCanvasElement.classList.add("debug-canvas");
       }
 
-      debugCanvasElement.width = this.canvas.width;
-      debugCanvasElement.height = this.canvas.height;
+      debugCanvasElement.width = canvas.width;
+      debugCanvasElement.height = canvas.height;
       debugCanvasContext = debugCanvasElement.getContext("2d") as CanvasRenderingContext2D;
-      debugCanvasContext.drawImage(this.canvas, 0, 0);
+      debugCanvasContext.drawImage(canvas, 0, 0);
     }
 
-    const frameCallback = () => {
-      // Get progress from 0 -> 1 and make sure progress isn't larger than 1.
-      const progress = Math.min((Date.now() - start)  / duration, 1 );
-
-      if (progress < 1) {
-        // Do the texture update
-        this.context.clearRect(0, 0, width, height);
-        this.context.drawImage(originalImage as HTMLImageElement, 0, 0);
-        //
-        this.context.save();
-        this.context.beginPath();
-        this.context.rect(0, 0, progress * width, progress * height);
-        this.context.clip();
-
-        this.context.drawImage(bImage, 0, 0, width, height);
-        this.context.restore();
-
-        if (debugCanvasContext) {
-          debugCanvasContext.drawImage(this.canvas, 0, 0);
-        }
-
-        tmpTexture.needsUpdate = true;
-
-        requestAnimationFrame(frameCallback);
-      } else {
-        // Set the final texture as the canvas
-        for (const material of materials) {
-          material[slot] = newTexture;
-        }
-
-        if (debugCanvasContext) {
-          debugCanvasContext.drawImage(bImage, 0, 0);
-        }
-
-        this.canvas.width = 1;
-        this.canvas.height = 1;
-        this.context.clearRect(0, 0, 1, 1);
-        tmpTexture.dispose();
-        this.isChanging = false;
-      }
-    };
-
-    requestAnimationFrame(frameCallback);
+    return { debugCanvasElement, debugCanvasContext };
   }
+
 
 }

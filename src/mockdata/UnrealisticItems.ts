@@ -3,6 +3,8 @@ import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
 import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
 import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
+import { SelectedSpecificColorsValue } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificColorsValue";
+import { SelectedSpecificTexturesValue } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificTexturesValue";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -54,6 +56,19 @@ export function createRose(id: number): ProductItem {
   rose5.position = new Vector3(0, 0, -1);
   rose5.rotation = new Euler(-0.2, 0, 0);
 
+  const selectedOptionsValue: SelectedSpecificTexturesValue = {
+    animationType: MaterialAnimationType.FromTopToBottom,
+    textures: [
+      {
+        url: "assets/models/rose.png",
+        thumbnail: "assets/models/thumbnail_rose.png",
+      }, {
+        url: "assets/models/rose_pink.png",
+        thumbnail: "assets/models/rose_pink.png",
+      }
+    ],
+  };
+
   return {
     id,
     name: "roses",
@@ -65,7 +80,8 @@ export function createRose(id: number): ProductItem {
     subItems: [],
     selectableMeshesOptions: [{
       options: {
-        type: SelectedOptionsType.SpecificColors,
+        type: SelectedOptionsType.SpecificTextures,
+        value: selectedOptionsValue,
       },
     }],
 

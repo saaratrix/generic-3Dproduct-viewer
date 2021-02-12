@@ -5,6 +5,7 @@ import { Color, Material, Mesh } from "three";
 import { ColorMaterial } from "../3rd-party/three/ColorMaterial";
 import { isColorMaterial } from "../utility/MaterialUtility";
 import { createAnimation } from "./CreateAnimation";
+import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
 
 interface AnimatableColorItem {
   startColor: Color;
@@ -17,8 +18,6 @@ export class MaterialColorChanger {
 
   public canvas: HTMLCanvasElement;
   public context: CanvasRenderingContext2D;
-
-  public isChanging: boolean = false;
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
@@ -56,7 +55,7 @@ export class MaterialColorChanger {
       return;
     }
 
-    const animate = createAnimation(event.productItem, duration, doProgress);
+    const animate = createAnimation(event.productItem, ActiveProductItemEventType.ColorChange, duration, doProgress);
     requestAnimationFrame(animate);
   }
 

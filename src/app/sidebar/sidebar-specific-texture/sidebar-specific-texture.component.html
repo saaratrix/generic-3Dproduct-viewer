@@ -1,0 +1,18 @@
+<p>
+  Edit texture:
+</p>
+<ul class="specific-color-values">
+  <li
+    *ngFor="let value of values"
+    class="item"
+    [class.active]="currentValue === value.url"
+  >
+    <div
+      class="item-content"
+      [class.active]="currentValue === value.url"
+      [ngStyle]="{ backgroundImage: 'url(\'' + value.thumbnail + '\')' }"
+      [class.inline-spinner]="loadingValues[value.url]"
+      (click)="changeCurrentTexture(value.url)"
+    ></div>
+  </li>
+</ul>

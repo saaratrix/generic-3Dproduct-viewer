@@ -12,6 +12,7 @@ import {
 import { SubProductItem } from "../../3D/models/ProductItem/SubProductItem";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductItem } from "../../3D/models/ProductItem/ProductItem";
+import { throttle } from "../../utility/throttle-decorator";
 
 @Component({
   selector: "app-toolbar-subitem-container",
@@ -40,14 +41,15 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
     }
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     this.isViewInitialized = true;
     this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
     this.calculatePosition();
   }
 
   @HostListener("window:resize", [])
-  onResize() {
+  @throttle(1000 / 60)
+  onResize(): void {
     this.calculatePosition();
   }
 

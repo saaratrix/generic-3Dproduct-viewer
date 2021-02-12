@@ -1,5 +1,5 @@
 @import "./src/styles/vars";
-@import "./src/styles/_mixins.scss";
+@import "./src/styles/mixins";
 
 .specific-color-values {
   padding: 0;
@@ -9,16 +9,15 @@
 
 .item {
   display: inline-block;
-
-  width: $input-color-size;
   max-width: 100%;
-  height: $input-color-size;
-
   padding: 0;
   cursor: pointer;
+  width: $input-color-size;
+  height: $input-color-size;
 }
 
 .item-content {
+  position: relative;
   height: 100%;
 }
 
