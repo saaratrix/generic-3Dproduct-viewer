@@ -1,3 +1,5 @@
+@import "styles/inline-loading-spinner";
+
 * {
   box-sizing: border-box;
 }
@@ -7,10 +9,14 @@ body {
   margin: 0;
 }
 
+p {
+  margin: 0;
+}
+
 .debug-canvas {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   width: 256px;
   height: 256px;
   z-index: 1000;

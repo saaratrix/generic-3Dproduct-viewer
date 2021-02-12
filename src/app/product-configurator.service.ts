@@ -1,14 +1,18 @@
-import { ElementRef, Injectable, } from "@angular/core";
+import { Injectable, OnDestroy, } from "@angular/core";
 import { Subject } from "rxjs";
-import { ProductItem } from "./3D/models/ProductItem";
+import { ProductItem } from "./3D/models/ProductItem/ProductItem";
 import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
 import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "../mockdata/RealisticItems";
 import { ProductConfigurationEvent } from "./product-configurator-events";
+import { LoadingProgressEventData } from "./3D/models/EventData/LoadingProgressEventData";
+import { MaterialTextureSwapEventData } from "./3D/models/EventData/MaterialTextureSwapEventData";
+import { Mesh } from "three";
+import { MaterialColorSwapEventData } from "./3D/models/EventData/MaterialColorSwapEventData";
 
 @Injectable({
   providedIn: "root"
 })
-export class ProductConfiguratorService {
+export class ProductConfiguratorService implements OnDestroy {
   /**
    * The product items that you can choose between.
    */
@@ -17,12 +21,28 @@ export class ProductConfiguratorService {
    * The HTML element associated with an item id.
    */
   public itemElements: { [key: string]: HTMLElement } = {};
+  /**
+   * The currently selected product.
+   */
   public selectedProduct: ProductItem | null = null;
 
-  /**
-   * The RxJs Subject objects.
-   */
-  private readonly subjects: { [key: string]: Subject<any> };
+  private subjects: Record<ProductConfigurationEvent, Subject<any>> = <any> {};
+  // The subjects
+  public loading_Started: Subject<void>;
+  public loading_Progress: Subject<LoadingProgressEventData>;
+  public loading_Finished: Subject<void>;
+
+  public material_ColorSwap: Subject<MaterialColorSwapEventData>;
+  public material_TextureSwap: Subject<MaterialTextureSwapEventData>;
+
+  public mesh_Selected: Subject<Mesh>;
+  public mesh_Deselected: Subject<Mesh>;
+  public mesh_PointerEnter: Subject<Mesh>;
+  public mesh_PointerLeave: Subject<Mesh>;
+
+  public selectedProduct_Changed: Subject<ProductItem>;
+
+  public toolbar_ChangeProduct: Subject<ProductItem>;
 
   constructor() {
     let id = 0;
@@ -36,32 +56,43 @@ export class ProductConfiguratorService {
     this.items.push(createIkeaChear(id++));
     this.items.push(createIkeaTable(id++));
 
-    this.subjects = {};
+    this.loading_Started = this.createSubject<void>(ProductConfigurationEvent.Loading_Started);
+    this.loading_Progress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.Loading_Progress);
+    this.loading_Finished = this.createSubject<void>(ProductConfigurationEvent.Loading_Finished);
 
-    // Create all the event subjects.
-    // This gets all the numbers and filters away the string keys, since ProductConfigurationEvent.Event == 0
-    // But ProductConfigurationEvent[0] = "Event"
-    const eventKeys = Object.keys(ProductConfigurationEvent).filter(key => typeof ProductConfigurationEvent[key as any] !== "number");
+    this.material_ColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap);
+    this.material_TextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.Material_TextureSwap);
 
-    for (const key of eventKeys) {
-      this.subjects[key] = new Subject<any>();
+    this.mesh_Selected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Selected);
+    this.mesh_Deselected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Deselected);
+    this.mesh_PointerEnter = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerEnter);
+    this.mesh_PointerLeave = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerLeave);
+
+    this.selectedProduct_Changed = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProduct_Changed);
+
+    this.toolbar_ChangeProduct = this.createSubject<ProductItem>(ProductConfigurationEvent.Toolbar_ChangeProduct);
+  }
+
+  public ngOnDestroy(): void {
+    const keys = Object.keys(this.subjects);
+    for (const key of keys) {
+      const subject = this.subjects[key] as Subject<any>;
+      if (!subject) {
+        continue;
+      }
+
+      subject.complete();
+      subject.unsubscribe();
+      delete this.subjects[key];
     }
   }
 
-  /**
-   * Get a subject corresponding to the type.
-   * @param type
-   */
-  public getSubject<T = any>(type: ProductConfigurationEvent): Subject<T> {
-    return this.subjects[type];
-  }
-
-  public dispatch(type: ProductConfigurationEvent, data?: any ) {
-    if (!this.subjects[type]) {
+  public dispatch<T = any>(eventType: ProductConfigurationEvent, data?: T): void {
+    if (!this.subjects[eventType]) {
       return;
     }
 
-    this.subjects[type].next(data);
+    this.subjects[eventType].next(data);
   }
 
   public getSelectedProductElement(product: ProductItem): HTMLElement | undefined {
@@ -70,5 +101,11 @@ export class ProductConfiguratorService {
     }
 
     return this.itemElements[product.name];
+  }
+
+  private createSubject<T>(eventType: ProductConfigurationEvent): Subject<T> {
+    const subject = new Subject<T>();
+    this.subjects[eventType] = subject;
+    return subject;
   }
 }

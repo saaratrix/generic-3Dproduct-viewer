@@ -20,23 +20,20 @@ export class ProductViewerComponent implements OnInit {
     private router: Router,
     private zone: NgZone,
   ) {
+    this.productConfiguratorService.loading_Started.subscribe(() => {
+      this.loadingsStarted++;
+    });
 
-    this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Started)
-      .subscribe(() => {
-        this.loadingsStarted++;
-      });
+    this.productConfiguratorService.loading_Finished.subscribe(() => {
+      this.loadingsFinished++;
 
-    this.productConfiguratorService.getSubject(ProductConfigurationEvent.Loading_Finished)
-      .subscribe(() => {
-        this.loadingsFinished++;
-
-        if (this.loadingsFinished === this.loadingsStarted) {
-          // Reset the loading states so you can show 0 / 2 models loaded etc.
-          // Instead of 6 / 7 if you've loaded them at 4 different times.
-          this.loadingsStarted = 0;
-          this.loadingsFinished = 0;
-        }
-      });
+      if (this.loadingsFinished === this.loadingsStarted) {
+        // Reset the loading states so you can show 0 / 2 models loaded etc.
+        // Instead of 6 / 7 if you've loaded them at 4 different times.
+        this.loadingsStarted = 0;
+        this.loadingsFinished = 0;
+      }
+    });
   }
 
   public ngOnInit(): void {

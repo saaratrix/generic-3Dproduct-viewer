@@ -1,5 +1,5 @@
 import { ProductConfigurator } from "./ProductConfigurator";
-import { ProductItem } from "./models/ProductItem";
+import { ProductItem } from "./models/ProductItem/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
@@ -7,7 +7,7 @@ import { Box3, LinearEncoding, Object3D, sRGBEncoding, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
 import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
-import { SubProductItem } from "./models/SubProductItem";
+import { SubProductItem } from "./models/ProductItem/SubProductItem";
 
 export class ProductChanger {
   private readonly productConfigurator: ProductConfigurator;
@@ -21,10 +21,9 @@ export class ProductChanger {
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfiguratorService.getSubject( ProductConfigurationEvent.Toolbar_ChangeProduct )
-      .subscribe((product: ProductItem) => {
-        this.changeProduct(product);
-      });
+    this.productConfiguratorService.toolbar_ChangeProduct.subscribe(product => {
+      this.changeProduct(product);
+    });
   }
 
   /**

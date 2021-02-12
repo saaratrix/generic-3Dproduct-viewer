@@ -3,10 +3,10 @@ import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2 } from "three";
 import { throttle } from "../utility/throttle";
+import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 
 export class PointerEventHandler {
   private element!: HTMLElement;
-  private raycaster: Raycaster = new Raycaster();
   private pointerPosition: Vector2 = new Vector2();
 
   private pointerdownPosition: { x: number, y: number } | undefined = undefined;
@@ -15,11 +15,10 @@ export class PointerEventHandler {
   private currentSelectedMesh: Mesh | undefined;
 
   constructor(
-    private scene: Scene,
-    private camera: PerspectiveCamera,
     private productConfiguratorService: ProductConfiguratorService,
+    private selectedProductMeshIntersector: SelectedProductMeshIntersector,
   ) {
-    this.productConfiguratorService.getSubject(ProductConfigurationEvent.SelectedProduct_Changed).subscribe(() => {
+    this.productConfiguratorService.selectedProduct_Changed.subscribe(() => {
       if (this.currentHoveredMesh) {
         this.deselectCurrentHoveredMesh();
       }
@@ -122,16 +121,13 @@ export class PointerEventHandler {
 
   private setPointerPosition(event: PointerEvent | MouseEvent): void {
     // Convert pointer XY to screen space.
-    this.pointerPosition.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    this.pointerPosition.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    this.pointerPosition.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.pointerPosition.y = - (event.clientY / window.innerHeight) * 2 + 1;
   }
 
   private getIntersections(event: PointerEvent | MouseEvent): Intersection[] {
     this.setPointerPosition(event);
-
-    this.raycaster.far = this.camera.far;
-    this.raycaster.setFromCamera(this.pointerPosition, this.camera);
-    return this.raycaster.intersectObjects(this.scene.children, true);
+    return this.selectedProductMeshIntersector.getIntersections(this.pointerPosition);
   }
 
   private deselectCurrentHoveredMesh(): void {

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
 import { ProductConfigurationEvent } from "../product-configurator-events";
-import { ProductItem } from "../3D/models/ProductItem";
+import { ProductItem } from "../3D/models/ProductItem/ProductItem";
 
 
 @Component({
@@ -26,7 +26,7 @@ export class ToolbarComponent implements OnDestroy {
       this.hasReadInstructions = true;
     }
 
-    this.subscriptions.push(this.productConfiguratorService.getSubject(ProductConfigurationEvent.SelectedProduct_Changed).subscribe((product) => {
+    this.subscriptions.push(this.productConfiguratorService.selectedProduct_Changed.subscribe(product => {
       this.selectedProduct = product;
       this.hasSubItems = !!(product.subItems?.length > 0 && product.object3D);
     }));

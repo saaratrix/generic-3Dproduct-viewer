@@ -1,0 +1,30 @@
+@import "./src/styles/vars";
+@import "./src/styles/_mixins.scss";
+
+.specific-color-values {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0;
+  cursor: pointer;
+  width: $input-texture-size;
+  height: $input-texture-size;
+}
+
+.item-content {
+  position: relative;
+  height: 100%;
+  background-size: cover;
+}
+
+.active {
+  border: 1px solid $active-color;
+}
+
+@include inline-spinner-size($inline-spinner-default-size * 2);
+@include remove-input-color-border();

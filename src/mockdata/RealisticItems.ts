@@ -1,6 +1,7 @@
-import { ProductItem } from "../app/3D/models/ProductItem";
+import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
 import { getIkeaChearModel, getIkeaTableModel, getWayfairChairModel, getWayfairTableModel } from "./Models";
 import { ProductConfigurationEvent } from "../app/product-configurator-events";
+import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
 
 export function createWayfairTable(id: number): ProductItem {
   return {
@@ -12,6 +13,8 @@ export function createWayfairTable(id: number): ProductItem {
     useGammaSpace: true,
     tooltip: "A table.",
     subItems: [],
+
+    activeEvents: [],
   };
 }
 
@@ -25,6 +28,8 @@ export function createWayfairChair(id: number): ProductItem {
     useGammaSpace: true,
     tooltip: "A hard chair.",
     subItems: [],
+
+    activeEvents: [],
   };
 }
 
@@ -39,7 +44,9 @@ export function createIkeaChear(id: number): ProductItem {
     useGammaSpace: true,
     tooltip: "A soft chair.",
     subItems: [],
-    selectedSubItem: null
+    selectedSubItem: null,
+
+    activeEvents: [],
   };
 
   const chearSubItems = ikeaChearProduct.subItems;
@@ -52,6 +59,8 @@ export function createIkeaChear(id: number): ProductItem {
     eventType: ProductConfigurationEvent.Material_TextureSwap,
     tooltip: "White chair",
     data: {
+      addGlobalLoadingEvent: true,
+      animationType: MaterialAnimationType.FromTopToBottom,
       productItem: ikeaChearProduct,
       textureSlot: "map",
       textureUrl: "assets/models/pbr/chair_mat_baseColor.png",
@@ -65,6 +74,8 @@ export function createIkeaChear(id: number): ProductItem {
     eventType: ProductConfigurationEvent.Material_TextureSwap,
     tooltip: "Blue chair",
     data: {
+      addGlobalLoadingEvent: true,
+      animationType: MaterialAnimationType.FromTopToBottom,
       productItem: ikeaChearProduct,
       textureSlot: "map",
       textureUrl: "assets/models/pbr/chair_mat_baseColor_alt.png",
@@ -85,5 +96,7 @@ export function createIkeaTable(id: number): ProductItem {
     useGammaSpace: true,
     tooltip: "A quite plastic looking table, but it's wood!!",
     subItems: [],
+
+    activeEvents: [],
   };
 }

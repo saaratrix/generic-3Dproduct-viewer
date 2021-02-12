@@ -1,8 +1,9 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Subscription } from "rxjs";
-import { Mesh, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Mesh, Object3D, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect";
+import { SelectableObject3DUserData } from "./models/SelectableMeshesOptions/SelectableObject3DUserData";
 
 
 export class SelectedProductHighlighter {
@@ -18,18 +19,18 @@ export class SelectedProductHighlighter {
   constructor(renderer: WebGLRenderer, private productConfiguratorService: ProductConfiguratorService) {
     this.createOutlineEffects(renderer);
     this.subscriptions.push(
-      this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerEnter).subscribe((mesh) => {
+      this.productConfiguratorService.mesh_PointerEnter.subscribe((mesh) => {
         this.setHoverMaterial(mesh);
       }),
-      this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerLeave).subscribe((mesh) => {
+      this.productConfiguratorService.mesh_PointerLeave.subscribe((mesh) => {
         this.clearHoverMaterial(mesh);
       }),
       // Selection
-      this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_Selected).subscribe(mesh => {
+      this.productConfiguratorService.mesh_Selected.subscribe(mesh => {
         this.selectedMesh = mesh;
         this.setSelectedMaterial(mesh);
       }),
-      this.productConfiguratorService.getSubject<Mesh>(ProductConfigurationEvent.Mesh_Deselected).subscribe(mesh => {
+      this.productConfiguratorService.mesh_Deselected.subscribe(mesh => {
         this.clearSelectedMaterial(mesh);
         this.selectedMesh = undefined;
       }),
@@ -70,22 +71,46 @@ export class SelectedProductHighlighter {
   }
 
   private setSelectedMaterial(mesh: Mesh): void {
-    mesh.layers.enable(2);
+    this.enableLayer(mesh, 2);
   }
 
   private clearSelectedMaterial(mesh: Mesh): void {
-    mesh.layers.disable(2);
+    this.disableLayer(mesh, 2);
   }
 
   private setHoverMaterial(mesh: Mesh): void {
     this.isHovering = true;
-    mesh.layers.enable(1);
+    this.enableLayer(mesh, 1);
   }
 
   private clearHoverMaterial(mesh: Mesh): void {
     this.isHovering = false;
-    mesh.layers.disable(1);
+    this.disableLayer(mesh, 1);
   }
 
+  private enableLayer(mesh: Mesh, channel: number): void {
+    mesh.layers.enable(channel);
 
+    const userData = mesh.userData as SelectableObject3DUserData;
+    if (!Array.isArray(userData?.siblings)) {
+      return;
+    }
+
+    for (const sibling of userData.siblings) {
+      sibling.layers.enable(channel);
+    }
+  }
+
+  private disableLayer(mesh: Mesh, channel: number): void {
+    mesh.layers.disable(channel);
+
+    const userData = mesh.userData as SelectableObject3DUserData;
+    if (!Array.isArray(userData?.siblings)) {
+      return;
+    }
+
+    for (const sibling of userData.siblings) {
+      sibling.layers.disable(channel);
+    }
+  }
 }

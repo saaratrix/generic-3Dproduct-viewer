@@ -3,6 +3,7 @@ export enum ProductConfigurationEvent {
   Loading_Started,
   Loading_Progress,
   Loading_Finished,
+  Material_ColorSwap,
   Material_TextureSwap,
   Mesh_Selected,
   Mesh_Deselected,
