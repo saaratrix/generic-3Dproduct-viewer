@@ -79,6 +79,7 @@ export function createRose(id: number): ProductItem {
     tooltip: "A special gift a long time ago.",
     subItems: [],
     selectableMeshesOptions: [{
+      noSiblings: true,
       options: {
         type: SelectedOptionsType.SpecificTextures,
         value: selectedOptionsValue,
