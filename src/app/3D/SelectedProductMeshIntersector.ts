@@ -74,9 +74,11 @@ export class SelectedProductMeshIntersector {
 
     // Iterate over all objects to set the siblings.
     // If two different SelectableMeshesOption targets the same mesh the last one would win.
-    for (const object of intersectableObjects) {
-      const userData = object.userData as SelectableObject3DUserData;
-      userData.siblings = intersectableObjects.filter(o => o !== object);
+    if (!option.noSiblings) {
+      for (const object of intersectableObjects) {
+        const userData = object.userData as SelectableObject3DUserData;
+        userData.siblings = intersectableObjects.filter(o => o !== object);
+      }
     }
 
     // Finally add the intersectableObjects found but skip potential duplicates
