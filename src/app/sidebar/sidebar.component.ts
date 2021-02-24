@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angula
 import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
-import { SelectedOptionsType } from "../3D/models/SelectableMeshesOptions/SelectedOptionsType";
-import { SelectableObject3DUserData } from "../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
+import { SelectedOptionsType } from "../3D/models/selectable-meshes-options/SelectedOptionsType";
+import { SelectableObject3DUserData } from "../3D/models/selectable-meshes-options/SelectableObject3DUserData";
 import { Mesh } from "three";
 
 @Component({

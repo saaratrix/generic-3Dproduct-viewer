@@ -1,7 +1,7 @@
-import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
+import { ProductItem } from "../app/3D/models/product-item/ProductItem";
 import { getIkeaChearModel, getIkeaTableModel, getWayfairChairModel, getWayfairTableModel } from "./Models";
 import { ProductConfigurationEvent } from "../app/product-configurator-events";
-import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
+import { MaterialAnimationType } from "../app/3D/material-animators/MaterialAnimationType";
 
 export function createWayfairTable(id: number): ProductItem {
   return {

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
-import { LoadingProgressEventData } from "../3D/models/EventData/LoadingProgressEventData";
+import { LoadingProgressEventData } from "../3D/models/event-data/LoadingProgressEventData";
 import { Subscription } from "rxjs";
 
 interface LoadingData {

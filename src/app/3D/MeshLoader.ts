@@ -18,7 +18,7 @@ import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { getOnProgressCallback } from "./getOnProgressCallback";
 import { Model3D } from "./models/Model3D";
-import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
+import { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
 
 
 export class MeshLoader {

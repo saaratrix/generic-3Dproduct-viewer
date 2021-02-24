@@ -1,14 +1,14 @@
 import { Component, Input, NgZone, OnInit } from "@angular/core";
 import { Color, Mesh } from "three";
-import { SelectableObject3DUserData } from "../../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
-import { SelectedSpecificColorsValue } from "../../3D/models/SelectableMeshesOptions/SelectedSpecificColorsValue";
+import { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
+import { SelectedSpecificColorsValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificColorsValue";
 import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
-import { MaterialAnimationType } from "../../3D/MaterialAnimators/MaterialAnimationType";
+import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialColorSwapEventData } from "../../3D/models/EventData/MaterialColorSwapEventData";
+import { MaterialColorSwapEventData } from "../../3D/models/event-data/MaterialColorSwapEventData";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
-import { ActiveProductItemEventType } from "../../3D/models/ProductItem/ActiveProductItemEventType";
+import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveProductItemEventType";
 
 @Component({
   selector: "sidebar-specific-color",

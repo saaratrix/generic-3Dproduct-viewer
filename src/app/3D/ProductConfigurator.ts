@@ -2,13 +2,13 @@ import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, WebGLRenderer
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
-import { MaterialTextureChanger } from "./MaterialAnimators/MaterialTextureChanger";
+import { MaterialTextureChanger } from "./material-animators/MaterialTextureChanger";
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
-import { MaterialColorChanger } from "./MaterialAnimators/MaterialColorChanger";
+import { MaterialColorChanger } from "./material-animators/MaterialColorChanger";
 
 @Injectable({
   providedIn: "root"

@@ -4,11 +4,11 @@
 import { CanvasTexture, Material, Mesh, Texture, TextureLoader } from "three";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialTextureSwapEventData } from "../models/EventData/MaterialTextureSwapEventData";
+import { MaterialTextureSwapEventData } from "../models/event-data/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "../getOnProgressCallback";
 import { MaterialAnimationType } from "./MaterialAnimationType";
 import { addActiveEventItem, createAnimation } from "./CreateAnimation";
-import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
+import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
 import { clearEvents } from "../utility/ProductItemUtility";
 
 const _showDebugCanvas: boolean = false;

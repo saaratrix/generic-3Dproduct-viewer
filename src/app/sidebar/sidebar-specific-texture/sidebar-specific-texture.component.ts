@@ -1,13 +1,13 @@
 import { Component, Input, NgZone, OnInit } from "@angular/core";
 import { Mesh, Texture } from "three";
-import { SelectedSpecificTexture } from "../../3D/models/SelectableMeshesOptions/SelectedSpecificTexture";
-import { MaterialAnimationType } from "../../3D/MaterialAnimators/MaterialAnimationType";
+import { SelectedSpecificTexture } from "../../3D/models/selectable-meshes-options/SelectedSpecificTexture";
+import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { SelectableObject3DUserData } from "../../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
+import { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
 import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
 import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialTextureSwapEventData } from "../../3D/models/EventData/MaterialTextureSwapEventData";
-import { SelectedSpecificTexturesValue } from "../../3D/models/SelectableMeshesOptions/SelectedSpecificTexturesValue";
+import { MaterialTextureSwapEventData } from "../../3D/models/event-data/MaterialTextureSwapEventData";
+import { SelectedSpecificTexturesValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
 
 @Component({
   selector: "sidebar-specific-texture",

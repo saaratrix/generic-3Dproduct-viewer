@@ -1,13 +1,13 @@
 import { Injectable, OnDestroy, } from "@angular/core";
 import { Subject } from "rxjs";
-import { ProductItem } from "./3D/models/ProductItem/ProductItem";
+import { ProductItem } from "./3D/models/product-item/ProductItem";
 import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
 import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "../mockdata/RealisticItems";
 import { ProductConfigurationEvent } from "./product-configurator-events";
-import { LoadingProgressEventData } from "./3D/models/EventData/LoadingProgressEventData";
-import { MaterialTextureSwapEventData } from "./3D/models/EventData/MaterialTextureSwapEventData";
+import { LoadingProgressEventData } from "./3D/models/event-data/LoadingProgressEventData";
+import { MaterialTextureSwapEventData } from "./3D/models/event-data/MaterialTextureSwapEventData";
 import { Mesh } from "three";
-import { MaterialColorSwapEventData } from "./3D/models/EventData/MaterialColorSwapEventData";
+import { MaterialColorSwapEventData } from "./3D/models/event-data/MaterialColorSwapEventData";
 
 @Injectable({
   providedIn: "root"

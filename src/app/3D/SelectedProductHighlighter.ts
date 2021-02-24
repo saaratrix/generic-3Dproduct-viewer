@@ -3,7 +3,7 @@ import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Subscription } from "rxjs";
 import { Mesh, Object3D, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect";
-import { SelectableObject3DUserData } from "./models/SelectableMeshesOptions/SelectableObject3DUserData";
+import { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
 
 
 export class SelectedProductHighlighter {
