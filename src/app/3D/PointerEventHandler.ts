@@ -122,7 +122,7 @@ export class PointerEventHandler {
   private setPointerPosition(event: PointerEvent | MouseEvent): void {
     // Convert pointer XY to screen space.
     this.pointerPosition.x = (event.clientX / window.innerWidth) * 2 - 1;
-    this.pointerPosition.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    this.pointerPosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
 
   private getIntersections(event: PointerEvent | MouseEvent): Intersection[] {

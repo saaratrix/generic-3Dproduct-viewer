@@ -1,4 +1,4 @@
-import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, WebGLRenderer, } from "three";
+import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, Vector2, WebGLRenderer, } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
@@ -9,6 +9,9 @@ import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 import { MaterialColorChanger } from "./material-animators/MaterialColorChanger";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { OutlinePass } from "./postprocessing/OutlinePass";
 
 @Injectable({
   providedIn: "root"
@@ -33,6 +36,8 @@ export class ProductConfigurator {
   private selectedProductMeshIntersector: SelectedProductMeshIntersector;
   private pointerEventHandler: PointerEventHandler;
   private selectedProductHighlighter: SelectedProductHighlighter;
+
+  private renderComposer: EffectComposer;
 
   constructor(
     renderer: WebGLRenderer,
@@ -77,6 +82,14 @@ export class ProductConfigurator {
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
 
+    this.renderComposer = new EffectComposer(this.renderer);
+
+    const renderPass = new RenderPass(this.scene, this.camera);
+    this.renderComposer.addPass(renderPass);
+
+    const outlinePass = new OutlinePass(this.renderer.getSize(new Vector2(0, 0)), this.scene, this.camera);
+    this.renderComposer.addPass(outlinePass);
+
     this.startRenderLoop();
   }
 
@@ -84,9 +97,7 @@ export class ProductConfigurator {
     const renderFunction = (): void => {
       this.cameraControls.update();
 
-      this.renderer.render(this.scene, this.camera);
-      this.selectedProductHighlighter.renderOutline(this.scene, this.camera);
-
+      this.renderComposer.render();
       requestAnimationFrame(renderFunction);
     };
 
