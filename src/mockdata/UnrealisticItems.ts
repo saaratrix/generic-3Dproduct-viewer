@@ -65,7 +65,7 @@ export function createRose(id: number): ProductItem {
       }, {
         url: "assets/models/rose_pink.png",
         thumbnail: "assets/models/rose_pink.png",
-      }
+      },
     ],
   };
 
