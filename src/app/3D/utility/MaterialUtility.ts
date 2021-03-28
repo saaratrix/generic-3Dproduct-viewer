@@ -29,13 +29,13 @@ export function getMaterialsFromMeshes(meshes: Mesh[]): Material[] {
   return result;
 }
 
-export function setMaterialParameters(mesh: Mesh, parameters: Record<string, any>): void {
+export function setMaterialParameters(mesh: Mesh, parameters: Record<string, unknown>): void {
   const materials = getMaterialsFromMesh(mesh);
   const keys = Object.keys(parameters);
   for (const material of materials) {
     for (const key of keys) {
-       const parameter = parameters[key];
-       material[key] = parameter;
+      const parameter = parameters[key];
+      material[key] = parameter;
     }
   }
 }

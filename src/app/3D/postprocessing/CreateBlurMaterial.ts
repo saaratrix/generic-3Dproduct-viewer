@@ -6,6 +6,7 @@ export function createSeperableBlurMaterial(maxRadius: number): ShaderMaterial {
   const material = new ShaderMaterial( {
 
     defines: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       MAX_RADIUS: maxRadius,
     },
 
@@ -13,7 +14,7 @@ export function createSeperableBlurMaterial(maxRadius: number): ShaderMaterial {
       colorTexture: { value: null },
       texSize: { value: new Vector2( 0.5, 0.5 ) },
       direction: { value: new Vector2( 0.5, 0.5 ) },
-      kernelRadius: { value: 1.0 }
+      kernelRadius: { value: 1.0 },
     },
 
     vertexShader:
@@ -49,7 +50,7 @@ export function createSeperableBlurMaterial(maxRadius: number): ShaderMaterial {
           uvOffset += delta;\
         }\
         gl_FragColor = diffuseSum / weightSum;\
-      }"
+      }",
   });
   return material;
 }

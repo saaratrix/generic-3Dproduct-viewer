@@ -6,7 +6,7 @@ import {
   Scene, ShaderMaterial, UniformsUtils,
   Vector2,
   WebGLRenderer,
-  WebGLRenderTarget
+  WebGLRenderTarget,
 } from "three";
 import { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import FullScreenQuad = Pass.FullScreenQuad;
@@ -44,7 +44,7 @@ export class OutlinePass extends Pass {
     });
 
     const renderTargetOptions: WebGLRenderTargetOptions = {
-      format: RGBAFormat
+      format: RGBAFormat,
     };
 
     this.maskRenderTarget = new WebGLRenderTarget(resolution.x, resolution.y, renderTargetOptions);
@@ -78,7 +78,7 @@ export class OutlinePass extends Pass {
       blending: NoBlending,
       depthTest: false,
       depthWrite: false,
-      transparent: true
+      transparent: true,
     } );
   }
 
@@ -164,8 +164,8 @@ export class OutlinePass extends Pass {
 					gl_FragColor = finalColor;\
 				}",
       uniforms: {
-        maskTexture: { value: null, },
-        blurTexture: { value: null, },
+        maskTexture: { value: null },
+        blurTexture: { value: null },
       },
       transparent: true,
     });

@@ -5,7 +5,7 @@ import { getOnProgressCallback } from "./getOnProgressCallback";
 import { PMREMGenerator } from "three/src/extras/PMREMGenerator";
 
 export class EnvironmentMapLoader {
-  public environments: { [key: string]: Promise<WebGLRenderTarget> } = {};
+  public environments: Record<string, Promise<WebGLRenderTarget>> = {};
 
   private productConfigurator: ProductConfigurator;
 
@@ -19,7 +19,7 @@ export class EnvironmentMapLoader {
       return this.environments[file];
     }
 
-    const promise: Promise<WebGLRenderTarget> = new Promise(async (resolve, reject) => {
+    const promise: Promise<WebGLRenderTarget> = new Promise((resolve) => {
       const renderer = this.productConfigurator.renderer;
 
       new EXRLoader().load( file, ( texture ) => {

@@ -1,4 +1,4 @@
-import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, Vector2, WebGLRenderer, } from "three";
+import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
@@ -14,7 +14,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { OutlinePass } from "./postprocessing/OutlinePass";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProductConfigurator {
   public productConfiguratorService: ProductConfiguratorService;

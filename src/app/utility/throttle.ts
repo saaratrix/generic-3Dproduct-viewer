@@ -1,8 +1,10 @@
 /**
  * Throttles a method so it's only called at most once every interval.
  * @param callback Must be a lambda or a bound method for now so that "this" is correct.
+ * @param interval the interval in milliseconds that the throttle method can be called.
  */
-export function throttle(callback: (...args: unknown[]) => void, interval: number): (...args: unknown[]) => void {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throttle(callback: (...args: any[]) => void, interval: number): (...args: unknown[]) => void {
   let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
   let nextAllowedCall: number = 0;
 

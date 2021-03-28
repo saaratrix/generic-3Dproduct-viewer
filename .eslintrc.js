@@ -61,7 +61,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": ["error"],
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-use-before-define": ["error", { ignoreTypeReferences: true }],
+    "@typescript-eslint/no-use-before-define": ["error", { classes: false, functions: false, ignoreTypeReferences: true, variables: false, }],
     "@typescript-eslint/type-annotation-spacing": ["error",
       {
         before: false,

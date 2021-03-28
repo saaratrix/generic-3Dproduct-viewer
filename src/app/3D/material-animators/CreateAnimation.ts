@@ -5,8 +5,7 @@ import { ActiveProductItemEventType } from "../models/product-item/ActiveProduct
 import { ActiveProductItemEvent } from "../models/product-item/ActiveProductItemEvent";
 
 // TODO: Try and refactor all this into a better system at some point (so never!) or maybe take a promise as input to continue the promise?
-
-export function addActiveEventItem(productItem: ProductItem, eventType: ActiveProductItemEventType) {
+export function addActiveEventItem(productItem: ProductItem, eventType: ActiveProductItemEventType): ActiveProductItemEvent {
   const item: ActiveProductItemEvent = {
     cancelEvent: () => {
       const index = productItem.activeEvents.indexOf(item);

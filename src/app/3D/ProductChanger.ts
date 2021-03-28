@@ -89,9 +89,7 @@ export class ProductChanger {
     }
 
     this.productConfiguratorService.dispatch(ProductConfigurationEvent.SelectedProduct_Changed, this.productConfiguratorService.selectedProduct);
-
     this.productConfigurator.router.navigate(urlParts);
-    return;
   }
 
   /**

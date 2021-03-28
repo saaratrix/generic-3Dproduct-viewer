@@ -7,7 +7,7 @@ import {
   MeshStandardMaterial,
   Object3D,
   TextureLoader,
-  WebGLRenderTarget
+  WebGLRenderTarget,
 } from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
@@ -33,27 +33,27 @@ export class MeshLoader {
 
   /**
    * Loads an .obj mesh with either an mtl file or raw textures.
-   * @param file The filename
-   * @param materialInfo The material information such as path to mtl file, textures
-   * @param onMeshLoaded When the mesh has loaded.
    */
   public loadMesh(model: Model3D): Promise<ModelLoadedEventData> {
-    const promise = new Promise<ModelLoadedEventData>(async (resolve, reject) => {
+    const promise = new Promise<ModelLoadedEventData>((resolve) => {
 
       const fileParts: string[] = model.filename.split(".");
       const fileExtension = fileParts[ fileParts.length - 1 ].toLowerCase();
 
-      let object: Object3D | undefined;
+      let promise: Promise<Object3D | undefined> | undefined;
       if (fileExtension === "obj") {
-        object = await this.loadObj(model.filename, model.materialInfo);
-      }
-      else if (fileExtension === "gltf") {
-        object = await this.loadGlTF(model.filename, model.materialInfo);
+        promise = this.loadObj(model.filename, model.materialInfo);
+      } else if (fileExtension === "gltf") {
+        promise = this.loadGlTF(model.filename, model.materialInfo);
+      } else {
+        promise = Promise.resolve(undefined);
       }
 
-      resolve({
-        object,
-        model
+      promise.then((object) => {
+        resolve({
+          object,
+          model,
+        });
       });
     });
     return promise;
@@ -62,8 +62,8 @@ export class MeshLoader {
   /**
    * Loads the material based on the MaterialInfo input.
    */
-  public async loadMaterial(object: Object3D, materialInfo: any): Promise<void> {
-    const promise = new Promise<void>((resolve, reject) => {
+  public async loadMaterial(object: Object3D, materialInfo: MaterialInfo): Promise<void> {
+    const promise = new Promise<void>((resolve) => {
       if (materialInfo.mtl) {
         const mtlLoader = new MTLLoader();
         // Load the MTL file.
@@ -95,7 +95,9 @@ export class MeshLoader {
 
         const textureLoader = new TextureLoader();
 
-        material.map = textureLoader.load(materialInfo.diffuseTexture);
+        if (materialInfo.diffuseTexture) {
+          material.map = textureLoader.load(materialInfo.diffuseTexture);
+        }
         if (materialInfo.normalTexture) {
           material.normalMap = textureLoader.load(materialInfo.normalTexture);
         }
@@ -126,7 +128,7 @@ export class MeshLoader {
    * @param materialInfo
    */
   private async loadObj(file: string, materialInfo: MaterialInfo): Promise<Object3D> {
-    const promise: Promise<Object3D> = new Promise(async (resolve, reject) => {
+    const promise: Promise<Object3D> = new Promise((resolve) => {
       const objLoader = new OBJLoader();
       // TODO: Add error handling.
       objLoader.load( file, async (group: Group) => {
@@ -140,7 +142,7 @@ export class MeshLoader {
   }
 
   private async loadGlTF(file: string, materialInfo: MaterialInfo): Promise<Object3D> {
-    const promise: Promise<Object3D> = new Promise(async (resolve, reject) => {
+    const promise: Promise<Object3D> = new Promise((resolve) => {
       const loader = new GLTFLoader();
 
       const environmentMapUrl: string = "assets/models/pbr/Soft_4TubeBank_2BlackFlags.exr";
@@ -152,7 +154,7 @@ export class MeshLoader {
         environmentPromise.then((texture: WebGLRenderTarget) => {
           const rootObject = new Group();
           for (const scene of gltfObject.scenes) {
-              rootObject.add(...scene.children);
+            rootObject.add(...scene.children);
           }
 
           this.setReceiveShadows(rootObject.children);
@@ -197,7 +199,7 @@ export class MeshLoader {
     }
   }
 
-  private trySetBackfaceRendering(children: Object3D[]) {
+  private trySetBackfaceRendering(children: Object3D[]): void {
     for (const child of children) {
       const mesh = child as Mesh;
       if (mesh.material) {

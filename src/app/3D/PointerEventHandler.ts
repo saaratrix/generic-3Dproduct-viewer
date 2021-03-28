@@ -1,7 +1,6 @@
-/* tslint:disable:member-ordering */
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductConfigurationEvent } from "../product-configurator-events";
-import { Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2 } from "three";
+import { Intersection, Mesh, Vector2 } from "three";
 import { throttle } from "../utility/throttle";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 
@@ -47,7 +46,7 @@ export class PointerEventHandler {
   // Creating lambdas so we don't have to do .bind() on the methods.
   private onPointerDown = (event: PointerEvent): void => {
     this.pointerdownPosition = { x: event.clientX, y: event.clientY };
-  }
+  };
 
   private onPointerUp = (event: PointerEvent): void => {
     if (this.pointerdownPosition) {
@@ -62,7 +61,7 @@ export class PointerEventHandler {
     }
 
     this.pointerdownPosition = undefined;
-  }
+  };
 
   /** Pointer Move **/
   private onPointerMove = throttle((event: PointerEvent): void => {
@@ -78,7 +77,7 @@ export class PointerEventHandler {
       this.deselectCurrentHoveredMesh();
     }
     this.pointerdownPosition = undefined;
-  }
+  };
 
   private onClick(event: PointerEvent): void {
     // button = 0 for left clicks on a mouse.

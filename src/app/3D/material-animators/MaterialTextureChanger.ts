@@ -11,7 +11,7 @@ import { addActiveEventItem, createAnimation } from "./CreateAnimation";
 import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
 import { clearEvents } from "../utility/ProductItemUtility";
 
-const _showDebugCanvas: boolean = false;
+const showDebugCanvas: boolean = false;
 
 interface DebugCanvas {
   debugCanvasElement: HTMLCanvasElement | undefined;
@@ -24,11 +24,9 @@ interface AnimatedMaterial {
 }
 
 export class MaterialTextureChanger {
-  private productConfiguratorService: ProductConfiguratorService;
-
-
-  constructor(productConfiguratorService: ProductConfiguratorService) {
-    this.productConfiguratorService = productConfiguratorService;
+  constructor(
+    private productConfiguratorService: ProductConfiguratorService,
+  ) {
     productConfiguratorService.material_TextureSwap.subscribe(event => {
       this.swapTexture(event);
     });
@@ -145,7 +143,7 @@ export class MaterialTextureChanger {
       canvas.width = width;
       canvas.height = height;
 
-      const { debugCanvasElement, debugCanvasContext } = this.trySetupDebugCanvas(canvas);
+      const { debugCanvasContext } = this.trySetupDebugCanvas(canvas);
       const renderMethod = this.getRenderMethod(event.animationType);
 
       const onProgress = (progress: number): void => {
@@ -212,7 +210,7 @@ export class MaterialTextureChanger {
       case MaterialAnimationType.FromTopToBottom:
         return this.renderFromTopToBottom;
       default:
-        return () => {};
+        return (): void => {};
     }
   }
 
@@ -242,7 +240,7 @@ export class MaterialTextureChanger {
     let debugCanvasElement: HTMLCanvasElement | undefined;
     let debugCanvasContext: CanvasRenderingContext2D | undefined;
 
-    if (_showDebugCanvas) {
+    if (showDebugCanvas) {
       debugCanvasElement = document.getElementById("debugCanvas") as HTMLCanvasElement;
       if (!debugCanvasElement) {
         debugCanvasElement = document.createElement("canvas");
