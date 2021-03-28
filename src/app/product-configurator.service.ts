@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
 import { ProductItem } from "./3D/models/product-item/ProductItem";
 import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
@@ -10,7 +10,7 @@ import { Mesh } from "three";
 import { MaterialColorSwapEventData } from "./3D/models/event-data/MaterialColorSwapEventData";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProductConfiguratorService implements OnDestroy {
   /**
@@ -26,7 +26,8 @@ export class ProductConfiguratorService implements OnDestroy {
    */
   public selectedProduct: ProductItem | null = null;
 
-  private subjects: Record<ProductConfigurationEvent, Subject<any>> = <any> {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
   // The subjects
   public loading_Started: Subject<void>;
   public loading_Progress: Subject<LoadingProgressEventData>;
@@ -76,7 +77,7 @@ export class ProductConfiguratorService implements OnDestroy {
   public ngOnDestroy(): void {
     const keys = Object.keys(this.subjects);
     for (const key of keys) {
-      const subject = this.subjects[key] as Subject<any>;
+      const subject = this.subjects[key] as Subject<unknown>;
       if (!subject) {
         continue;
       }
@@ -87,7 +88,7 @@ export class ProductConfiguratorService implements OnDestroy {
     }
   }
 
-  public dispatch<T = any>(eventType: ProductConfigurationEvent, data?: T): void {
+  public dispatch<T = unknown>(eventType: ProductConfigurationEvent, data?: T): void {
     if (!this.subjects[eventType]) {
       return;
     }
@@ -105,7 +106,7 @@ export class ProductConfiguratorService implements OnDestroy {
 
   private createSubject<T>(eventType: ProductConfigurationEvent): Subject<T> {
     const subject = new Subject<T>();
-    this.subjects[eventType] = subject;
+    this.subjects[eventType] = subject as Subject<unknown>;
     return subject;
   }
 }

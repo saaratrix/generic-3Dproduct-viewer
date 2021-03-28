@@ -66,7 +66,7 @@ export function createAnimation(
     onAnimationFinished(complete);
   };
 
-  const onAnimationFinished = (complete: boolean) => {
+  const onAnimationFinished = (complete: boolean): void => {
     const index = productItem.activeEvents.indexOf(activeEvent);
     if (index !== -1) {
       productItem.activeEvents.splice(index, 1);
