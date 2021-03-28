@@ -20,7 +20,7 @@ import { Mesh } from "three";
       })),
       transition("open <=> closed", [
         animate("0.15s"),
-      ])
+      ]),
     ]),
   ],
 })
@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // TODO: Performance Improvement - Currently it triggers 2 animations which triggers detectChanges so I think we ideally should have Mesh_SelectedNew, Mesh_SelectedChanged so we don't have to trigger both states.
     this.subscriptions.push(
-      this.productConfiguratorService.mesh_Deselected.subscribe(mesh => {
+      this.productConfiguratorService.mesh_Deselected.subscribe(() => {
         this.zone.run(() => {
           this.isOpened = false;
           this.activeMesh = undefined;

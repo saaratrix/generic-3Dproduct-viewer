@@ -12,7 +12,7 @@ import { SelectedSpecificTexturesValue } from "../../3D/models/selectable-meshes
 @Component({
   selector: "sidebar-specific-texture",
   templateUrl: "./sidebar-specific-texture.component.html",
-  styleUrls: ["./sidebar-specific-texture.component.scss"]
+  styleUrls: ["./sidebar-specific-texture.component.scss"],
 })
 export class SidebarSpecificTextureComponent implements OnInit {
   @Input() mesh!: Mesh;
@@ -100,6 +100,7 @@ export class SidebarSpecificTextureComponent implements OnInit {
         animationType: this.animationType,
         materials,
         onLoaded,
+        // We know selectedProduct exists as we are using the sidebar!
         productItem: this.productConfiguratorService.selectedProduct!,
         textureSlot: "map",
         textureUrl: value,

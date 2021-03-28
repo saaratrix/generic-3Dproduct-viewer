@@ -4,11 +4,11 @@ import { WebGLRenderer } from "three";
 @Component({
   selector: "app-viewer-threejs",
   templateUrl: "./viewer-threejs.component.html",
-  styleUrls: ["./viewer-threejs.component.scss"]
+  styleUrls: ["./viewer-threejs.component.scss"],
 })
 export class ViewerThreejsComponent implements OnInit {
 
-  @ViewChild("canvas", {static: true})
+  @ViewChild("canvas", { static: true })
   canvasRef !: ElementRef;
 
   @Output()
@@ -17,7 +17,7 @@ export class ViewerThreejsComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
     const renderer = new WebGLRenderer({ canvas, antialias: true });
     this.sceneInit.emit(renderer);

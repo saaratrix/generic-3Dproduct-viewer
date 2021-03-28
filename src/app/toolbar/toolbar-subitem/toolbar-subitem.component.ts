@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { SubProductItem } from "../../3D/models/product-item/SubProductItem";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { ProductItem } from "../../3D/models/product-item/ProductItem";
@@ -6,9 +6,9 @@ import { ProductItem } from "../../3D/models/product-item/ProductItem";
 @Component({
   selector: "app-toolbar-subitem",
   templateUrl: "./toolbar-subitem.component.html",
-  styleUrls: ["./toolbar-subitem.component.scss"]
+  styleUrls: ["./toolbar-subitem.component.scss"],
 })
-export class ToolbarSubitemComponent implements OnInit {
+export class ToolbarSubitemComponent {
 
   @Input() public item!: SubProductItem;
   @Input() public productItem!: ProductItem;
@@ -17,9 +17,6 @@ export class ToolbarSubitemComponent implements OnInit {
 
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
-  }
-
-  public ngOnInit(): void {
   }
 
   public clicked(): void {

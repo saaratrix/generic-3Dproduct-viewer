@@ -1,14 +1,13 @@
 import { Component, NgZone, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ProductConfigurationEvent } from "../product-configurator-events";
 import * as THREE from "three";
 import { ProductConfigurator } from "../3D/ProductConfigurator";
 
 @Component({
   selector: "app-product-viewer",
   templateUrl: "./product-viewer.component.html",
-  styleUrls: ["./product-viewer.component.scss"]
+  styleUrls: ["./product-viewer.component.scss"],
 })
 export class ProductViewerComponent implements OnInit {
   public loadingsStarted: number = 0;

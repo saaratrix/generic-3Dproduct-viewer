@@ -41,6 +41,12 @@ module.exports = {
         selector: "default",
         format: ["camelCase"],
       },
+      // Should allow a class property to be whatever!
+      // PascalCase can be useful when setting setting a property as an enum for the template.
+      {
+        selector: "classProperty",
+        format: ["camelCase", "PascalCase"],
+      },
       {
         selector: "typeLike",
         format: ["PascalCase"],
@@ -54,6 +60,7 @@ module.exports = {
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-explicit-any": ["error"],
     "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-use-before-define": ["error", { ignoreTypeReferences: true }],
     "@typescript-eslint/type-annotation-spacing": ["error",
       {
@@ -62,8 +69,8 @@ module.exports = {
         overrides: {
           arrow: { before: true, after: true },
           colon: { before: false, after: true },
-        }
-      }
+        },
+      },
     ],
     "brace-style": "off",
     "@typescript-eslint/brace-style": [ "error", "1tbs", { allowSingleLine: true } ],
@@ -76,6 +83,10 @@ module.exports = {
     "semi": "off",
     "@typescript-eslint/semi": ["error", "always"],
     "space-before-function-parent": "off",
-    "@typescript-eslint/space-before-function-paren": ["error", "always"],
+    "@typescript-eslint/space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
   },
 };

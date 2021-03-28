@@ -3,7 +3,7 @@ import { Color, Mesh } from "three";
 import { throttle } from "../../utility/throttle-decorator";
 import {
   getMaterialsFromMesh,
-  setMaterialParameters
+  setMaterialParameters,
 } from "../../3D/utility/MaterialUtility";
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
@@ -12,7 +12,7 @@ import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveP
 @Component({
   selector: "sidebar-free-color",
   templateUrl: "./sidebar-free-color.component.html",
-  styleUrls: ["./sidebar-free-color.component.scss"]
+  styleUrls: ["./sidebar-free-color.component.scss"],
 })
 export class SidebarFreeColorComponent implements OnInit {
   @Input() mesh!: Mesh;

@@ -64,7 +64,7 @@ export function createIkeaChear(id: number): ProductItem {
       productItem: ikeaChearProduct,
       textureSlot: "map",
       textureUrl: "assets/models/pbr/chair_mat_baseColor.png",
-    }
+    },
   });
   chearSubItems.push({
     id: chearSubItems.length,
@@ -79,7 +79,7 @@ export function createIkeaChear(id: number): ProductItem {
       productItem: ikeaChearProduct,
       textureSlot: "map",
       textureUrl: "assets/models/pbr/chair_mat_baseColor_alt.png",
-    }
+    },
   });
   ikeaChearProduct.selectedSubItem = chearSubItems[0];
 
