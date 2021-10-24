@@ -1,4 +1,4 @@
-import { Pass } from "three/examples/jsm/postprocessing/Pass";
+import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
 import {
   Camera, DoubleSide,
   MeshBasicMaterial, NoBlending,
@@ -9,7 +9,6 @@ import {
   WebGLRenderTarget,
 } from "three";
 import { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
-import FullScreenQuad = Pass.FullScreenQuad;
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 
@@ -54,7 +53,7 @@ export class OutlinePass extends Pass {
     this.blurRenderTarget.texture.name = "OutlinePass.blur";
     this.blurRenderTarget.texture.generateMipmaps = false;
 
-    this.fsQuad = new Pass.FullScreenQuad();
+    this.fsQuad = new FullScreenQuad();
 
     this.outlineMaterial = this.createOutlineMaterial();
     this.blurMaterial = createSeperableBlurMaterial(4);
