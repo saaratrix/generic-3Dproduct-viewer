@@ -3,7 +3,7 @@
  */
 export function throttle(interval: number): MethodDecorator {
   return function (target: unknown, propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
-    let timerId: number | null = null;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
     let nextAllowedCall: number = 0;
     let lastArgs: unknown[];
     const original = descriptor.value;
