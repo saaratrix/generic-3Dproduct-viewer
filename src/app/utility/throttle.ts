@@ -3,7 +3,7 @@
  * @param callback Must be a lambda or a bound method for now so that "this" is correct.
  */
 export function throttle(callback: (...args: any[]) => void, interval: number): (...args: any[]) => void {
-  let timerId: number | null = null;
+  let timerId: ReturnType<typeof setTimeout> | null = null;
   let nextAllowedCall: number = 0;
 
   // We need to store the lastArgs so we always execute the last callback when throttling.
