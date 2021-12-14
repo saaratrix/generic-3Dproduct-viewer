@@ -8,7 +8,7 @@ import {
   WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
-import { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
+import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 
