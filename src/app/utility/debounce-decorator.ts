@@ -1,7 +1,7 @@
 // Source: https://embed.plnkr.co/plunk/bDvMqa
 export function debounce(delay: number = 300): MethodDecorator {
   return function(target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
-    let timeout: number;
+    let timeout: ReturnType<typeof setTimeout>;
 
     const original = descriptor.value;
 

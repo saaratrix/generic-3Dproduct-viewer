@@ -3,7 +3,6 @@ import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
 import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
 import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
-import { SelectedSpecificColorsValue } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificColorsValue";
 import { SelectedSpecificTexturesValue } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificTexturesValue";
 
 export function createFlowerPot(id: number): ProductItem {
