@@ -11,6 +11,7 @@ import {
 import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
+import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
 
 export class OutlinePass extends Pass {
 
@@ -27,7 +28,7 @@ export class OutlinePass extends Pass {
   private blurVerticalDirection = new Vector2(0, 1);
 
   private fsQuad: FullScreenQuad;
-  private copyUniforms: any;
+  private copyUniforms: Record<string, IUniform>;
   private materialCopy: ShaderMaterial;
 
   constructor(resolution: Vector2, private scene: Scene, private camera: Camera) {
@@ -68,7 +69,7 @@ export class OutlinePass extends Pass {
     const copyShader = CopyShader;
 
     this.copyUniforms = UniformsUtils.clone( copyShader.uniforms );
-    this.copyUniforms["opacity"].value = 1.0;
+    this.copyUniforms.opacity.value = 1.0;
 
     this.materialCopy = new ShaderMaterial( {
       uniforms: this.copyUniforms,
@@ -100,7 +101,7 @@ export class OutlinePass extends Pass {
 
     if ( this.renderToScreen ) {
       this.fsQuad.material = this.materialCopy;
-      this.copyUniforms["tDiffuse"].value = readBuffer.texture;
+      this.copyUniforms.tDiffuse.value = readBuffer.texture;
       renderer.setRenderTarget( null );
       this.fsQuad.render( renderer );
     }

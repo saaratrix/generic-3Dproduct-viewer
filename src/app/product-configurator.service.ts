@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
 import { ProductItem } from "./3D/models/product-item/ProductItem";
