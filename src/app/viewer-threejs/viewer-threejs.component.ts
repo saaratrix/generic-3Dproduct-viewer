@@ -9,7 +9,7 @@ import { WebGLRenderer } from "three";
 export class ViewerThreejsComponent implements OnInit {
 
   @ViewChild("canvas", { static: true })
-  canvasRef !: ElementRef;
+  canvasRef!: ElementRef;
 
   @Output()
   public sceneInit: EventEmitter<WebGLRenderer> = new EventEmitter();
