@@ -12,7 +12,7 @@ export function throttle(callback: (...args: any[]) => void, interval: number): 
   let lastArgs: unknown[];
   return function (...args: unknown[]): void {
     lastArgs = args;
-    if (timerId !== null) {
+    if (timerId !== undefined) {
       return;
     }
 

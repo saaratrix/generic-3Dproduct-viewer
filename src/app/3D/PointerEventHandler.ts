@@ -4,6 +4,7 @@ import { Intersection, Mesh, Vector2 } from "three";
 import { throttle } from "../utility/throttle";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 import type { Subject } from "rxjs";
+import { isMesh } from "./3rd-party/three/IsMesh";
 
 type SetMeshEvent = ProductConfigurationEvent.MeshSelected | ProductConfigurationEvent.MeshPointerEnter;
 
@@ -72,7 +73,7 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.MeshPointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
+    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshPointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
@@ -88,11 +89,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.MeshSelected, "currentSelectedMesh", this.deselectCurrentMesh);
+    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshSelected, "currentSelectedMesh", this.deselectCurrentMesh);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
-  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, selectedEvent: SetMeshEvent, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
+  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, subject: Subject<Mesh>, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
     const intersections = this.getIntersections(pointerEvent);
 
     if (intersections.length === 0) {
@@ -113,20 +114,12 @@ export class PointerEventHandler {
       }
     }
 
-    if (!selectedObject.type.toLowerCase().includes("mesh")) {
+    if (!isMesh(selectedObject)) {
       return;
     }
 
-    this[selectedKey] = selectedObject as Mesh;
-    const subject = this.getSetMeshSubject(selectedEvent);
+    this[selectedKey] = selectedObject;
     subject.next(this[selectedKey]);
-  }
-
-  private getSetMeshSubject(event: SetMeshEvent): Subject<Mesh> {
-    if (event === ProductConfigurationEvent.MeshSelected) {
-      return this.productConfiguratorService.meshSelected;
-    }
-    return this.productConfiguratorService.meshPointerEnter;
   }
 
   private setPointerPosition(event: PointerEvent | MouseEvent): void {
