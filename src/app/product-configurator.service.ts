@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
 import { ProductItem } from "./3D/models/product-item/ProductItem";
@@ -27,24 +26,23 @@ export class ProductConfiguratorService implements OnDestroy {
    */
   public selectedProduct: ProductItem | null = null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
   // The subjects
-  public loading_Started: Subject<void>;
-  public loading_Progress: Subject<LoadingProgressEventData>;
-  public loading_Finished: Subject<void>;
+  public loadingStarted: Subject<void>;
+  public loadingProgress: Subject<LoadingProgressEventData>;
+  public loadingFinished: Subject<void>;
 
-  public material_ColorSwap: Subject<MaterialColorSwapEventData>;
-  public material_TextureSwap: Subject<MaterialTextureSwapEventData>;
+  public materialColorSwap: Subject<MaterialColorSwapEventData>;
+  public materialTextureSwap: Subject<MaterialTextureSwapEventData>;
 
-  public mesh_Selected: Subject<Mesh>;
-  public mesh_Deselected: Subject<Mesh>;
-  public mesh_PointerEnter: Subject<Mesh>;
-  public mesh_PointerLeave: Subject<Mesh>;
+  public meshSelected: Subject<Mesh>;
+  public meshDeselected: Subject<Mesh>;
+  public meshPointerEnter: Subject<Mesh>;
+  public meshPointerLeave: Subject<Mesh>;
 
-  public selectedProduct_Changed: Subject<ProductItem>;
+  public selectedProductChanged: Subject<ProductItem>;
 
-  public toolbar_ChangeProduct: Subject<ProductItem>;
+  public toolbarChangeProduct: Subject<ProductItem>;
 
   constructor() {
     let id = 0;
@@ -58,21 +56,21 @@ export class ProductConfiguratorService implements OnDestroy {
     this.items.push(createIkeaChear(id++));
     this.items.push(createIkeaTable(id++));
 
-    this.loading_Started = this.createSubject<void>(ProductConfigurationEvent.Loading_Started);
-    this.loading_Progress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.Loading_Progress);
-    this.loading_Finished = this.createSubject<void>(ProductConfigurationEvent.Loading_Finished);
+    this.loadingStarted = this.createSubject<void>(ProductConfigurationEvent.LoadingStarted);
+    this.loadingProgress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.LoadingProgress);
+    this.loadingFinished = this.createSubject<void>(ProductConfigurationEvent.LoadingFinished);
 
-    this.material_ColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap);
-    this.material_TextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.Material_TextureSwap);
+    this.materialColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.MaterialColorSwap);
+    this.materialTextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.MaterialTextureSwap);
 
-    this.mesh_Selected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Selected);
-    this.mesh_Deselected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Deselected);
-    this.mesh_PointerEnter = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerEnter);
-    this.mesh_PointerLeave = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerLeave);
+    this.meshSelected = this.createSubject<Mesh>(ProductConfigurationEvent.MeshSelected);
+    this.meshDeselected = this.createSubject<Mesh>(ProductConfigurationEvent.MeshDeselected);
+    this.meshPointerEnter = this.createSubject<Mesh>(ProductConfigurationEvent.MeshPointerEnter);
+    this.meshPointerLeave = this.createSubject<Mesh>(ProductConfigurationEvent.MeshPointerLeave);
 
-    this.selectedProduct_Changed = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProduct_Changed);
+    this.selectedProductChanged = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProductChanged);
 
-    this.toolbar_ChangeProduct = this.createSubject<ProductItem>(ProductConfigurationEvent.Toolbar_ChangeProduct);
+    this.toolbarChangeProduct = this.createSubject<ProductItem>(ProductConfigurationEvent.ToolbarChangeProduct);
   }
 
   public ngOnDestroy(): void {

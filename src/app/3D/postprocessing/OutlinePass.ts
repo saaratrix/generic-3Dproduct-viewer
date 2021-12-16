@@ -83,7 +83,6 @@ export class OutlinePass extends Pass {
   }
 
   public render(renderer: WebGLRenderer, writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget, deltaTime: number, maskActive: boolean): void {
-
     const oldAutoClear = renderer.autoClear;
     // Since we're rendering multiple times to a render target we don't want to auto clear.
     renderer.autoClear = false;

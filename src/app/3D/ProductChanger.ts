@@ -21,7 +21,7 @@ export class ProductChanger {
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfiguratorService.toolbar_ChangeProduct.subscribe(product => {
+    this.productConfiguratorService.toolbarChangeProduct.subscribe(product => {
       this.changeProduct(product);
     });
   }
@@ -45,7 +45,7 @@ export class ProductChanger {
 
     let obj: Object3D | undefined = product.object3D;
     if (!obj) {
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+      this.productConfiguratorService.loadingStarted.next();
 
       obj = new Object3D();
       const promises: Promise<ModelLoadedEventData>[] = [];
@@ -67,7 +67,7 @@ export class ProductChanger {
       // Finally set the whole object at origin.
       this.setObjectAtOrigin(obj);
 
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
+      this.productConfiguratorService.loadingFinished.next();
       product.object3D = obj;
     }
 
@@ -88,7 +88,7 @@ export class ProductChanger {
       urlParts.push(selectedSubItem.id.toString());
     }
 
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.SelectedProduct_Changed, this.productConfiguratorService.selectedProduct);
+    this.productConfiguratorService.selectedProductChanged.next(this.productConfiguratorService.selectedProduct);
     this.productConfigurator.router.navigate(urlParts);
   }
 

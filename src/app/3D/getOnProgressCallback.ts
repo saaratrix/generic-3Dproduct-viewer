@@ -10,7 +10,7 @@ export const getOnProgressCallback = (productConfiguratorService: ProductConfigu
   const id = loadingId++;
 
   return (progress: ProgressEvent): void => {
-    productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Progress, {
+    productConfiguratorService.loadingProgress.next({
       id,
       loaded: progress.loaded,
       total: progress.total,

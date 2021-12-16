@@ -16,7 +16,7 @@ export class SelectedProductMeshIntersector {
     private productConfiguratorService: ProductConfiguratorService,
   ) {
     this.subscriptions.push(
-      this.productConfiguratorService.selectedProduct_Changed.subscribe(productItem => {
+      this.productConfiguratorService.selectedProductChanged.subscribe(productItem => {
         if (productItem.selectableMeshIntersections) {
           this.intersectableObjects = productItem.selectableMeshIntersections;
           return;

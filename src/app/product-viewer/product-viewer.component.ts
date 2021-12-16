@@ -19,11 +19,11 @@ export class ProductViewerComponent implements OnInit {
     private router: Router,
     private zone: NgZone,
   ) {
-    this.productConfiguratorService.loading_Started.subscribe(() => {
+    this.productConfiguratorService.loadingStarted.subscribe(() => {
       this.loadingsStarted++;
     });
 
-    this.productConfiguratorService.loading_Finished.subscribe(() => {
+    this.productConfiguratorService.loadingFinished.subscribe(() => {
       this.loadingsFinished++;
 
       if (this.loadingsFinished === this.loadingsStarted) {

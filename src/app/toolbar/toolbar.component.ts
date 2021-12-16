@@ -28,7 +28,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.push(
-      this.productConfiguratorService.selectedProduct_Changed.subscribe(product => {
+      this.productConfiguratorService.selectedProductChanged.subscribe(product => {
         this.selectedProduct = product;
         this.hasSubItems = !!(product.subItems?.length > 0 && product.object3D);
       }),

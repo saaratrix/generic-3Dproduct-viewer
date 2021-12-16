@@ -78,7 +78,7 @@ export class SidebarSpecificColorComponent implements OnInit {
     this.currentValue = value;
     // Run this outside angular or it'll do angular things calls before & after each animation frame.
     this.ngZone.runOutsideAngular(() => {
-      this.productConfiguratorService.dispatch<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap, {
+      this.productConfiguratorService.materialColorSwap.next({
         animationType: this.animationType,
         materials,
         targetColor: new Color(value),

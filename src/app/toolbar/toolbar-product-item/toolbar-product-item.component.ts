@@ -23,6 +23,6 @@ export class ToolbarProductItemComponent implements AfterViewInit {
   }
 
   public changeProduct(): void {
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Toolbar_ChangeProduct, this.item);
+    this.productConfiguratorService.toolbarChangeProduct.next(this.item);
   }
 }

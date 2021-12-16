@@ -18,18 +18,18 @@ export class SelectedProductHighlighter {
   constructor(renderer: WebGLRenderer, private productConfiguratorService: ProductConfiguratorService) {
     this.createOutlineEffects(renderer);
     this.subscriptions.push(
-      this.productConfiguratorService.mesh_PointerEnter.subscribe((mesh) => {
+      this.productConfiguratorService.meshPointerEnter.subscribe((mesh) => {
         this.setHoverMaterial(mesh);
       }),
-      this.productConfiguratorService.mesh_PointerLeave.subscribe((mesh) => {
+      this.productConfiguratorService.meshPointerLeave.subscribe((mesh) => {
         this.clearHoverMaterial(mesh);
       }),
       // Selection
-      this.productConfiguratorService.mesh_Selected.subscribe(mesh => {
+      this.productConfiguratorService.meshSelected.subscribe(mesh => {
         this.selectedMesh = mesh;
         this.setSelectedMaterial(mesh);
       }),
-      this.productConfiguratorService.mesh_Deselected.subscribe(mesh => {
+      this.productConfiguratorService.meshDeselected.subscribe(mesh => {
         this.clearSelectedMaterial(mesh);
         this.selectedMesh = undefined;
       }),

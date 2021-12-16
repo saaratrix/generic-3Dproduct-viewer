@@ -95,7 +95,7 @@ export class SidebarSpecificTextureComponent implements OnInit {
     };
 
     this.ngZone.runOutsideAngular(() => {
-      this.productConfiguratorService.dispatch<MaterialTextureSwapEventData>(ProductConfigurationEvent.Material_TextureSwap, {
+      this.productConfiguratorService.materialTextureSwap.next({
         addGlobalLoadingEvent: false,
         animationType: this.animationType,
         materials,

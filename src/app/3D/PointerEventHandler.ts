@@ -3,6 +3,9 @@ import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Intersection, Mesh, Vector2 } from "three";
 import { throttle } from "../utility/throttle";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
+import type { Subject } from "rxjs";
+
+type SetMeshEvent = ProductConfigurationEvent.MeshSelected | ProductConfigurationEvent.MeshPointerEnter;
 
 export class PointerEventHandler {
   private element!: HTMLElement;
@@ -17,7 +20,7 @@ export class PointerEventHandler {
     private productConfiguratorService: ProductConfiguratorService,
     private selectedProductMeshIntersector: SelectedProductMeshIntersector,
   ) {
-    this.productConfiguratorService.selectedProduct_Changed.subscribe(() => {
+    this.productConfiguratorService.selectedProductChanged.subscribe(() => {
       if (this.currentHoveredMesh) {
         this.deselectCurrentHoveredMesh();
       }
@@ -69,7 +72,7 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.Mesh_PointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
+    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.MeshPointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
@@ -85,11 +88,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.Mesh_Selected, "currentSelectedMesh", this.deselectCurrentMesh);
+    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.MeshSelected, "currentSelectedMesh", this.deselectCurrentMesh);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
-  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, selectedEvent: ProductConfigurationEvent, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
+  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, selectedEvent: SetMeshEvent, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
     const intersections = this.getIntersections(pointerEvent);
 
     if (intersections.length === 0) {
@@ -115,7 +118,15 @@ export class PointerEventHandler {
     }
 
     this[selectedKey] = selectedObject as Mesh;
-    this.productConfiguratorService.dispatch(selectedEvent, this[selectedKey]);
+    const subject = this.getSetMeshSubject(selectedEvent);
+    subject.next(this[selectedKey]);
+  }
+
+  private getSetMeshSubject(event: SetMeshEvent): Subject<Mesh> {
+    if (event === ProductConfigurationEvent.MeshSelected) {
+      return this.productConfiguratorService.meshSelected;
+    }
+    return this.productConfiguratorService.meshPointerEnter;
   }
 
   private setPointerPosition(event: PointerEvent | MouseEvent): void {
@@ -130,12 +141,12 @@ export class PointerEventHandler {
   }
 
   private deselectCurrentHoveredMesh(): void {
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Mesh_PointerLeave, this.currentHoveredMesh);
+    this.productConfiguratorService.meshPointerLeave.next(this.currentHoveredMesh);
     this.currentHoveredMesh = undefined;
   }
 
   private deselectCurrentMesh(): void {
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Mesh_Deselected, this.currentSelectedMesh);
+    this.productConfiguratorService.meshDeselected.next(this.currentSelectedMesh);
     this.currentSelectedMesh = undefined;
   }
 }

@@ -27,7 +27,7 @@ export class MaterialTextureChanger {
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
   ) {
-    productConfiguratorService.material_TextureSwap.subscribe(event => {
+    productConfiguratorService.materialTextureSwap.subscribe(event => {
       this.swapTexture(event);
     });
   }
@@ -59,7 +59,7 @@ export class MaterialTextureChanger {
 
   private loadTexture(event: MaterialTextureSwapEventData, onLoaded: (texture: Texture) => void): void {
     if (event.addGlobalLoadingEvent) {
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+      this.productConfiguratorService.loadingStarted.next();
     }
 
     const onProgressCallback = event.addGlobalLoadingEvent ? getOnProgressCallback(this.productConfiguratorService) : undefined;
@@ -67,7 +67,7 @@ export class MaterialTextureChanger {
     // Load the new texture
     new TextureLoader().load(event.textureUrl, (texture: Texture) => {
       if (event.addGlobalLoadingEvent) {
-        this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
+        this.productConfiguratorService.loadingFinished.next();
       }
       // For example to stop a loading spinner!
       event.onLoaded?.();

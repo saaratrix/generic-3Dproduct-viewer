@@ -56,7 +56,7 @@ export function createIkeaChear(id: number): ProductItem {
     // TODO: Change this into using a thumbnail.
     // 1024x1024 image scaled to ~32x32px :D - them loading times too!
     image: "assets/models/pbr/chair_mat_baseColor.png",
-    eventType: ProductConfigurationEvent.Material_TextureSwap,
+    eventType: ProductConfigurationEvent.MaterialTextureSwap,
     tooltip: "White chair",
     data: {
       addGlobalLoadingEvent: true,
@@ -71,7 +71,7 @@ export function createIkeaChear(id: number): ProductItem {
     // TODO: Change this into using a thumbnail.
     // 1024x1024 image scaled to ~32x32px :D - them loading times too!
     image: "assets/models/pbr/chair_mat_baseColor_alt.png",
-    eventType: ProductConfigurationEvent.Material_TextureSwap,
+    eventType: ProductConfigurationEvent.MaterialTextureSwap,
     tooltip: "Blue chair",
     data: {
       addGlobalLoadingEvent: true,

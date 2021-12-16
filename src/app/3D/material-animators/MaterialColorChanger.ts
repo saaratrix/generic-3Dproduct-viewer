@@ -19,7 +19,7 @@ export class MaterialColorChanger {
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
 
-    productConfiguratorService.material_ColorSwap.subscribe(event => {
+    productConfiguratorService.materialColorSwap.subscribe(event => {
       switch (event.animationType) {
         case MaterialAnimationType.None:
           this.changeColorLinearly(event, 0);

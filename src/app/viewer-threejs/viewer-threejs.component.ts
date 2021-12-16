@@ -11,7 +11,7 @@ export class ViewerThreejsComponent implements OnInit {
   @ViewChild("canvas", { static: true }) canvasRef!: ElementRef;
 
   @Output()
-  public sceneInit: EventEmitter<WebGLRenderer> = new EventEmitter();
+  public sceneInit: EventEmitter<WebGLRenderer> = new EventEmitter<WebGLRenderer>();
 
   constructor() {
   }
