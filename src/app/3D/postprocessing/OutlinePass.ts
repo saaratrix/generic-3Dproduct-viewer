@@ -98,7 +98,7 @@ export class OutlinePass extends Pass {
 
     renderer.autoClear = oldAutoClear;
 
-    if ( this.renderToScreen ) {
+    if (this.renderToScreen) {
       this.fsQuad.material = this.materialCopy;
       this.copyUniforms.tDiffuse.value = readBuffer.texture;
       renderer.setRenderTarget( null );
@@ -115,6 +115,7 @@ export class OutlinePass extends Pass {
 
     this.scene.overrideMaterial = this.hoverMaterial;
     this.camera.layers.set(1);
+
     renderer.render(this.scene, this.camera);
     this.scene.overrideMaterial = this.selectedMaterial;
     this.camera.layers.set(2);
@@ -138,30 +139,30 @@ export class OutlinePass extends Pass {
   private createOutlineMaterial(): ShaderMaterial {
     const material = new ShaderMaterial({
       vertexShader:
-        "varying vec2 vUv;\n\
-        void main() {\n\
-          vUv = uv;\n\
-          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\
-        }",
+        `varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
 
       fragmentShader:
-        "varying vec2 vUv;\
-        uniform sampler2D maskTexture;\
-				uniform sampler2D blurTexture;\
-				\
-				vec4 getOutlineColor(float mask, float blur, vec3 outlineColor)\
-        {\
-          float blurOutline = clamp((blur - mask) * 2.5, 0.0, 1.0);\
-          return vec4(outlineColor.x * blurOutline, outlineColor.y * blurOutline, outlineColor.z * blurOutline, blurOutline);\
-        }\
-				\
-				void main() {\
-					vec4 maskColor = texture2D(maskTexture, vUv);\
-					vec4 blurColor = texture2D(blurTexture, vUv);\
-					vec4 hoverColor = getOutlineColor(maskColor.r, blurColor.r, vec3(1.0, 1.0, 1.0));\
-					vec4 finalColor = vec4(blurColor.xyz - maskColor.xyz, 1.0);\
-					gl_FragColor = finalColor;\
-				}",
+        `varying vec2 vUv;
+        uniform sampler2D maskTexture;
+				uniform sampler2D blurTexture;
+
+				vec4 getOutlineColor(float mask, float blur, vec3 outlineColor)
+        {
+          float blurOutline = clamp((blur - mask) * 2.5, 0.0, 1.0);
+          return vec4(outlineColor.x * blurOutline, outlineColor.y * blurOutline, outlineColor.z * blurOutline, blurOutline);
+        }
+
+				void main() {
+					vec4 maskColor = texture2D(maskTexture, vUv);
+					vec4 blurColor = texture2D(blurTexture, vUv);
+					vec4 hoverColor = getOutlineColor(maskColor.r, blurColor.r, vec3(1.0, 1.0, 1.0));
+					vec4 finalColor = vec4(blurColor.xyz - maskColor.xyz, hoverColor.w);
+					gl_FragColor = hoverColor;
+				}`,
       uniforms: {
         maskTexture: { value: null },
         blurTexture: { value: null },
