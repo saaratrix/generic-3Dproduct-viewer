@@ -2,29 +2,34 @@
  * Throttles a method so it's only called once every interval.
  * @param callback Must be a lambda or a bound method for now so that "this" is correct.
  */
-export function throttle(callback: (...args: any[]) => void, interval: number): (...args: any[]) => void {
-  let timerId: ReturnType<typeof setTimeout> | null = null;
-  let nextAllowedCall: number = 0;
+export function throttle(callback: (...args: unknown[]) => void, interval: number): (...args: any[]) => void {
+  let isThrottling: boolean
+  let wasCalled: boolean = false;
 
   // We need to store the lastArgs so we always execute the last callback when throttling.
   let lastArgs: unknown[];
   return function(...args: unknown[]): void {
     lastArgs = args;
-    if (timerId !== null) {
+    if (isThrottling) {
+      wasCalled = true;
       return;
     }
 
-    const now = Date.now();
-    if (now >= nextAllowedCall) {
-      callback(...args);
-    } else {
-      timerId = setTimeout(() => {
-        nextAllowedCall = Date.now() + interval;
-        callback(...lastArgs);
-        timerId = null;
-      }, nextAllowedCall - now);
-    }
-
-    nextAllowedCall = now + interval;
+    callback(...args);
+    isThrottling = true;
+    internalThrottle();
   };
+
+  function internalThrottle(): void {
+    setTimeout(function () {
+      if (!wasCalled) {
+        isThrottling = false;
+        return;
+      }
+
+      callback(...lastArgs);
+      wasCalled = false;
+      internalThrottle();
+    }, interval);
+  }
 }
