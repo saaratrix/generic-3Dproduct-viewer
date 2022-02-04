@@ -32,27 +32,30 @@ export function throttle(interval: number): MethodDecorator {
         return;
       }
 
-      if (!throttler) {
-        throttler = {
-          args,
-          wasCalled: true,
-          thisArg: this,
-        };
-        throttlers.set(this, throttler);
-      }
-
+      throttler = createThrottler(args, this);
+      original.apply(this, args);
       internalThrottle(throttler);
     };
 
+    function createThrottler(args: unknown[], that: unknown): Throttler {
+      const throttler: Throttler = {
+        args,
+        wasCalled: false,
+        thisArg: that,
+      };
+      throttlers.set(that, throttler);
+      return throttler;
+    }
+
     function internalThrottle(throttler: Throttler): void {
       setTimeout(function (): void {
-        if (!throttler!.wasCalled) {
+        if (!throttler.wasCalled) {
           throttlers.delete(throttler.thisArg);
           return;
         }
 
-        throttler!.wasCalled = false;
-        original.apply(throttler.thisArg, throttler!.args);
+        original.apply(throttler.thisArg, throttler.args);
+        throttler.wasCalled = false;
         internalThrottle(throttler);
       }, interval);
     }
