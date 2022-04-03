@@ -2,7 +2,7 @@
  * Throttles a method so it's only called once every interval.
  * @param callback Must be a lambda or a bound method for now so that "this" is correct.
  */
-export function throttle(callback: (...args: unknown[]) => void, interval: number): (...args: any[]) => void {
+export function throttle(callback: (...args: any[]) => void, interval: number): (...args: any[]) => void {
   let isThrottling: boolean
   let wasCalled: boolean = false;
 
