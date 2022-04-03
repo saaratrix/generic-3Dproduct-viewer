@@ -22,12 +22,8 @@ export class PointerEventHandler {
     private selectedProductMeshIntersector: SelectedProductMeshIntersector,
   ) {
     this.productConfiguratorService.selectedProductChanged.subscribe(() => {
-      if (this.currentHoveredMesh) {
-        this.deselectCurrentHoveredMesh();
-      }
-      if (this.currentSelectedMesh) {
-        this.deselectCurrentMesh();
-      }
+      this.tryDeselectCurrentHoveredMesh();
+      this.tryDeselectCurrentMesh();
     });
   }
 
@@ -73,13 +69,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshPointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
+    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshPointerEnter, "currentHoveredMesh", this.tryDeselectCurrentHoveredMesh);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
-    if (this.currentHoveredMesh) {
-      this.deselectCurrentHoveredMesh();
-    }
+    this.tryDeselectCurrentHoveredMesh();
     this.pointerdownPosition = undefined;
   };
 
@@ -89,7 +83,7 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshSelected, "currentSelectedMesh", this.deselectCurrentMesh);
+    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshSelected, "currentSelectedMesh", this.tryDeselectCurrentMesh);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
@@ -108,7 +102,7 @@ export class PointerEventHandler {
     if (this[selectedKey]) {
       if (selectedObject === this[selectedKey]) {
         return;
-        // If the object isn't the same then we need to deselect it so it can lose the selected material!
+      // If the object isn't the same then we need to deselect it, so it can lose the selected material!
       } else {
         deselectMethod.call(this);
       }
@@ -119,7 +113,7 @@ export class PointerEventHandler {
     }
 
     this[selectedKey] = selectedObject;
-    subject.next(this[selectedKey]);
+    subject.next(selectedObject);
   }
 
   private setPointerPosition(event: PointerEvent | MouseEvent): void {
@@ -133,12 +127,20 @@ export class PointerEventHandler {
     return this.selectedProductMeshIntersector.getIntersections(this.pointerPosition);
   }
 
-  private deselectCurrentHoveredMesh(): void {
+  private tryDeselectCurrentHoveredMesh(): void {
+    if (!this.currentHoveredMesh) {
+      return;
+    }
+
     this.productConfiguratorService.meshPointerLeave.next(this.currentHoveredMesh);
     this.currentHoveredMesh = undefined;
   }
 
-  private deselectCurrentMesh(): void {
+  private tryDeselectCurrentMesh(): void {
+    if (!this.currentSelectedMesh) {
+      return;
+    }
+
     this.productConfiguratorService.meshDeselected.next(this.currentSelectedMesh);
     this.currentSelectedMesh = undefined;
   }
