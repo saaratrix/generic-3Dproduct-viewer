@@ -6,7 +6,6 @@ export function createSeperableBlurMaterial(maxRadius: number): ShaderMaterial {
   const material = new ShaderMaterial( {
 
     defines: {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       MAX_RADIUS: maxRadius,
     },
 

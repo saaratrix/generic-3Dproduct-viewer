@@ -43,6 +43,10 @@ module.exports = {
         selector: "default",
         format: ["camelCase"],
       },
+      {
+        selector: "property",
+        format: ["camelCase", "UPPER_CASE"],
+      },
       // Should allow a class property to be whatever!
       // PascalCase can be useful when setting a property as an enum for the template.
       {
