@@ -13,21 +13,23 @@ module.exports = {
     // ESLint rules: https://eslint.org/docs/rules/
     "arrow-spacing": ["error", { before: true, after: true }],
     "block-spacing": ["error", "always"],
-    "comma-dangle": ["error", "always-multiline"],
     "comma-spacing": ["error", { after: true }],
     "curly": ["error", "all"],
     "eqeqeq": ["error", "smart"],
+    "function-paren-newline": ["error", "multiline-arguments"],
     "key-spacing": ["error", { afterColon: true }],
-    "keyword-spacing": "error",
     "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
     "no-irregular-whitespace": "error",
     "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }],
+    "no-multi-spaces": ["error", { ignoreEOLComments: true, exceptions: { ImportDeclaration: true }}],
     "no-prototype-builtins": "off",
+    "no-trailing-spaces": ["error", { ignoreComments: true }],
     "no-useless-escape": "off",
+    "no-whitespace-before-property": ["error"],
     "object-curly-spacing": ["error", "always"],
+    "object-property-newline": ["error",  { allowAllPropertiesOnSameLine: true }],
     "quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
     "space-before-blocks": ["error", "always"],
-    "space-infix-ops": ["error", { int32Hint: false }],
     // Typescript ESLint rules: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin/docs/rules
     // "@typescript-eslint/"
     "@typescript-eslint/ban-ts-comment": "off",
@@ -42,7 +44,7 @@ module.exports = {
         format: ["camelCase"],
       },
       // Should allow a class property to be whatever!
-      // PascalCase can be useful when setting setting a property as an enum for the template.
+      // PascalCase can be useful when setting a property as an enum for the template.
       {
         selector: "classProperty",
         format: ["camelCase", "PascalCase"],
@@ -74,19 +76,39 @@ module.exports = {
     ],
     "brace-style": "off",
     "@typescript-eslint/brace-style": [ "error", "1tbs", { allowSingleLine: true } ],
+    "comma-dangle": ["error", "always-multiline"],
+    "@typescript-eslint/comma-dangle": [
+      "error",
+      {
+        arrays: "always-multiline",
+        enums: "always-multiline",
+        exports: "always-multiline",
+        functions: "always-multiline",
+        generics: "always-multiline",
+        imports: "always-multiline",
+        objects: "always-multiline",
+        tuples: "always-multiline",
+      },
+    ],
     "indent": "off",
     "@typescript-eslint/indent": ["error", 2, {
       FunctionDeclaration: { parameters: "first" },
       FunctionExpression: { parameters: "off" },
       SwitchCase: 1,
     }],
+    "keyword-spacing": "off",
+    "@typescript-eslint/keyword-spacing": ["error"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { ignoreRestSiblings: true }],
     "semi": "off",
     "@typescript-eslint/semi": ["error", "always"],
     "space-before-function-parent": "off",
     "@typescript-eslint/space-before-function-paren": ["error", {
-      "anonymous": "always",
-      "named": "never",
-      "asyncArrow": "always"
+      anonymous: "always",
+      named: "never",
+      asyncArrow: "always"
     }],
+    "space-infix-ops": "off",
+    "@typescript-eslint/space-infix-ops": ["error", { int32Hint: true }],
   },
 };
