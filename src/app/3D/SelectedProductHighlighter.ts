@@ -1,9 +1,7 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
-import { Mesh, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect";
+import { Mesh, WebGLRenderer } from "three";
 import { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
-
 
 export class SelectedProductHighlighter {
   private hoveredMesh: Mesh | undefined;
@@ -38,21 +36,6 @@ export class SelectedProductHighlighter {
     this.hoveredMesh = undefined;
     this.selectedMesh = undefined;
   }
-
-  // private createOutlineEffects(renderer: WebGLRenderer): void {
-  //   const defaultThickness = 0.005; // default: 0.003
-  //   this.selectedEffect = new OutlineEffect(renderer, {
-  //     // snow
-  //     defaultColor: [ 255 / 255, 250 / 255, 250 / 255 ],
-  //     defaultThickness,
-  //   });
-  //
-  //   this.hoverEffect = new OutlineEffect(renderer, {
-  //     // #b591c7
-  //     defaultColor: [181 / 255, 145 / 255, 199 / 255],  // default: [0, 0, 0],
-  //     defaultThickness,
-  //   });
-  // }
 
   private setSelectedMaterial(mesh: Mesh): void {
     this.enableLayer(mesh, 2);

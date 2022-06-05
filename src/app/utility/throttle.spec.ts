@@ -39,8 +39,7 @@ describe("throttle tests", () => {
       const obj = new TestObject();
       let events = 0;
 
-      let expectedCalls: number[] = [1, 3, 5, 7, 9];
-      // let intervals: number[] = [10, 10, 10, 10];
+      const expectedCalls: number[] = [1, 3, 5, 7, 9];
 
       expect(obj.called).toBe(0);
       const start = performance.now();
@@ -59,8 +58,7 @@ describe("throttle tests", () => {
         } else {
           // Probably because of jasmine the setTimeout is unreliable and can give times between 2 and 35 milliseconds difference.
           const callTimeDeltas = obj.callTimes.map((c, index) => {
-            const delta = c - (obj.callTimes[index - 1] ?? start);
-            return delta;
+            return c - (obj.callTimes[index - 1] ?? start);
           });
 
           for (let i = 1; i < callTimeDeltas.length; i++) {
@@ -117,7 +115,7 @@ describe("throttle tests", () => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
       let events = 0;
 
-      let expectedCalls: number[] = [1, 3, 5, 7, 9];
+      const expectedCalls: number[] = [1, 3, 5, 7, 9];
 
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -142,8 +140,7 @@ describe("throttle tests", () => {
           for (const obj of objects) {
             // Probably because of jasmine the setTimeout is unreliable and can give times between 2 and 35 milliseconds difference.
             const callTimeDeltas = obj.callTimes.map((c, index) => {
-              const delta = c - (obj.callTimes[index - 1] ?? start);
-              return delta;
+              return c - (obj.callTimes[index - 1] ?? start);
             });
 
             for (let i = 1; i < callTimeDeltas.length; i++) {
@@ -157,23 +154,23 @@ describe("throttle tests", () => {
     });
   });
 
-  describe('Tests with mocked setTimeout', () => {
-    beforeEach(function() {
+  describe("Tests with mocked setTimeout", () => {
+    beforeEach(function () {
       jasmine.clock().install();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
     });
 
     it ("Single instances hould call instantly and consecutively many times later", () => {
       const obj = new TestObject();
 
-      let tests = 1000;
+      const tests = 1000;
       // 1, 2, 4, 5, 7, 8, 10, 11 ...
       let count = 0;
-      let expectedCalls: number[] = [];
-      let intervals: number[] = [];
+      const expectedCalls: number[] = [];
+      const intervals: number[] = [];
       for (let i = 0; i < tests; i++) {
         if (i === 0) {
           count++;
@@ -198,11 +195,11 @@ describe("throttle tests", () => {
     it ("Multiple instances should call instantly and consecutively many times later", () => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
 
-      let tests = 1000;
+      const tests = 1000;
       // 1, 2, 4, 5, 7, 8, 10, 11 ...
       let count = 0;
-      let expectedCalls: number[] = [];
-      let intervals: number[] = [];
+      const expectedCalls: number[] = [];
+      const intervals: number[] = [];
       for (let i = 0; i < tests; i++) {
         if (i === 0) {
           count++;
@@ -230,18 +227,18 @@ describe("throttle tests", () => {
     });
   });
 
-  describe('Testing potential recursion limit', () => {
-    beforeEach(function() {
+  describe("Testing potential recursion limit", () => {
+    beforeEach(function () {
       jasmine.clock().install();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
     });
 
-    it ('Should handle many consecutive method calls', () => {
+    it ("Should handle many consecutive method calls", () => {
       const obj = new TestObject();
-      let tests = 1000000;
+      const tests = 1000000;
 
       for (let i = 0; i < tests; i++) {
         obj.nuu();
@@ -255,7 +252,7 @@ describe("throttle tests", () => {
 
       expect (obj.called).toBe(tests + 1);
     });
-  })
+  });
 
   class TestObject {
     called: number = 0;
@@ -266,4 +263,4 @@ describe("throttle tests", () => {
       this.callTimes.push(performance.now());
     }, 2);
   }
-})
+});
