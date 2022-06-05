@@ -9,17 +9,7 @@ import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 import { MaterialColorChanger } from "./material-animators/MaterialColorChanger";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { ColorBlurOutlinePass } from "./rendering/postprocessing/ColorBlurOutlinePass";
 import { throttle } from "../utility/throttle";
-import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { LuminosityShader } from "three/examples/jsm/shaders/LuminosityShader";
-import { FilmShader } from "three/examples/jsm/shaders/FilmShader";
-import { SSAOShader } from "three/examples/jsm/shaders/SSAOShader";
-import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
-import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 import { EffectComposerHandler } from "./rendering/EffectComposerHandler";
 
 @Injectable({

@@ -2,7 +2,7 @@ import { ProductConfigurator } from "./ProductConfigurator";
 import { ProductItem } from "./models/product-item/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { Box3, LinearEncoding, Object3D, sRGBEncoding, Vector3 } from "three";
+import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
 import { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";

@@ -2,7 +2,7 @@ import type { ProductConfiguratorService } from "../../product-configurator.serv
 import type { Subscription } from "rxjs";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { Camera, Color, LinearEncoding, Scene, sRGBEncoding, Vector2, WebGLRenderer } from "three";
+import { Camera, Color, Scene, Vector2, WebGLRenderer } from "three";
 import { ColorBlurOutlinePass } from "./postprocessing/ColorBlurOutlinePass";
 import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
