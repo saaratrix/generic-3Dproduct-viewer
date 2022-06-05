@@ -2,7 +2,6 @@ import { ProductConfigurator } from "./ProductConfigurator";
 import { ProductItem } from "./models/product-item/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Box3, LinearEncoding, Object3D, sRGBEncoding, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
@@ -144,7 +143,7 @@ export class ProductChanger {
     cameraControls.maxDistance = size * 1.5;
     cameraControls.minDistance = size * 0.55;
 
-    cameraControls.maxPolarAngle = hasFloor ?  Math.PI * 0.5 : Math.PI;
+    cameraControls.maxPolarAngle = hasFloor ? Math.PI * 0.5 : Math.PI;
 
     cameraControls.update();
   }

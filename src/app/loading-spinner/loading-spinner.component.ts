@@ -16,7 +16,7 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
   /**
    * This is to map the array with a key to easily check if it exists or not.
    */
-  private loadingsMap: { [key: number]: LoadingData } = {};
+  private loadingsMap: Record<number, LoadingData> = {};
   /**
    * To easily iterate over the different loadings that can happen at once.
    */

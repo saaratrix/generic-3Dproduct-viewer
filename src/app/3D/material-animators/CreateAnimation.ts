@@ -26,7 +26,7 @@ export function createAnimation(
   duration: number,
   onProgress: OnAnimationProgressCallback,
   onFinish?: (cancelled: boolean, complete: boolean) => void,
-  easingMethod?: (progress: number) => number
+  easingMethod?: (progress: number) => number,
 ): () => void {
   let isCancelled: boolean = false;
   let lastFrame: number = Date.now();

@@ -1,9 +1,5 @@
-/**
- * Changes a texture from One to another over time.
- */
 import { CanvasTexture, Material, Mesh, Texture, TextureLoader } from "three";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { ProductConfigurationEvent } from "../../product-configurator-events";
 import { MaterialTextureSwapEventData } from "../models/event-data/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "../getOnProgressCallback";
 import { MaterialAnimationType } from "./MaterialAnimationType";
@@ -23,6 +19,9 @@ interface AnimatedMaterial {
   originalTexture: Texture;
 }
 
+/**
+ * Changes a texture from one to another over time.
+ */
 export class MaterialTextureChanger {
   constructor(
     private productConfiguratorService: ProductConfiguratorService,

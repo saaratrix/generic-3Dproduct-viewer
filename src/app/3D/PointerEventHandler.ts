@@ -1,12 +1,9 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
 import { Intersection, Mesh, Vector2 } from "three";
 import { throttle } from "../utility/throttle";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 import type { Subject } from "rxjs";
 import { isMesh } from "./3rd-party/three/IsMesh";
-
-type SetMeshEvent = ProductConfigurationEvent.MeshSelected | ProductConfigurationEvent.MeshPointerEnter;
 
 interface PointerCoordinates {
   x: number;

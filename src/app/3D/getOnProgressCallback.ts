@@ -1,5 +1,4 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
 
 type OnProgressCallback = (progress: ProgressEvent) => void;
 

@@ -20,7 +20,7 @@ export class ProductConfiguratorService implements OnDestroy {
   /**
    * The HTML element associated with an item id.
    */
-  public itemElements: { [key: string]: HTMLElement } = {};
+  public itemElements: Record<string, HTMLElement> = {};
   /**
    * The currently selected product.
    */

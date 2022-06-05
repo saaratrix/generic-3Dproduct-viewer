@@ -5,8 +5,6 @@ import { SelectedSpecificColorsValue } from "../../3D/models/selectable-meshes-o
 import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
 import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialColorSwapEventData } from "../../3D/models/event-data/MaterialColorSwapEventData";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
 import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveProductItemEventType";
 

@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as THREE from "three";

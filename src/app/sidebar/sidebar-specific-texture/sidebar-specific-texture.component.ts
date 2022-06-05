@@ -5,8 +5,6 @@ import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnima
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
 import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
-import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialTextureSwapEventData } from "../../3D/models/event-data/MaterialTextureSwapEventData";
 import { SelectedSpecificTexturesValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
 
 @Component({
