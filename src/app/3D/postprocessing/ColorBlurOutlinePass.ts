@@ -22,20 +22,32 @@ import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
 export class ColorBlurOutlinePass extends Pass {
+  /**
+   * The hover mask material that renders the hovered meshes into a single colour.
+   */
+  private readonly hoverMaskMaterial: MeshBasicMaterial;
+  /**
+   * The selected mask material that renders the selected meshes into a single colour.
+   */
+  private readonly selectedMaskMaterial: MeshBasicMaterial;
 
-  private readonly hoverMaterial: MeshBasicMaterial;
-  private readonly selectedMaterial: MeshBasicMaterial;
-
+  /**
+   * The hover & selected masks.
+   */
   private readonly maskRenderTarget: WebGLRenderTarget;
   /**
-   * This is the edge outline of the material.
+   * This is used for the edge outline of the material.
    */
   private blurRenderTarget!: WebGLRenderTarget;
   /**
-   * This is the glowing part of the outline.
+   * This is used for the glowing part of the outline.
+   * It's half the render size as {@link blurRenderTarget}.
    */
   private blurRenderHalfTarget!: WebGLRenderTarget;
 
+  /**
+   * The shader material that combines all render targets to generate the final outline.
+   */
   private readonly outlineMaterial: ShaderMaterial;
 
   private blurMaterial!: ShaderMaterial;
@@ -44,10 +56,17 @@ export class ColorBlurOutlinePass extends Pass {
   private blurHorizontalDirection = new Vector2(1, 0);
   private blurVerticalDirection = new Vector2(0, 1);
 
+  /**
+   * Full screen quad to render the post process effects onto.
+   */
   private fsQuad: FullScreenQuad;
   private readonly copyUniforms: Record<string, IUniform>;
   private readonly materialCopy: ShaderMaterial;
 
+  /**
+   * We down sample the blur materials to increase the effect of the blur.
+   * @private
+   */
   private downsampleResolution: number = 2;
 
   private readonly edgeThickness: number = 1;
@@ -58,13 +77,13 @@ export class ColorBlurOutlinePass extends Pass {
 
     // We use additive blending and depthWrite = false to sum the outlines together.
     // Otherwise, the outlines would happen where the meshes intersect instead of outlining each mesh individually.
-    this.hoverMaterial = new MeshBasicMaterial({
+    this.hoverMaskMaterial = new MeshBasicMaterial({
       color: 0xff0000,
       side: DoubleSide,
       blending: AdditiveBlending,
       depthWrite: false,
     });
-    this.selectedMaterial = new MeshBasicMaterial({
+    this.selectedMaskMaterial = new MeshBasicMaterial({
       color: 0x00ff00,
       side: DoubleSide,
       blending: AdditiveBlending,
@@ -163,11 +182,11 @@ export class ColorBlurOutlinePass extends Pass {
     renderer.setRenderTarget(this.maskRenderTarget);
     renderer.clear();
 
-    this.scene.overrideMaterial = this.hoverMaterial;
+    this.scene.overrideMaterial = this.hoverMaskMaterial;
     this.camera.layers.set(1);
     renderer.render(this.scene, this.camera);
 
-    this.scene.overrideMaterial = this.selectedMaterial;
+    this.scene.overrideMaterial = this.selectedMaskMaterial;
     this.camera.layers.set(2);
     renderer.render(this.scene, this.camera);
 
