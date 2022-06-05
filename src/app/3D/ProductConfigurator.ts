@@ -87,7 +87,9 @@ export class ProductConfigurator {
     const renderPass = new RenderPass(this.scene, this.camera);
     this.renderComposer.addPass(renderPass);
 
-    const outlinePass = new ColorBlurOutlinePass(this.renderer.getSize(new Vector2(0, 0)), this.scene, this.camera);
+    const hoverColor = new Color(181 / 255, 145 / 255, 199 / 255);
+    const selectedColor = new Color(255 / 255, 250 / 255, 250 / 255);
+    const outlinePass = new ColorBlurOutlinePass(this.renderer.getSize(new Vector2(0, 0)), this.scene, this.camera, hoverColor, selectedColor);
     this.renderComposer.addPass(outlinePass);
 
     this.startRenderLoop();
