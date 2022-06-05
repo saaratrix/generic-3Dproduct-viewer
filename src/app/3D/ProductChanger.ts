@@ -73,8 +73,6 @@ export class ProductChanger {
     }
 
     this.productConfigurator.scene.add(obj);
-
-    this.toggleGammeSpace(product.useGammaSpace);
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
 
@@ -143,30 +141,5 @@ export class ProductChanger {
     cameraControls.maxPolarAngle = hasFloor ? Math.PI * 0.5 : Math.PI;
 
     cameraControls.update();
-  }
-
-  /**
-   * Toggle between gamma space.
-   * Also changes the intensity of the lights because the light intensity is different between the spaces.
-   * @param value
-   */
-  public toggleGammeSpace(value: boolean): void {
-    const textureEncoding = value ? sRGBEncoding : LinearEncoding;
-    if (this.productConfigurator.renderer.outputEncoding === textureEncoding) {
-      return;
-    }
-
-    this.productConfigurator.renderer.outputEncoding = textureEncoding;
-    // light.intensity * factor
-    // default is gamma -> non-gamma space
-    let factor = this.productConfigurator.lightIntensityFactor;
-    // Changing from non-gamma -> gamma
-    if (value) {
-      factor = 1 / this.productConfigurator.lightIntensityFactor;
-    }
-
-    for (const light of this.productConfigurator.lights) {
-      light.intensity *= factor;
-    }
   }
 }

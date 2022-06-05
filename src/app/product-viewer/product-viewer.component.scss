@@ -9,4 +9,5 @@
   // Otherwise a scroll bar might be visible.
   // Caused for example by offsetHeight being 826 but get getBoundingClientRect() would return 825.6
   overflow: hidden;
+  background-color: #444444;
 }

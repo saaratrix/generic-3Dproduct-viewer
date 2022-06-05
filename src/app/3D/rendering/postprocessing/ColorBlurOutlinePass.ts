@@ -18,7 +18,7 @@ import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTa
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
-import { ProductConfiguratorService } from "../../product-configurator.service";
+import { ProductConfiguratorService } from "../../../product-configurator.service";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
@@ -192,6 +192,10 @@ export class ColorBlurOutlinePass extends Pass {
 
     renderer.autoClear = oldAutoClear;
     renderer.setClearColor(oldClearColor, oldClearAlpha);
+
+    if (maskActive) {
+      renderer.state.buffers.stencil.setTest( true );
+    }
 
     if (this.renderToScreen) {
       this.fsQuad.material = this.materialCopy;

@@ -11,8 +11,16 @@ import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector
 import { MaterialColorChanger } from "./material-animators/MaterialColorChanger";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { ColorBlurOutlinePass } from "./postprocessing/ColorBlurOutlinePass";
+import { ColorBlurOutlinePass } from "./rendering/postprocessing/ColorBlurOutlinePass";
 import { throttle } from "../utility/throttle";
+import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import { LuminosityShader } from "three/examples/jsm/shaders/LuminosityShader";
+import { FilmShader } from "three/examples/jsm/shaders/FilmShader";
+import { SSAOShader } from "three/examples/jsm/shaders/SSAOShader";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
+import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
+import { EffectComposerHandler } from "./rendering/EffectComposerHandler";
 
 @Injectable({
   providedIn: "root",
@@ -33,7 +41,7 @@ export class ProductConfigurator {
   private pointerEventHandler: PointerEventHandler;
   private selectedProductHighlighter: SelectedProductHighlighter;
 
-  private renderComposer: EffectComposer;
+  private effectsComposerHandler: EffectComposerHandler;
 
   constructor(
     public renderer: WebGLRenderer,
@@ -44,7 +52,7 @@ export class ProductConfigurator {
   ) {
     const { width, height } = this.getRendererSize();
     this.renderer.setSize(width, height);
-    this.renderer.setClearColor(new Color(0x444444));
+    this.renderer.setClearColor(new Color(0x000000), 0);
 
     this.scene = new Scene();
 
@@ -75,15 +83,7 @@ export class ProductConfigurator {
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
 
-    this.renderComposer = new EffectComposer(this.renderer);
-
-    const renderPass = new RenderPass(this.scene, this.camera);
-    this.renderComposer.addPass(renderPass);
-
-    const hoverColor = new Color(181 / 255, 145 / 255, 199 / 255);
-    const selectedColor = new Color(255 / 255, 250 / 255, 250 / 255);
-    const outlinePass = new ColorBlurOutlinePass(this.productConfiguratorService, this.renderer.getSize(new Vector2(0, 0)), this.scene, this.camera, hoverColor, selectedColor);
-    this.renderComposer.addPass(outlinePass);
+    this.effectsComposerHandler = new EffectComposerHandler(this.productConfiguratorService, this.renderer, this.scene, this.camera);
 
     this.startRenderLoop();
   }
@@ -91,8 +91,7 @@ export class ProductConfigurator {
   public startRenderLoop(): void {
     const renderFunction = (): void => {
       this.cameraControls.update();
-
-      this.renderComposer.render();
+      this.effectsComposerHandler.render();
       requestAnimationFrame(renderFunction);
     };
 
