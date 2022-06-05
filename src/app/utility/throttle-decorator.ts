@@ -8,7 +8,7 @@ export interface Throttler {
 }
 
 /**
- * Throttles a method so it's only called at most once every interval.
+ * Throttles a method, so it's only called at most once every interval.
  * @param interval the interval in milliseconds that the throttled method can be called.
  */
 export function throttle(interval: number): MethodDecorator {

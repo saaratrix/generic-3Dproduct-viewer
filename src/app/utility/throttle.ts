@@ -7,7 +7,7 @@ export function throttle(callback: (...args: any[]) => void, interval: number): 
   let isThrottling: boolean;
   let wasCalled: boolean = false;
 
-  // We need to store the lastArgs so we always execute the last callback when throttling.
+  // We need to store the lastArgs, so we always execute the last callback when throttling.
   let lastArgs: unknown[];
   return function (...args: unknown[]): void {
     lastArgs = args;

@@ -9,7 +9,7 @@ import { ProductConfigurator } from "../3D/ProductConfigurator";
   templateUrl: "./product-viewer.component.html",
   styleUrls: ["./product-viewer.component.scss"],
 })
-export class ProductViewerComponent implements OnInit {
+export class ProductViewerComponent {
   public loadingsStarted: number = 0;
   public loadingsFinished: number = 0;
 
@@ -33,9 +33,6 @@ export class ProductViewerComponent implements OnInit {
         this.loadingsFinished = 0;
       }
     });
-  }
-
-  public ngOnInit(): void {
   }
 
   public onSceneInit(renderer: THREE.WebGLRenderer): void {

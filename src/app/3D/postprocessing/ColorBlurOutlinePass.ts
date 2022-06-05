@@ -1,5 +1,6 @@
 import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
 import {
+  AdditiveBlending,
   Camera,
   Color,
   DoubleSide,
@@ -20,7 +21,7 @@ import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
-export class OutlinePass extends Pass {
+export class ColorBlurOutlinePass extends Pass {
 
   private readonly hoverMaterial: MeshBasicMaterial;
   private readonly selectedMaterial: MeshBasicMaterial;
@@ -55,13 +56,19 @@ export class OutlinePass extends Pass {
   constructor(resolution: Vector2, private scene: Scene, private camera: Camera) {
     super();
 
+    // We use additive blending and depthWrite = false to sum the outlines together.
+    // Otherwise, the outlines would happen where the meshes intersect instead of outlining each mesh individually.
     this.hoverMaterial = new MeshBasicMaterial({
       color: 0xff0000,
       side: DoubleSide,
+      blending: AdditiveBlending,
+      depthWrite: false,
     });
     this.selectedMaterial = new MeshBasicMaterial({
       color: 0x00ff00,
       side: DoubleSide,
+      blending: AdditiveBlending,
+      depthWrite: false,
     });
 
     const renderTargetOptions: WebGLRenderTargetOptions = {
@@ -222,12 +229,12 @@ export class OutlinePass extends Pass {
 					vec4 blurColor = texture2D(blurTexture, vUv);
 					vec4 blurHalfColor = texture2D(blurHalfTexture, vUv);
 
-          float blurAlpha = min(ceil(blurColor.w + blurHalfColor.w), 1.0);
-					vec3 combinedBlur = blurAlpha * min(blurColor.xyz + blurHalfColor.xyz, vec3(1.0, 1.0, 1.0));
+					vec3 combinedBlur = min(blurColor.xyz + blurHalfColor.xyz, vec3(1.0, 1.0, 1.0));
 
-					vec4 hoverColor = getOutlineColor(maskColor.r, combinedBlur.r, vec3(1.0, 1.0, 1.0));
-					vec4 finalColor = vec4(blurColor.xyz - maskColor.xyz, hoverColor.w);
-					gl_FragColor = hoverColor;
+					vec4 hoverColor = getOutlineColor(maskColor.r, combinedBlur.r, vec3(0.0, 0.0, 1.0));
+					vec4 selectedColor = getOutlineColor(maskColor.g, combinedBlur.g, vec3(0.0, 1.0, 0.0));
+					vec4 finalColor = vec4(hoverColor.xyz + selectedColor.xyz, max(hoverColor.w, selectedColor.w));
+					gl_FragColor = finalColor;
 				}`,
       uniforms: {
         maskTexture: { value: null },

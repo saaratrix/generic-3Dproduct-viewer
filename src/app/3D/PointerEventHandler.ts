@@ -8,11 +8,16 @@ import { isMesh } from "./3rd-party/three/IsMesh";
 
 type SetMeshEvent = ProductConfigurationEvent.MeshSelected | ProductConfigurationEvent.MeshPointerEnter;
 
+interface PointerCoordinates {
+  x: number;
+  y: number;
+}
+
 export class PointerEventHandler {
   private element!: HTMLElement;
   private pointerPosition: Vector2 = new Vector2();
 
-  private pointerdownPosition: { x: number, y: number } | undefined = undefined;
+  private pointerdownPosition: PointerCoordinates | undefined = undefined;
 
   private currentHoveredMesh: Mesh | undefined;
   private currentSelectedMesh: Mesh | undefined;
