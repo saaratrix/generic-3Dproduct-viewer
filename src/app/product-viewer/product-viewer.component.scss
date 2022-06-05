@@ -1,0 +1,12 @@
+.viewer-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.container-3d {
+  width: 100%;
+  height: 100%;
+  // Otherwise a scroll bar might be visible.
+  // Caused for example by offsetHeight being 826 but get getBoundingClientRect() would return 825.6
+  overflow: hidden;
+}

@@ -1,4 +1,4 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, ElementRef, NgZone, ViewChild } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as THREE from "three";
@@ -10,6 +10,8 @@ import { ProductConfigurator } from "../3D/ProductConfigurator";
   styleUrls: ["./product-viewer.component.scss"],
 })
 export class ProductViewerComponent {
+  @ViewChild("canvasContainer", { static: true }) containerElement!: ElementRef<HTMLDivElement>;
+
   public loadingsStarted: number = 0;
   public loadingsFinished: number = 0;
 
@@ -38,9 +40,9 @@ export class ProductViewerComponent {
   public onSceneInit(renderer: THREE.WebGLRenderer): void {
     let productConfigurator: ProductConfigurator;
     this.zone.runOutsideAngular(() => {
-      productConfigurator = new ProductConfigurator(renderer, this.productConfiguratorService, this.activatedRoute, this.router);
+      productConfigurator = new ProductConfigurator(renderer, this.containerElement.nativeElement, this.productConfiguratorService, this.activatedRoute, this.router);
     });
-    // Need a set timeout or it is stuck on loading 0% on page load.
+    // Need a set timeout, or it is stuck on loading 0% on page load.
     setTimeout(() => {
       productConfigurator.loadInitialItem();
     }, 1);

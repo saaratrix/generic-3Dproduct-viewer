@@ -18,6 +18,7 @@ import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTa
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
+import { ProductConfiguratorService } from "../../product-configurator.service";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
@@ -43,7 +44,7 @@ export class ColorBlurOutlinePass extends Pass {
    * This is used for the glowing part of the outline.
    * It's half the render size as {@link blurRenderTarget}.
    */
-  private blurRenderHalfTarget!: WebGLRenderTarget;
+  private blurHalfRenderTarget!: WebGLRenderTarget;
 
   /**
    * The shader material that combines all render targets to generate the final outline.
@@ -72,7 +73,14 @@ export class ColorBlurOutlinePass extends Pass {
   private readonly edgeThickness: number = 1;
   private readonly edgeGlow: number = 2;
 
-  constructor(resolution: Vector2, private scene: Scene, private camera: Camera, hoverColor: Color, selectedColor: Color) {
+  constructor(
+    private productConfiguratorService: ProductConfiguratorService,
+    resolution: Vector2,
+    private scene: Scene,
+    private camera: Camera,
+    hoverColor: Color,
+    selectedColor: Color,
+  ) {
     super();
 
     // We use additive blending and depthWrite = false to sum the outlines together.
@@ -119,6 +127,24 @@ export class ColorBlurOutlinePass extends Pass {
       depthWrite: false,
       transparent: true,
     });
+
+    this.productConfiguratorService.canvasResized.subscribe((size) => this.setSize(size.width, size.height));
+  }
+
+  setSize(width: number, height: number): void {
+    this.maskRenderTarget.setSize(width, height);
+
+    let resX = Math.round(width / this.downsampleResolution);
+    let resY = Math.round(height / this.downsampleResolution);
+
+    this.blurRenderTarget.setSize(resX, resY);
+    this.blurMaterial.uniforms.texSize.value.set(resX, resY);
+
+    resX = Math.round(resX / 2);
+    resY = Math.round(resY / 2);
+
+    this.blurHalfRenderTarget.setSize(resX, resY);
+    this.blurHalfMaterial.uniforms.texSize.value.set(resX, resY);
   }
 
   private initBlurRenderTargetsAndMaterials(resolution: Vector2, renderTargetOptions: WebGLRenderTargetOptions): void {
@@ -136,9 +162,9 @@ export class ColorBlurOutlinePass extends Pass {
     resX = Math.round(resX / 2);
     resY = Math.round(resY / 2);
 
-    this.blurRenderHalfTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurRenderHalfTarget.texture.name = "OutlinePass.blur.half";
-    this.blurRenderHalfTarget.texture.generateMipmaps = false;
+    this.blurHalfRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
+    this.blurHalfRenderTarget.texture.name = "OutlinePass.blur.half";
+    this.blurHalfRenderTarget.texture.generateMipmaps = false;
 
     this.blurHalfMaterial = createSeperableBlurMaterial(this.edgeGlow);
     this.blurHalfMaterial.uniforms.texSize.value.set(resX, resY);
@@ -160,7 +186,7 @@ export class ColorBlurOutlinePass extends Pass {
     this.fsQuad.material = this.outlineMaterial;
     this.outlineMaterial.uniforms.maskTexture.value = this.maskRenderTarget.texture;
     this.outlineMaterial.uniforms.blurTexture.value = this.blurRenderTarget.texture;
-    this.outlineMaterial.uniforms.blurHalfTexture.value = this.blurRenderHalfTarget.texture;
+    this.outlineMaterial.uniforms.blurHalfTexture.value = this.blurHalfRenderTarget.texture;
     renderer.setRenderTarget(readBuffer);
     this.fsQuad.render(renderer);
 
@@ -209,7 +235,7 @@ export class ColorBlurOutlinePass extends Pass {
   }
 
   private renderBlurHalfTexture(renderer: WebGLRenderer): void {
-    renderer.setRenderTarget(this.blurRenderHalfTarget);
+    renderer.setRenderTarget(this.blurHalfRenderTarget);
     renderer.clear();
 
     this.fsQuad.material = this.blurHalfMaterial;
@@ -217,7 +243,7 @@ export class ColorBlurOutlinePass extends Pass {
     this.blurHalfMaterial.uniforms.direction.value = this.blurHorizontalDirection;
     this.fsQuad.render(renderer);
 
-    this.blurHalfMaterial.uniforms.colorTexture.value = this.blurRenderHalfTarget.texture;
+    this.blurHalfMaterial.uniforms.colorTexture.value = this.blurHalfRenderTarget.texture;
     this.blurHalfMaterial.uniforms.direction.value = this.blurVerticalDirection;
     this.fsQuad.render(renderer);
   }

@@ -6,7 +6,7 @@ import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTabl
 import { ProductConfigurationEvent } from "./product-configurator-events";
 import { LoadingProgressEventData } from "./3D/models/event-data/LoadingProgressEventData";
 import { MaterialTextureSwapEventData } from "./3D/models/event-data/MaterialTextureSwapEventData";
-import { Mesh } from "three";
+import { Mesh, Vector2 } from "three";
 import { MaterialColorSwapEventData } from "./3D/models/event-data/MaterialColorSwapEventData";
 
 @Injectable({
@@ -28,6 +28,8 @@ export class ProductConfiguratorService implements OnDestroy {
 
   private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
   // The subjects
+  public canvasResized: Subject<Vector2>;
+
   public loadingStarted: Subject<void>;
   public loadingProgress: Subject<LoadingProgressEventData>;
   public loadingFinished: Subject<void>;
@@ -55,6 +57,8 @@ export class ProductConfiguratorService implements OnDestroy {
     this.items.push(createWayfairChair(id++));
     this.items.push(createIkeaChear(id++));
     this.items.push(createIkeaTable(id++));
+
+    this.canvasResized = this.createSubject<Vector2>(ProductConfigurationEvent.CanvasResized);
 
     this.loadingStarted = this.createSubject<void>(ProductConfigurationEvent.LoadingStarted);
     this.loadingProgress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.LoadingProgress);

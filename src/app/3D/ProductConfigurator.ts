@@ -12,16 +12,12 @@ import { MaterialColorChanger } from "./material-animators/MaterialColorChanger"
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { ColorBlurOutlinePass } from "./postprocessing/ColorBlurOutlinePass";
+import { throttle } from "../utility/throttle";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProductConfigurator {
-  public productConfiguratorService: ProductConfiguratorService;
-  public activatedRouter: ActivatedRoute;
-  public router: Router;
-
-  public renderer: WebGLRenderer;
   public scene: Scene;
   public camera: PerspectiveCamera;
   public cameraControls: OrbitControls;
@@ -40,22 +36,19 @@ export class ProductConfigurator {
   private renderComposer: EffectComposer;
 
   constructor(
-    renderer: WebGLRenderer,
-    productConfiguratorService: ProductConfiguratorService,
-    activatedRoute: ActivatedRoute,
-    router: Router,
+    public renderer: WebGLRenderer,
+    private containerElement: HTMLElement,
+    public productConfiguratorService: ProductConfiguratorService,
+    private activatedRoute: ActivatedRoute,
+    public router: Router,
   ) {
-    this.renderer = renderer;
-    this.productConfiguratorService = productConfiguratorService;
-    this.activatedRouter = activatedRoute;
-    this.router = router;
-
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    const { width, height } = this.getRendererSize();
+    this.renderer.setSize(width, height);
     this.renderer.setClearColor(new Color(0x444444));
 
     this.scene = new Scene();
 
-    const aspectRatio = window.innerWidth / window.innerHeight;
+    const aspectRatio = width / height;
     this.camera = new PerspectiveCamera(90, aspectRatio, 0.1, 10000);
     this.camera.position.z = 100;
 
@@ -89,7 +82,7 @@ export class ProductConfigurator {
 
     const hoverColor = new Color(181 / 255, 145 / 255, 199 / 255);
     const selectedColor = new Color(255 / 255, 250 / 255, 250 / 255);
-    const outlinePass = new ColorBlurOutlinePass(this.renderer.getSize(new Vector2(0, 0)), this.scene, this.camera, hoverColor, selectedColor);
+    const outlinePass = new ColorBlurOutlinePass(this.productConfiguratorService, this.renderer.getSize(new Vector2(0, 0)), this.scene, this.camera, hoverColor, selectedColor);
     this.renderComposer.addPass(outlinePass);
 
     this.startRenderLoop();
@@ -140,17 +133,24 @@ export class ProductConfigurator {
    * Init events like window.resize
    */
   public initEvents(): void {
-    window.addEventListener("resize", () => {
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-      this.camera.aspect = window.innerWidth / window.innerHeight;
+    window.addEventListener("resize", throttle(() => {
+      const { width, height } = this.getRendererSize();
+      this.renderer.setSize(width, height);
+      this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
-    });
+
+      this.productConfiguratorService.canvasResized.next(new Vector2(width, height));
+    }, 1000 / 30));
   }
 
   public loadInitialItem(): void {
-    const snapshot = this.activatedRouter.snapshot;
+    const snapshot = this.activatedRoute.snapshot;
     const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
     this.productChanger.changeProduct(selectedItem);
+  }
+
+  private getRendererSize(): Vector2 {
+    return new Vector2(this.containerElement.offsetWidth, this.containerElement.offsetHeight);
   }
 }

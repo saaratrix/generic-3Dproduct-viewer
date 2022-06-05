@@ -9,20 +9,17 @@ import { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
 import { SubProductItem } from "./models/product-item/SubProductItem";
 
 export class ProductChanger {
-  private readonly productConfigurator: ProductConfigurator;
   private readonly productConfiguratorService: ProductConfiguratorService;
 
   private readonly environmentMapLoader: EnvironmentMapLoader;
 
-  constructor(productConfigurator: ProductConfigurator) {
+  constructor(private readonly productConfigurator: ProductConfigurator) {
     this.productConfigurator = productConfigurator;
     this.productConfiguratorService = this.productConfigurator.productConfiguratorService;
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfiguratorService.toolbarChangeProduct.subscribe(product => {
-      this.changeProduct(product);
-    });
+    this.productConfiguratorService.toolbarChangeProduct.subscribe(product => this.changeProduct(product));
   }
 
   /**
@@ -88,7 +85,7 @@ export class ProductChanger {
     }
 
     this.productConfiguratorService.selectedProductChanged.next(this.productConfiguratorService.selectedProduct);
-    this.productConfigurator.router.navigate(urlParts);
+    this.productConfigurator.router.navigate(urlParts).then();
   }
 
   /**
