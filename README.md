@@ -10,6 +10,6 @@ How the application looks like:
 
 There's pointer events!
 
-![hover](https://user-images.githubusercontent.com/16946048/99428982-0b41a880-2910-11eb-963a-10c6e4a2066b.gif)
+![hover](https://user-images.githubusercontent.com/16946048/172140311-e8a7555b-f9cc-453c-ac09-a14ef4230292.gif)
 
 
