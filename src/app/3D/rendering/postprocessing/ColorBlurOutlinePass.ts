@@ -39,12 +39,24 @@ export class ColorBlurOutlinePass extends Pass {
   /**
    * This is used for the edge outline of the material.
    */
-  private blurRenderTarget!: WebGLRenderTarget;
+  private blurHorizontalRenderTarget!: WebGLRenderTarget;
+
+  /**
+   * This is used for the edge outline of the material.
+   */
+  private blurVerticalRenderTarget!: WebGLRenderTarget;
+
   /**
    * This is used for the glowing part of the outline.
-   * It's half the render size as {@link blurRenderTarget}.
+   * It's half the render size as {@link blurHorizontalRenderTarget}.
    */
-  private blurHalfRenderTarget!: WebGLRenderTarget;
+  private blurHorizontalHalfRenderTarget!: WebGLRenderTarget;
+
+  /**
+   * This is used for the glowing part of the outline.
+   * It's half the render size as {@link blurVerticalRenderTarget}.
+   */
+  private blurVerticalHalfRenderTarget2!: WebGLRenderTarget;
 
   /**
    * The shader material that combines all render targets to generate the final outline.
@@ -137,13 +149,13 @@ export class ColorBlurOutlinePass extends Pass {
     let resX = Math.round(width / this.downsampleResolution);
     let resY = Math.round(height / this.downsampleResolution);
 
-    this.blurRenderTarget.setSize(resX, resY);
+    this.blurHorizontalRenderTarget.setSize(resX, resY);
     this.blurMaterial.uniforms.texSize.value.set(resX, resY);
 
     resX = Math.round(resX / 2);
     resY = Math.round(resY / 2);
 
-    this.blurHalfRenderTarget.setSize(resX, resY);
+    this.blurHorizontalHalfRenderTarget.setSize(resX, resY);
     this.blurHalfMaterial.uniforms.texSize.value.set(resX, resY);
   }
 
@@ -151,9 +163,13 @@ export class ColorBlurOutlinePass extends Pass {
     let resX = Math.round(resolution.x / this.downsampleResolution);
     let resY = Math.round(resolution.y / this.downsampleResolution);
 
-    this.blurRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurRenderTarget.texture.name = "OutlinePass.blur";
-    this.blurRenderTarget.texture.generateMipmaps = false;
+    this.blurHorizontalRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
+    this.blurHorizontalRenderTarget.texture.name = "OutlinePass.blur";
+    this.blurHorizontalRenderTarget.texture.generateMipmaps = false;
+
+    this.blurVerticalRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
+    this.blurVerticalRenderTarget.texture.name = "OutlinePass.blur2";
+    this.blurVerticalRenderTarget.texture.generateMipmaps = false;
 
     this.blurMaterial = createSeperableBlurMaterial(this.edgeThickness);
     this.blurMaterial.uniforms.texSize.value.set(resX, resY);
@@ -162,9 +178,13 @@ export class ColorBlurOutlinePass extends Pass {
     resX = Math.round(resX / 2);
     resY = Math.round(resY / 2);
 
-    this.blurHalfRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurHalfRenderTarget.texture.name = "OutlinePass.blur.half";
-    this.blurHalfRenderTarget.texture.generateMipmaps = false;
+    this.blurHorizontalHalfRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
+    this.blurHorizontalHalfRenderTarget.texture.name = "OutlinePass.blur.half";
+    this.blurHorizontalHalfRenderTarget.texture.generateMipmaps = false;
+
+    this.blurVerticalHalfRenderTarget2 = new WebGLRenderTarget(resX, resY, renderTargetOptions);
+    this.blurVerticalHalfRenderTarget2.texture.name = "OutlinePass.blur.half2";
+    this.blurVerticalHalfRenderTarget2.texture.generateMipmaps = false;
 
     this.blurHalfMaterial = createSeperableBlurMaterial(this.edgeGlow);
     this.blurHalfMaterial.uniforms.texSize.value.set(resX, resY);
@@ -185,8 +205,8 @@ export class ColorBlurOutlinePass extends Pass {
     // This adds the outline material on top of the previous render.
     this.fsQuad.material = this.outlineMaterial;
     this.outlineMaterial.uniforms.maskTexture.value = this.maskRenderTarget.texture;
-    this.outlineMaterial.uniforms.blurTexture.value = this.blurRenderTarget.texture;
-    this.outlineMaterial.uniforms.blurHalfTexture.value = this.blurHalfRenderTarget.texture;
+    this.outlineMaterial.uniforms.blurTexture.value = this.blurVerticalRenderTarget.texture;
+    this.outlineMaterial.uniforms.blurHalfTexture.value = this.blurVerticalHalfRenderTarget2.texture;
     renderer.setRenderTarget(readBuffer);
     this.fsQuad.render(renderer);
 
@@ -225,7 +245,7 @@ export class ColorBlurOutlinePass extends Pass {
   }
 
   private renderBlurTexture(renderer: WebGLRenderer): void {
-    renderer.setRenderTarget(this.blurRenderTarget);
+    renderer.setRenderTarget(this.blurHorizontalRenderTarget);
     renderer.clear();
 
     this.fsQuad.material = this.blurMaterial;
@@ -233,13 +253,17 @@ export class ColorBlurOutlinePass extends Pass {
     this.blurMaterial.uniforms.direction.value = this.blurHorizontalDirection;
     this.fsQuad.render(renderer);
 
-    this.blurMaterial.uniforms.colorTexture.value = this.blurRenderTarget.texture;
+    // Rendering a second time in a vertical direction fixes some issues with the lines for pointy meshes in a vertical direction.
+    // For example otherwise the outline doesn't fully cover the mesh.
+    renderer.setRenderTarget(this.blurVerticalRenderTarget);
+    renderer.clear();
+    this.blurMaterial.uniforms.colorTexture.value = this.blurHorizontalRenderTarget.texture;
     this.blurMaterial.uniforms.direction.value = this.blurVerticalDirection;
     this.fsQuad.render(renderer);
   }
 
   private renderBlurHalfTexture(renderer: WebGLRenderer): void {
-    renderer.setRenderTarget(this.blurHalfRenderTarget);
+    renderer.setRenderTarget(this.blurHorizontalHalfRenderTarget);
     renderer.clear();
 
     this.fsQuad.material = this.blurHalfMaterial;
@@ -247,7 +271,9 @@ export class ColorBlurOutlinePass extends Pass {
     this.blurHalfMaterial.uniforms.direction.value = this.blurHorizontalDirection;
     this.fsQuad.render(renderer);
 
-    this.blurHalfMaterial.uniforms.colorTexture.value = this.blurHalfRenderTarget.texture;
+    renderer.setRenderTarget(this.blurVerticalHalfRenderTarget2);
+    renderer.clear();
+    this.blurHalfMaterial.uniforms.colorTexture.value = this.blurHorizontalHalfRenderTarget.texture;
     this.blurHalfMaterial.uniforms.direction.value = this.blurVerticalDirection;
     this.fsQuad.render(renderer);
   }
