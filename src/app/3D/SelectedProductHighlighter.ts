@@ -37,6 +37,10 @@ export class SelectedProductHighlighter {
     this.selectedMesh = undefined;
   }
 
+  isAnyProductHighlighted(): boolean {
+    return !!(this.hoveredMesh || this.selectedMesh);
+  }
+
   private setSelectedMaterial(mesh: Mesh): void {
     this.enableLayer(mesh, 2);
     if (this.hoveredMesh && this.areMeshOrSiblingsEqual(mesh, this.hoveredMesh)) {

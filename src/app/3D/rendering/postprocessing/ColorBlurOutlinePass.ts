@@ -19,6 +19,7 @@ import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
+import { SelectedProductHighlighter } from "../../SelectedProductHighlighter";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
@@ -85,8 +86,12 @@ export class ColorBlurOutlinePass extends Pass {
   private readonly edgeThickness: number = 1;
   private readonly edgeGlow: number = 2;
 
+  private readonly maskClearColor: Color = new Color(0x000000);
+  private tempOldClearColor: Color = new Color();
+
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
+    private selectedProductHighlighter: SelectedProductHighlighter,
     resolution: Vector2,
     private scene: Scene,
     private camera: Camera,
@@ -192,10 +197,29 @@ export class ColorBlurOutlinePass extends Pass {
   }
 
   public render(renderer: WebGLRenderer, writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget, deltaTime: number, maskActive: boolean): void {
+    this.renderOutline(renderer, readBuffer);
+
+    if (maskActive) {
+      renderer.state.buffers.stencil.setTest( true );
+    }
+
+    if (this.renderToScreen) {
+      this.fsQuad.material = this.materialCopy;
+      this.copyUniforms.tDiffuse.value = readBuffer.texture;
+      renderer.setRenderTarget( null );
+      this.fsQuad.render( renderer );
+    }
+  }
+
+  private renderOutline(renderer: WebGLRenderer, readBuffer: WebGLRenderTarget): void {
+    if (!this.selectedProductHighlighter.isAnyProductHighlighted()) {
+      return;
+    }
+
     const oldAutoClear = renderer.autoClear;
     const oldClearAlpha = renderer.getClearAlpha();
-    const oldClearColor = renderer.getClearColor(new Color());
-    renderer.setClearColor(new Color(0x000000), 0);
+    const oldClearColor = renderer.getClearColor(this.tempOldClearColor);
+    renderer.setClearColor(this.maskClearColor, 0);
     // Since we're rendering multiple times to a render target we don't want to auto clear.
     renderer.autoClear = false;
     this.renderMaskTexture(renderer);
@@ -212,17 +236,6 @@ export class ColorBlurOutlinePass extends Pass {
 
     renderer.autoClear = oldAutoClear;
     renderer.setClearColor(oldClearColor, oldClearAlpha);
-
-    if (maskActive) {
-      renderer.state.buffers.stencil.setTest( true );
-    }
-
-    if (this.renderToScreen) {
-      this.fsQuad.material = this.materialCopy;
-      this.copyUniforms.tDiffuse.value = readBuffer.texture;
-      renderer.setRenderTarget( null );
-      this.fsQuad.render( renderer );
-    }
   }
 
   /**

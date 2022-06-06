@@ -73,7 +73,7 @@ export class ProductConfigurator {
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
 
-    this.effectsComposerHandler = new EffectComposerHandler(this.productConfiguratorService, this.renderer, this.scene, this.camera);
+    this.effectsComposerHandler = new EffectComposerHandler(this.productConfiguratorService, this.selectedProductHighlighter, this.renderer, this.scene, this.camera);
 
     this.startRenderLoop();
   }

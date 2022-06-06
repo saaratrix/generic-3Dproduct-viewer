@@ -7,6 +7,7 @@ import { ColorBlurOutlinePass } from "./postprocessing/ColorBlurOutlinePass";
 import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
+import { SelectedProductHighlighter } from "../SelectedProductHighlighter";
 
 export class EffectComposerHandler {
   private composer!: EffectComposer;
@@ -16,6 +17,7 @@ export class EffectComposerHandler {
 
   constructor(
     productConfiguratorService: ProductConfiguratorService,
+    selectedProductHighlighter: SelectedProductHighlighter,
     renderer: WebGLRenderer,
     scene: Scene,
     camera: Camera,
@@ -29,7 +31,7 @@ export class EffectComposerHandler {
 
     const hoverColor = new Color(181 / 255, 145 / 255, 199 / 255);
     const selectedColor = new Color(255 / 255, 250 / 255, 250 / 255);
-    const outlinePass = new ColorBlurOutlinePass(productConfiguratorService, renderer.getSize(new Vector2(0, 0)), scene, camera, hoverColor, selectedColor);
+    const outlinePass = new ColorBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera, hoverColor, selectedColor);
 
     this.composer.addPass(renderPass);
     this.composer.addPass(this.gammaCorrectionPass);
