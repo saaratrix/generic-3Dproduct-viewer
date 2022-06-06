@@ -1,9 +1,9 @@
-import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
+import { ProductItem } from "../app/3D/models/product-item/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
-import { SelectedOptionsType } from "../app/3D/models/SelectableMeshesOptions/SelectedOptionsType";
-import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
-import { SelectedSpecificTexturesValue } from "../app/3D/models/SelectableMeshesOptions/SelectedSpecificTexturesValue";
+import { SelectedOptionsType } from "../app/3D/models/selectable-meshes-options/SelectedOptionsType";
+import { MaterialAnimationType } from "../app/3D/material-animators/MaterialAnimationType";
+import { SelectedSpecificTexturesValue } from "../app/3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -30,8 +30,8 @@ export function createFlowerPot(id: number): ProductItem {
             // ffc0cb = CSS Color 'pink'
             colors: ["#ff7f00", "#badbad", "#ffc0cb"],
           },
-        }
-      }
+        },
+      },
     ],
 
     activeEvents: [],
@@ -64,7 +64,7 @@ export function createRose(id: number): ProductItem {
       }, {
         url: "assets/models/rose_pink.png",
         thumbnail: "assets/models/rose_pink.png",
-      }
+      },
     ],
   };
 
@@ -104,5 +104,3 @@ export function createWuffels(id: number): ProductItem {
     activeEvents: [],
   };
 }
-
-

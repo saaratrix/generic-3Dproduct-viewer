@@ -1,16 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
-import { ProductConfigurationEvent } from "../product-configurator-events";
-import { ProductItem } from "../3D/models/ProductItem/ProductItem";
+import { ProductItem } from "../3D/models/product-item/ProductItem";
 
 
 @Component({
   selector: "app-toolbar",
   templateUrl: "./toolbar.component.html",
-  styleUrls: ["./toolbar.component.scss"]
+  styleUrls: ["./toolbar.component.scss"],
 })
-export class ToolbarComponent implements OnDestroy {
+export class ToolbarComponent implements OnInit, OnDestroy {
 
   public hasReadInstructions: boolean = false;
   public selectedProduct: ProductItem | undefined;
@@ -20,16 +19,20 @@ export class ToolbarComponent implements OnDestroy {
 
   constructor(
     public productConfiguratorService: ProductConfiguratorService,
-  ) {
-    const hasTutorialItem = localStorage && localStorage.getItem("tutorial");
+  ) { }
+
+  public ngOnInit(): void {
+    const hasTutorialItem = localStorage?.getItem("tutorial");
     if (hasTutorialItem && hasTutorialItem === "1") {
       this.hasReadInstructions = true;
     }
 
-    this.subscriptions.push(this.productConfiguratorService.selectedProduct_Changed.subscribe(product => {
-      this.selectedProduct = product;
-      this.hasSubItems = !!(product.subItems?.length > 0 && product.object3D);
-    }));
+    this.subscriptions.push(
+      this.productConfiguratorService.selectedProductChanged.subscribe(product => {
+        this.selectedProduct = product;
+        this.hasSubItems = !!(product.subItems?.length > 0 && product.object3D);
+      }),
+    );
   }
 
   public ngOnDestroy(): void {

@@ -3,7 +3,7 @@ import {
   flowerPotModelLoadInfo, ikeaChearModelLoadInfo, ikeaTableModelLoadInfo,
   roseModelLoadInfo,
   wayfairChairModelLoadInfo, wayfairTableModelLoadInfo,
-  wuffelsModelLoadInfo
+  wuffelsModelLoadInfo,
 } from "./ModelsLoadInfo";
 
 export const getFlowerPotModel: () => Model3D = () => {

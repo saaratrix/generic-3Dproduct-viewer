@@ -1,4 +1,4 @@
 export enum ActiveProductItemEventType {
   ColorChange,
-  TextureChange
+  TextureChange,
 }

@@ -3,21 +3,19 @@ import {
   ElementRef,
   HostListener,
   Input,
-  OnInit,
   ViewChild,
   AfterViewInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from "@angular/core";
-import { SubProductItem } from "../../3D/models/ProductItem/SubProductItem";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { ProductItem } from "../../3D/models/ProductItem/ProductItem";
+import { ProductItem } from "../../3D/models/product-item/ProductItem";
 import { throttle } from "../../utility/throttle-decorator";
 
 @Component({
   selector: "app-toolbar-subitem-container",
   templateUrl: "./toolbar-subitem-container.component.html",
-  styleUrls: ["./toolbar-subitem-container.component.scss"]
+  styleUrls: ["./toolbar-subitem-container.component.scss"],
 })
 export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewInit {
   @ViewChild("containerElement") containerRef!: ElementRef<HTMLElement>;
@@ -29,12 +27,10 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
   private productItemElement: HTMLElement | undefined;
 
   constructor(
-    private productConfiguratorService: ProductConfiguratorService
-  ) {
-    this.productConfiguratorService = productConfiguratorService;
-  }
+    private productConfiguratorService: ProductConfiguratorService,
+  ) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (this.isViewInitialized && changes.productItem) {
       this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
       this.calculatePosition();
@@ -49,14 +45,14 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
 
   @HostListener("window:resize", [])
   @throttle(1000 / 60)
-  onResize(): void {
+  public onResize(): void {
     this.calculatePosition();
   }
 
   /**
    * Calculate the position for the sub items element so it's centered on top of the selected product.
    */
-  calculatePosition(): void {
+  private calculatePosition(): void {
     if (!this.productItemElement) {
       return;
     }
@@ -87,5 +83,4 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
 
     subItemsElement.style.left = positionX + "px";
   }
-
 }

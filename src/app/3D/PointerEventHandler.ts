@@ -1,15 +1,20 @@
-/* tslint:disable:member-ordering */
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
-import { Intersection, Mesh, PerspectiveCamera, Raycaster, Scene, Vector2 } from "three";
+import { Intersection, Mesh, Vector2 } from "three";
 import { throttle } from "../utility/throttle";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
+import type { Subject } from "rxjs";
+import { isMesh } from "./3rd-party/three/IsMesh";
+
+interface PointerCoordinates {
+  x: number;
+  y: number;
+}
 
 export class PointerEventHandler {
   private element!: HTMLElement;
   private pointerPosition: Vector2 = new Vector2();
 
-  private pointerdownPosition: { x: number, y: number } | undefined = undefined;
+  private pointerdownPosition: PointerCoordinates | undefined = undefined;
 
   private currentHoveredMesh: Mesh | undefined;
   private currentSelectedMesh: Mesh | undefined;
@@ -18,13 +23,9 @@ export class PointerEventHandler {
     private productConfiguratorService: ProductConfiguratorService,
     private selectedProductMeshIntersector: SelectedProductMeshIntersector,
   ) {
-    this.productConfiguratorService.selectedProduct_Changed.subscribe(() => {
-      if (this.currentHoveredMesh) {
-        this.deselectCurrentHoveredMesh();
-      }
-      if (this.currentSelectedMesh) {
-        this.deselectCurrentMesh();
-      }
+    this.productConfiguratorService.selectedProductChanged.subscribe(() => {
+      this.tryDeselectCurrentHoveredMesh();
+      this.tryDeselectCurrentMesh();
     });
   }
 
@@ -47,7 +48,7 @@ export class PointerEventHandler {
   // Creating lambdas so we don't have to do .bind() on the methods.
   private onPointerDown = (event: PointerEvent): void => {
     this.pointerdownPosition = { x: event.clientX, y: event.clientY };
-  }
+  };
 
   private onPointerUp = (event: PointerEvent): void => {
     if (this.pointerdownPosition) {
@@ -62,7 +63,7 @@ export class PointerEventHandler {
     }
 
     this.pointerdownPosition = undefined;
-  }
+  };
 
   /** Pointer Move **/
   private onPointerMove = throttle((event: PointerEvent): void => {
@@ -70,15 +71,13 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.Mesh_PointerEnter, "currentHoveredMesh", this.deselectCurrentHoveredMesh);
+    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshPointerEnter, "currentHoveredMesh", this.tryDeselectCurrentHoveredMesh);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
-    if (this.currentHoveredMesh) {
-      this.deselectCurrentHoveredMesh();
-    }
+    this.tryDeselectCurrentHoveredMesh();
     this.pointerdownPosition = undefined;
-  }
+  };
 
   private onClick(event: PointerEvent): void {
     // button = 0 for left clicks on a mouse.
@@ -86,11 +85,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, ProductConfigurationEvent.Mesh_Selected, "currentSelectedMesh", this.deselectCurrentMesh);
+    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshSelected, "currentSelectedMesh", this.tryDeselectCurrentMesh);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
-  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, selectedEvent: ProductConfigurationEvent, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
+  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, subject: Subject<Mesh>, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
     const intersections = this.getIntersections(pointerEvent);
 
     if (intersections.length === 0) {
@@ -105,24 +104,24 @@ export class PointerEventHandler {
     if (this[selectedKey]) {
       if (selectedObject === this[selectedKey]) {
         return;
-        // If the object isn't the same then we need to deselect it so it can lose the selected material!
+      // If the object isn't the same then we need to deselect it, so it can lose the selected material!
       } else {
         deselectMethod.call(this);
       }
     }
 
-    if (!selectedObject.type.toLowerCase().includes("mesh")) {
+    if (!isMesh(selectedObject)) {
       return;
     }
 
-    this[selectedKey] = selectedObject as Mesh;
-    this.productConfiguratorService.dispatch(selectedEvent, this[selectedKey]);
+    this[selectedKey] = selectedObject;
+    subject.next(selectedObject);
   }
 
   private setPointerPosition(event: PointerEvent | MouseEvent): void {
     // Convert pointer XY to screen space.
-    this.pointerPosition.x = (event.clientX / window.innerWidth) * 2 - 1;
-    this.pointerPosition.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    this.pointerPosition.x = (event.clientX / this.element.offsetWidth) * 2 - 1;
+    this.pointerPosition.y = -(event.clientY / this.element.offsetHeight) * 2 + 1;
   }
 
   private getIntersections(event: PointerEvent | MouseEvent): Intersection[] {
@@ -130,13 +129,21 @@ export class PointerEventHandler {
     return this.selectedProductMeshIntersector.getIntersections(this.pointerPosition);
   }
 
-  private deselectCurrentHoveredMesh(): void {
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Mesh_PointerLeave, this.currentHoveredMesh);
+  private tryDeselectCurrentHoveredMesh(): void {
+    if (!this.currentHoveredMesh) {
+      return;
+    }
+
+    this.productConfiguratorService.meshPointerLeave.next(this.currentHoveredMesh);
     this.currentHoveredMesh = undefined;
   }
 
-  private deselectCurrentMesh(): void {
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.Mesh_Deselected, this.currentSelectedMesh);
+  private tryDeselectCurrentMesh(): void {
+    if (!this.currentSelectedMesh) {
+      return;
+    }
+
+    this.productConfiguratorService.meshDeselected.next(this.currentSelectedMesh);
     this.currentSelectedMesh = undefined;
   }
 }

@@ -1,10 +1,10 @@
 import { debounce } from "./debounce-decorator";
 
-describe('debounce decorator tests', () => {
+describe("debounce decorator tests", () => {
   const delay = 5;
 
-  describe('single instance tests', () => {
-    it('should not call until after timeout', (done) => {
+  describe("single instance tests", () => {
+    it("should not call until after timeout", (done) => {
       const obj = new TestDebounce();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -15,7 +15,7 @@ describe('debounce decorator tests', () => {
       }, delay + 1);
     });
 
-    it('should not call method until after timeout multiple times.', (done) => {
+    it("should not call method until after timeout multiple times.", (done) => {
       const obj = new TestDebounce();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -31,7 +31,7 @@ describe('debounce decorator tests', () => {
       }, delay + 1);
     });
 
-    it('should keep extending the debounce', (done) => {
+    it("should keep extending the debounce", (done) => {
       const obj = new TestDebounce();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -60,11 +60,11 @@ describe('debounce decorator tests', () => {
       }, 2);
     });
 
-    it('should call multiple times', (done) => {
+    it("should call multiple times", (done) => {
       const obj = new TestDebounce();
       const next = delay + 1;
-      let expected: number[] =  [0, 1,    1, 1, 1, 2];
-      let timers: number[] =    [0, next, 2, 2, 2, next];
+      const expected: number[] = [0, 1, 1, 1, 1, 2];
+      const timers: number[] = [0, next, 2, 2, 2, next];
       let test: number = 0;
 
       callDebounce();
@@ -88,7 +88,7 @@ describe('debounce decorator tests', () => {
   });
 
   describe("multiple instances tests", () => {
-    it('should not call until after timeout', (done) => {
+    it("should not call until after timeout", (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -103,7 +103,7 @@ describe('debounce decorator tests', () => {
       }, delay + 1);
     });
 
-    it('should not call method until after timeout multiple times.', (done) => {
+    it("should not call method until after timeout multiple times.", (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -123,7 +123,7 @@ describe('debounce decorator tests', () => {
       }, delay + 1);
     });
 
-    it('should keep extending the debounce', (done) => {
+    it("should keep extending the debounce", (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -164,11 +164,11 @@ describe('debounce decorator tests', () => {
       }, 2);
     });
 
-    it('should call multiple times', (done) => {
+    it("should call multiple times", (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       const next = delay + 1;
-      let expected: number[] =  [0, 1,    1, 1, 1, 2];
-      let timers: number[] =    [0, next, 2, 2, 2, next];
+      const expected: number[] = [0, 1, 1, 1, 1, 2];
+      const timers: number[] = [0, next, 2, 2, 2, next];
       let test: number = 0;
 
       callDebounce();
@@ -196,20 +196,20 @@ describe('debounce decorator tests', () => {
   });
 
   describe("multiple instances using mocked setTimeout", () => {
-    beforeEach(function() {
+    beforeEach(function () {
       jasmine.clock().install();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
     });
 
     it ("should debounce multiple times.", () => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       const next = delay + 1;
-      let tests = 1000;
-      let expected: number[] = [];
-      let timers: number[] = [];
+      const tests = 1000;
+      const expected: number[] = [];
+      const timers: number[] = [];
 
       let expectedCalled = 0;
 
@@ -234,17 +234,17 @@ describe('debounce decorator tests', () => {
   });
 
   describe("call stack overflow tests", () => {
-    beforeEach(function() {
+    beforeEach(function () {
       jasmine.clock().install();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
     });
 
     it ("tests 1 000 000 methods", () => {
       const obj = new TestDebounce();
-      let tests = 1000000;
+      const tests = 1000000;
 
       for (let i = 0; i < tests; i++) {
         obj.nuu();

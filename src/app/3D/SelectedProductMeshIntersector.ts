@@ -1,9 +1,9 @@
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { Intersection, Mesh, Object3D, PerspectiveCamera, Raycaster, Vector2 } from "three";
+import { Intersection, Mesh, PerspectiveCamera, Raycaster, Vector2 } from "three";
 import { Subscription } from "rxjs";
-import { SelectableObject3DUserData } from "./models/SelectableMeshesOptions/SelectableObject3DUserData";
-import { SelectableMeshesOption } from "./models/SelectableMeshesOptions/SelectableMeshesOption";
-import { ProductItem } from "./models/ProductItem/ProductItem";
+import { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
+import { SelectableMeshesOption } from "./models/selectable-meshes-options/SelectableMeshesOption";
+import { ProductItem } from "./models/product-item/ProductItem";
 
 export class SelectedProductMeshIntersector {
   private raycaster: Raycaster = new Raycaster();
@@ -16,7 +16,7 @@ export class SelectedProductMeshIntersector {
     private productConfiguratorService: ProductConfiguratorService,
   ) {
     this.subscriptions.push(
-      this.productConfiguratorService.selectedProduct_Changed.subscribe(productItem => {
+      this.productConfiguratorService.selectedProductChanged.subscribe(productItem => {
         if (productItem.selectableMeshIntersections) {
           this.intersectableObjects = productItem.selectableMeshIntersections;
           return;

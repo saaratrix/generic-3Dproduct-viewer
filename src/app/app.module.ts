@@ -13,13 +13,13 @@ import { ToolbarSubitemContainerComponent } from "./toolbar/toolbar-subitem-cont
 import { RouterModule } from "@angular/router";
 import { ProductViewerComponent } from "./product-viewer/product-viewer.component";
 import { productViewerPageMatcher } from "./product-viewer/product-viewer-page-matcher";
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { SidebarFreeColorComponent } from './sidebar/sidebar-free-color/sidebar-free-color.component';
-import { SidebarSpecificColorComponent } from './sidebar/sidebar-specific-color/sidebar-specific-color.component';
-import { SidebarSpecificTextureComponent } from './sidebar/sidebar-specific-texture/sidebar-specific-texture.component';
+import { SidebarComponent } from "./sidebar/sidebar.component";
+import { SidebarFreeColorComponent } from "./sidebar/sidebar-free-color/sidebar-free-color.component";
+import { SidebarSpecificColorComponent } from "./sidebar/sidebar-specific-color/sidebar-specific-color.component";
+import { SidebarSpecificTextureComponent } from "./sidebar/sidebar-specific-texture/sidebar-specific-texture.component";
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
-    { component: ProductViewerComponent, matcher: productViewerPageMatcher },
+  { component: ProductViewerComponent, matcher: productViewerPageMatcher },
 ]);
 
 @NgModule({
@@ -44,6 +44,6 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     rootRouting,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

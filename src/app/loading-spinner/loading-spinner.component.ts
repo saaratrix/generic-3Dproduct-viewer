@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
-import { LoadingProgressEventData } from "../3D/models/EventData/LoadingProgressEventData";
 import { Subscription } from "rxjs";
 
 interface LoadingData {
@@ -12,13 +10,13 @@ interface LoadingData {
 @Component({
   selector: "app-loading-spinner",
   templateUrl: "./loading-spinner.component.html",
-  styleUrls: ["./loading-spinner.component.scss"]
+  styleUrls: ["./loading-spinner.component.scss"],
 })
 export class LoadingSpinnerComponent implements OnInit, OnDestroy {
   /**
    * This is to map the array with a key to easily check if it exists or not.
    */
-  private loadingsMap: { [key: number]: LoadingData } = {};
+  private loadingsMap: Record<number, LoadingData> = {};
   /**
    * To easily iterate over the different loadings that can happen at once.
    */
@@ -33,38 +31,37 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.progressSubscription = this.productConfiguratorService.loading_Progress.subscribe(event => {
-        let loadingData: LoadingData = this.loadingsMap[ event.id ];
+    this.progressSubscription = this.productConfiguratorService.loadingProgress.subscribe(event => {
+      let loadingData: LoadingData = this.loadingsMap[ event.id ];
 
-        if (!loadingData) {
-          loadingData = {
-            loaded: event.loaded,
-            total: event.total
-          };
+      if (!loadingData) {
+        loadingData = {
+          loaded: event.loaded,
+          total: event.total,
+        };
 
-          this.loadingsMap[ event.id ] = loadingData;
-          this.loadings.push(loadingData);
-        }
-        else {
-          loadingData.loaded = event.loaded;
-          loadingData.total = event.total;
-        }
+        this.loadingsMap[ event.id ] = loadingData;
+        this.loadings.push(loadingData);
+      } else {
+        loadingData.loaded = event.loaded;
+        loadingData.total = event.total;
+      }
 
-        let loaded = 0;
-        let total = 0;
-        for (const data of this.loadings) {
-          loaded += data.loaded;
-          total += data.total;
-        }
-        // Can't divide by 0.
-        if (total === 0) {
-          return;
-        }
+      let loaded = 0;
+      let total = 0;
+      for (const data of this.loadings) {
+        loaded += data.loaded;
+        total += data.total;
+      }
+      // Can't divide by 0.
+      if (total === 0) {
+        return;
+      }
 
-        // 0-2 decimals is fine but 0, 1, 2, 3 does look better than 1.23% and is precise enough.
-        const progress = ((loaded / total) * 100).toFixed(0);
-        this.progressText = `${progress}%`;
-      });
+      // 0-2 decimals is fine but 0, 1, 2, 3 does look better than 1.23% and is precise enough.
+      const progress = ((loaded / total) * 100).toFixed(0);
+      this.progressText = `${progress}%`;
+    });
   }
 
   public ngOnDestroy(): void {

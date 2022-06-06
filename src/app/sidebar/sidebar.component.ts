@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angula
 import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { Subscription } from "rxjs";
-import { SelectedOptionsType } from "../3D/models/SelectableMeshesOptions/SelectedOptionsType";
-import { SelectableObject3DUserData } from "../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
+import { SelectedOptionsType } from "../3D/models/selectable-meshes-options/SelectedOptionsType";
+import { SelectableObject3DUserData } from "../3D/models/selectable-meshes-options/SelectableObject3DUserData";
 import { Mesh } from "three";
 
 @Component({
@@ -20,7 +20,7 @@ import { Mesh } from "three";
       })),
       transition("open <=> closed", [
         animate("0.15s"),
-      ])
+      ]),
     ]),
   ],
 })
@@ -42,14 +42,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // TODO: Performance Improvement - Currently it triggers 2 animations which triggers detectChanges so I think we ideally should have Mesh_SelectedNew, Mesh_SelectedChanged so we don't have to trigger both states.
     this.subscriptions.push(
-      this.productConfiguratorService.mesh_Deselected.subscribe(mesh => {
+      this.productConfiguratorService.meshDeselected.subscribe(() => {
         this.zone.run(() => {
           this.isOpened = false;
           this.activeMesh = undefined;
           this.type = SelectedOptionsType.None;
         });
       }),
-      this.productConfiguratorService.mesh_Selected.subscribe(mesh => {
+      this.productConfiguratorService.meshSelected.subscribe(mesh => {
         this.zone.run(() => {
           this.isOpened = true;
           const userData = mesh.userData as SelectableObject3DUserData;

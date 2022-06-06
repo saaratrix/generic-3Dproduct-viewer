@@ -1,16 +1,16 @@
-import { Injectable, OnDestroy, } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
-import { ProductItem } from "./3D/models/ProductItem/ProductItem";
+import { ProductItem } from "./3D/models/product-item/ProductItem";
 import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
 import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "../mockdata/RealisticItems";
 import { ProductConfigurationEvent } from "./product-configurator-events";
-import { LoadingProgressEventData } from "./3D/models/EventData/LoadingProgressEventData";
-import { MaterialTextureSwapEventData } from "./3D/models/EventData/MaterialTextureSwapEventData";
-import { Mesh } from "three";
-import { MaterialColorSwapEventData } from "./3D/models/EventData/MaterialColorSwapEventData";
+import { LoadingProgressEventData } from "./3D/models/event-data/LoadingProgressEventData";
+import { MaterialTextureSwapEventData } from "./3D/models/event-data/MaterialTextureSwapEventData";
+import { Mesh, Vector2 } from "three";
+import { MaterialColorSwapEventData } from "./3D/models/event-data/MaterialColorSwapEventData";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProductConfiguratorService implements OnDestroy {
   /**
@@ -20,29 +20,31 @@ export class ProductConfiguratorService implements OnDestroy {
   /**
    * The HTML element associated with an item id.
    */
-  public itemElements: { [key: string]: HTMLElement } = {};
+  public itemElements: Record<string, HTMLElement> = {};
   /**
    * The currently selected product.
    */
   public selectedProduct: ProductItem | null = null;
 
-  private subjects: Record<ProductConfigurationEvent, Subject<any>> = <any> {};
+  private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
   // The subjects
-  public loading_Started: Subject<void>;
-  public loading_Progress: Subject<LoadingProgressEventData>;
-  public loading_Finished: Subject<void>;
+  public canvasResized: Subject<Vector2>;
 
-  public material_ColorSwap: Subject<MaterialColorSwapEventData>;
-  public material_TextureSwap: Subject<MaterialTextureSwapEventData>;
+  public loadingStarted: Subject<void>;
+  public loadingProgress: Subject<LoadingProgressEventData>;
+  public loadingFinished: Subject<void>;
 
-  public mesh_Selected: Subject<Mesh>;
-  public mesh_Deselected: Subject<Mesh>;
-  public mesh_PointerEnter: Subject<Mesh>;
-  public mesh_PointerLeave: Subject<Mesh>;
+  public materialColorSwap: Subject<MaterialColorSwapEventData>;
+  public materialTextureSwap: Subject<MaterialTextureSwapEventData>;
 
-  public selectedProduct_Changed: Subject<ProductItem>;
+  public meshSelected: Subject<Mesh>;
+  public meshDeselected: Subject<Mesh>;
+  public meshPointerEnter: Subject<Mesh>;
+  public meshPointerLeave: Subject<Mesh>;
 
-  public toolbar_ChangeProduct: Subject<ProductItem>;
+  public selectedProductChanged: Subject<ProductItem>;
+
+  public toolbarChangeProduct: Subject<ProductItem>;
 
   constructor() {
     let id = 0;
@@ -56,27 +58,29 @@ export class ProductConfiguratorService implements OnDestroy {
     this.items.push(createIkeaChear(id++));
     this.items.push(createIkeaTable(id++));
 
-    this.loading_Started = this.createSubject<void>(ProductConfigurationEvent.Loading_Started);
-    this.loading_Progress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.Loading_Progress);
-    this.loading_Finished = this.createSubject<void>(ProductConfigurationEvent.Loading_Finished);
+    this.canvasResized = this.createSubject<Vector2>(ProductConfigurationEvent.CanvasResized);
 
-    this.material_ColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap);
-    this.material_TextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.Material_TextureSwap);
+    this.loadingStarted = this.createSubject<void>(ProductConfigurationEvent.LoadingStarted);
+    this.loadingProgress = this.createSubject<LoadingProgressEventData>(ProductConfigurationEvent.LoadingProgress);
+    this.loadingFinished = this.createSubject<void>(ProductConfigurationEvent.LoadingFinished);
 
-    this.mesh_Selected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Selected);
-    this.mesh_Deselected = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_Deselected);
-    this.mesh_PointerEnter = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerEnter);
-    this.mesh_PointerLeave = this.createSubject<Mesh>(ProductConfigurationEvent.Mesh_PointerLeave);
+    this.materialColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.MaterialColorSwap);
+    this.materialTextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.MaterialTextureSwap);
 
-    this.selectedProduct_Changed = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProduct_Changed);
+    this.meshSelected = this.createSubject<Mesh>(ProductConfigurationEvent.MeshSelected);
+    this.meshDeselected = this.createSubject<Mesh>(ProductConfigurationEvent.MeshDeselected);
+    this.meshPointerEnter = this.createSubject<Mesh>(ProductConfigurationEvent.MeshPointerEnter);
+    this.meshPointerLeave = this.createSubject<Mesh>(ProductConfigurationEvent.MeshPointerLeave);
 
-    this.toolbar_ChangeProduct = this.createSubject<ProductItem>(ProductConfigurationEvent.Toolbar_ChangeProduct);
+    this.selectedProductChanged = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProductChanged);
+
+    this.toolbarChangeProduct = this.createSubject<ProductItem>(ProductConfigurationEvent.ToolbarChangeProduct);
   }
 
   public ngOnDestroy(): void {
     const keys = Object.keys(this.subjects);
     for (const key of keys) {
-      const subject = this.subjects[key] as Subject<any>;
+      const subject = this.subjects[key] as Subject<unknown>;
       if (!subject) {
         continue;
       }
@@ -87,7 +91,7 @@ export class ProductConfiguratorService implements OnDestroy {
     }
   }
 
-  public dispatch<T = any>(eventType: ProductConfigurationEvent, data?: T): void {
+  public dispatch<T = unknown>(eventType: ProductConfigurationEvent, data?: T): void {
     if (!this.subjects[eventType]) {
       return;
     }
@@ -105,7 +109,7 @@ export class ProductConfiguratorService implements OnDestroy {
 
   private createSubject<T>(eventType: ProductConfigurationEvent): Subject<T> {
     const subject = new Subject<T>();
-    this.subjects[eventType] = subject;
+    this.subjects[eventType] = subject as Subject<unknown>;
     return subject;
   }
 }
