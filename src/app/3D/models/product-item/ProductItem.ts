@@ -1,7 +1,7 @@
 import { SubProductItem } from "./SubProductItem";
 import { Mesh, Object3D } from "three";
 import { Model3D } from "../Model3D";
-import { SelectableMeshesOption } from "../SelectableMeshesOptions/SelectableMeshesOption";
+import { SelectableMeshesOption } from "../selectable-meshes-options/SelectableMeshesOption";
 import { ActiveProductItemEvent } from "./ActiveProductItemEvent";
 
 export interface ProductItem {

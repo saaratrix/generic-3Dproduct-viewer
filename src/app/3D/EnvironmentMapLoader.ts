@@ -18,7 +18,7 @@ export class EnvironmentMapLoader {
       return this.environments.get(file)!;
     }
 
-    const promise: Promise<WebGLRenderTarget> = new Promise(async (resolve, reject) => {
+    const promise: Promise<WebGLRenderTarget> = new Promise((resolve) => {
       const renderer = this.productConfigurator.renderer;
 
       new EXRLoader().load( file, ( texture ) => {

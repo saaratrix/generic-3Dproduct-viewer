@@ -1,24 +1,21 @@
-import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, WebGLRenderer, } from "three";
+import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
-import { MaterialTextureChanger } from "./MaterialAnimators/MaterialTextureChanger";
+import { MaterialTextureChanger } from "./material-animators/MaterialTextureChanger";
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
-import { MaterialColorChanger } from "./MaterialAnimators/MaterialColorChanger";
+import { MaterialColorChanger } from "./material-animators/MaterialColorChanger";
+import { throttle } from "../utility/throttle";
+import { EffectComposerHandler } from "./rendering/EffectComposerHandler";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProductConfigurator {
-  public productConfiguratorService: ProductConfiguratorService;
-  public activatedRouter: ActivatedRoute;
-  public router: Router;
-
-  public renderer: WebGLRenderer;
   public scene: Scene;
   public camera: PerspectiveCamera;
   public cameraControls: OrbitControls;
@@ -34,23 +31,22 @@ export class ProductConfigurator {
   private pointerEventHandler: PointerEventHandler;
   private selectedProductHighlighter: SelectedProductHighlighter;
 
-  constructor(
-    renderer: WebGLRenderer,
-    productConfiguratorService: ProductConfiguratorService,
-    activatedRoute: ActivatedRoute,
-    router: Router,
-  ) {
-    this.renderer = renderer;
-    this.productConfiguratorService = productConfiguratorService;
-    this.activatedRouter = activatedRoute;
-    this.router = router;
+  private effectsComposerHandler: EffectComposerHandler;
 
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setClearColor(new Color(0x444444));
+  constructor(
+    public renderer: WebGLRenderer,
+    private containerElement: HTMLElement,
+    public productConfiguratorService: ProductConfiguratorService,
+    private activatedRoute: ActivatedRoute,
+    public router: Router,
+  ) {
+    const { width, height } = this.getRendererSize();
+    this.renderer.setSize(width, height);
+    this.renderer.setClearColor(new Color(0x000000), 0);
 
     this.scene = new Scene();
 
-    const aspectRatio = window.innerWidth / window.innerHeight;
+    const aspectRatio = width / height;
     this.camera = new PerspectiveCamera(90, aspectRatio, 0.1, 10000);
     this.camera.position.z = 100;
 
@@ -77,16 +73,15 @@ export class ProductConfigurator {
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);
     this.initEvents();
 
+    this.effectsComposerHandler = new EffectComposerHandler(this.productConfiguratorService, this.selectedProductHighlighter, this.renderer, this.scene, this.camera);
+
     this.startRenderLoop();
   }
 
   public startRenderLoop(): void {
     const renderFunction = (): void => {
       this.cameraControls.update();
-
-      this.renderer.render(this.scene, this.camera);
-      this.selectedProductHighlighter.renderOutline(this.scene, this.camera);
-
+      this.effectsComposerHandler.render();
       requestAnimationFrame(renderFunction);
     };
 
@@ -127,17 +122,24 @@ export class ProductConfigurator {
    * Init events like window.resize
    */
   public initEvents(): void {
-    window.addEventListener("resize", () => {
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-      this.camera.aspect = window.innerWidth / window.innerHeight;
+    window.addEventListener("resize", throttle(() => {
+      const { width, height } = this.getRendererSize();
+      this.renderer.setSize(width, height);
+      this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
-    });
+
+      this.productConfiguratorService.canvasResized.next(new Vector2(width, height));
+    }, 1000 / 30));
   }
 
   public loadInitialItem(): void {
-    const snapshot = this.activatedRouter.snapshot;
+    const snapshot = this.activatedRoute.snapshot;
     const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
     this.productChanger.changeProduct(selectedItem);
+  }
+
+  private getRendererSize(): Vector2 {
+    return new Vector2(this.containerElement.offsetWidth, this.containerElement.offsetHeight);
   }
 }

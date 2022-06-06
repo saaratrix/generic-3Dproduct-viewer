@@ -1,7 +1,7 @@
 import { UrlMatchResult, UrlSegment } from "@angular/router";
 
 export function productViewerPageMatcher(segments: UrlSegment[]): UrlMatchResult {
-  const params: any = {};
+  const params: Record<string, UrlSegment> = {};
 
   if (segments.length > 0 && segments[0].path === "model") {
     if (segments.length > 1) {

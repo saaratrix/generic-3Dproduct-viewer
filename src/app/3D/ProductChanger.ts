@@ -1,29 +1,25 @@
 import { ProductConfigurator } from "./ProductConfigurator";
-import { ProductItem } from "./models/ProductItem/ProductItem";
+import { ProductItem } from "./models/product-item/ProductItem";
 import { MeshLoader } from "./MeshLoader";
 import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductConfigurationEvent } from "../product-configurator-events";
-import { Box3, LinearEncoding, Object3D, sRGBEncoding, Vector3 } from "three";
+import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
 import { Model3D } from "./models/Model3D";
-import { ModelLoadedEventData } from "./models/EventData/ModelLoadedEventData";
-import { SubProductItem } from "./models/ProductItem/SubProductItem";
+import { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
+import { SubProductItem } from "./models/product-item/SubProductItem";
 
 export class ProductChanger {
-  private readonly productConfigurator: ProductConfigurator;
   private readonly productConfiguratorService: ProductConfiguratorService;
 
   private readonly environmentMapLoader: EnvironmentMapLoader;
 
-  constructor(productConfigurator: ProductConfigurator) {
+  constructor(private readonly productConfigurator: ProductConfigurator) {
     this.productConfigurator = productConfigurator;
     this.productConfiguratorService = this.productConfigurator.productConfiguratorService;
 
     this.environmentMapLoader = new EnvironmentMapLoader(productConfigurator);
 
-    this.productConfiguratorService.toolbar_ChangeProduct.subscribe(product => {
-      this.changeProduct(product);
-    });
+    this.productConfiguratorService.toolbarChangeProduct.subscribe(product => this.changeProduct(product));
   }
 
   /**
@@ -45,7 +41,7 @@ export class ProductChanger {
 
     let obj: Object3D | undefined = product.object3D;
     if (!obj) {
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+      this.productConfiguratorService.loadingStarted.next();
 
       obj = new Object3D();
       const promises: Promise<ModelLoadedEventData>[] = [];
@@ -67,7 +63,7 @@ export class ProductChanger {
       // Finally set the whole object at origin.
       this.setObjectAtOrigin(obj);
 
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
+      this.productConfiguratorService.loadingFinished.next();
       product.object3D = obj;
     }
 
@@ -77,8 +73,6 @@ export class ProductChanger {
     }
 
     this.productConfigurator.scene.add(obj);
-
-    this.toggleGammeSpace(product.useGammaSpace);
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
 
@@ -88,10 +82,8 @@ export class ProductChanger {
       urlParts.push(selectedSubItem.id.toString());
     }
 
-    this.productConfiguratorService.dispatch(ProductConfigurationEvent.SelectedProduct_Changed, this.productConfiguratorService.selectedProduct);
-
-    this.productConfigurator.router.navigate(urlParts);
-    return;
+    this.productConfiguratorService.selectedProductChanged.next(this.productConfiguratorService.selectedProduct);
+    this.productConfigurator.router.navigate(urlParts).then();
   }
 
   /**
@@ -146,33 +138,8 @@ export class ProductChanger {
     cameraControls.maxDistance = size * 1.5;
     cameraControls.minDistance = size * 0.55;
 
-    cameraControls.maxPolarAngle = hasFloor ?  Math.PI * 0.5 : Math.PI;
+    cameraControls.maxPolarAngle = hasFloor ? Math.PI * 0.5 : Math.PI;
 
     cameraControls.update();
-  }
-
-  /**
-   * Toggle between gamma space.
-   * Also changes the intensity of the lights because the light intensity is different between the spaces.
-   * @param value
-   */
-  public toggleGammeSpace(value: boolean): void {
-    const textureEncoding = value ? sRGBEncoding : LinearEncoding;
-    if (this.productConfigurator.renderer.outputEncoding === textureEncoding) {
-      return;
-    }
-
-    this.productConfigurator.renderer.outputEncoding = textureEncoding;
-    // light.intensity * factor
-    // default is gamma -> non-gamma space
-    let factor = this.productConfigurator.lightIntensityFactor;
-    // Changing from non-gamma -> gamma
-    if (value) {
-      factor = 1 / this.productConfigurator.lightIntensityFactor;
-    }
-
-    for (const light of this.productConfigurator.lights) {
-      light.intensity *= factor;
-    }
   }
 }

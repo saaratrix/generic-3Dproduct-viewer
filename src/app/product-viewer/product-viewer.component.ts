@@ -1,16 +1,17 @@
-import { Component, NgZone, OnInit } from "@angular/core";
+import { Component, ElementRef, NgZone, ViewChild } from "@angular/core";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ProductConfigurationEvent } from "../product-configurator-events";
 import * as THREE from "three";
 import { ProductConfigurator } from "../3D/ProductConfigurator";
 
 @Component({
   selector: "app-product-viewer",
   templateUrl: "./product-viewer.component.html",
-  styleUrls: ["./product-viewer.component.scss"]
+  styleUrls: ["./product-viewer.component.scss"],
 })
-export class ProductViewerComponent implements OnInit {
+export class ProductViewerComponent {
+  @ViewChild("canvasContainer", { static: true }) containerElement!: ElementRef<HTMLDivElement>;
+
   public loadingsStarted: number = 0;
   public loadingsFinished: number = 0;
 
@@ -20,11 +21,11 @@ export class ProductViewerComponent implements OnInit {
     private router: Router,
     private zone: NgZone,
   ) {
-    this.productConfiguratorService.loading_Started.subscribe(() => {
+    this.productConfiguratorService.loadingStarted.subscribe(() => {
       this.loadingsStarted++;
     });
 
-    this.productConfiguratorService.loading_Finished.subscribe(() => {
+    this.productConfiguratorService.loadingFinished.subscribe(() => {
       this.loadingsFinished++;
 
       if (this.loadingsFinished === this.loadingsStarted) {
@@ -36,15 +37,12 @@ export class ProductViewerComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void {
-  }
-
   public onSceneInit(renderer: THREE.WebGLRenderer): void {
     let productConfigurator: ProductConfigurator;
     this.zone.runOutsideAngular(() => {
-      productConfigurator = new ProductConfigurator(renderer, this.productConfiguratorService, this.activatedRoute, this.router);
+      productConfigurator = new ProductConfigurator(renderer, this.containerElement.nativeElement, this.productConfiguratorService, this.activatedRoute, this.router);
     });
-    // Need a set timeout or it is stuck on loading 0% on page load.
+    // Need a set timeout, or it is stuck on loading 0% on page load.
     setTimeout(() => {
       productConfigurator.loadInitialItem();
     }, 1);

@@ -1,7 +1,7 @@
-import { ProductItem } from "../app/3D/models/ProductItem/ProductItem";
+import { ProductItem } from "../app/3D/models/product-item/ProductItem";
 import { getIkeaChearModel, getIkeaTableModel, getWayfairChairModel, getWayfairTableModel } from "./Models";
 import { ProductConfigurationEvent } from "../app/product-configurator-events";
-import { MaterialAnimationType } from "../app/3D/MaterialAnimators/MaterialAnimationType";
+import { MaterialAnimationType } from "../app/3D/material-animators/MaterialAnimationType";
 
 export function createWayfairTable(id: number): ProductItem {
   return {
@@ -56,7 +56,7 @@ export function createIkeaChear(id: number): ProductItem {
     // TODO: Change this into using a thumbnail.
     // 1024x1024 image scaled to ~32x32px :D - them loading times too!
     image: "assets/models/pbr/chair_mat_baseColor.png",
-    eventType: ProductConfigurationEvent.Material_TextureSwap,
+    eventType: ProductConfigurationEvent.MaterialTextureSwap,
     tooltip: "White chair",
     data: {
       addGlobalLoadingEvent: true,
@@ -64,14 +64,14 @@ export function createIkeaChear(id: number): ProductItem {
       productItem: ikeaChearProduct,
       textureSlot: "map",
       textureUrl: "assets/models/pbr/chair_mat_baseColor.png",
-    }
+    },
   });
   chearSubItems.push({
     id: chearSubItems.length,
     // TODO: Change this into using a thumbnail.
     // 1024x1024 image scaled to ~32x32px :D - them loading times too!
     image: "assets/models/pbr/chair_mat_baseColor_alt.png",
-    eventType: ProductConfigurationEvent.Material_TextureSwap,
+    eventType: ProductConfigurationEvent.MaterialTextureSwap,
     tooltip: "Blue chair",
     data: {
       addGlobalLoadingEvent: true,
@@ -79,7 +79,7 @@ export function createIkeaChear(id: number): ProductItem {
       productItem: ikeaChearProduct,
       textureSlot: "map",
       textureUrl: "assets/models/pbr/chair_mat_baseColor_alt.png",
-    }
+    },
   });
   ikeaChearProduct.selectedSubItem = chearSubItems[0];
 

@@ -1,11 +1,11 @@
 import { ProductConfiguratorService } from "../../product-configurator.service";
 import { MaterialAnimationType } from "./MaterialAnimationType";
-import { MaterialColorSwapEventData } from "../models/EventData/MaterialColorSwapEventData";
+import { MaterialColorSwapEventData } from "../models/event-data/MaterialColorSwapEventData";
 import { Color, Material, Mesh } from "three";
 import { ColorMaterial } from "../3rd-party/three/ColorMaterial";
 import { isColorMaterial } from "../utility/MaterialUtility";
 import { createAnimation } from "./CreateAnimation";
-import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
+import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
 
 interface AnimatableColorItem {
   startColor: Color;
@@ -19,7 +19,7 @@ export class MaterialColorChanger {
   constructor(productConfiguratorService: ProductConfiguratorService) {
     this.productConfiguratorService = productConfiguratorService;
 
-    productConfiguratorService.material_ColorSwap.subscribe(event => {
+    productConfiguratorService.materialColorSwap.subscribe(event => {
       switch (event.animationType) {
         case MaterialAnimationType.None:
           this.changeColorLinearly(event, 0);

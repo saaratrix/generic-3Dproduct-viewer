@@ -21,17 +21,15 @@ export class ToolbarInstructionsComponent implements OnInit {
   public isOpen = true;
   public isTextVisible = true;
 
-  @ViewChild("instructionContainer")
-  instructionContainerRef !: ElementRef;
+  @ViewChild("instructionContainer") instructionContainerRef !: ElementRef;
 
-  @Output()
-  public closed: EventEmitter<void>;
+  @Output() public closed: EventEmitter<void>;
 
   constructor() {
     this.closed = new EventEmitter();
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     // Automatically close the instructions if user haven't closed them after a certain time.
     setTimeout(() => {
       if (this.isOpen) {
@@ -43,7 +41,7 @@ export class ToolbarInstructionsComponent implements OnInit {
   /**
    * If a user clicks the X button they have read the text and we'll set a localStorage variable to make it persistent.
    */
-  public closeInstructionsButton() {
+  public closeInstructionsButton(): void {
     // Don't show the tutorial again!
     if (localStorage) {
       localStorage.setItem("tutorial", "1");
@@ -52,7 +50,7 @@ export class ToolbarInstructionsComponent implements OnInit {
     this.closeInstructions();
   }
 
-  public closeInstructions() {
+  public closeInstructions(): void {
     this.isOpen = false;
 
     const element = this.instructionContainerRef.nativeElement as HTMLElement;

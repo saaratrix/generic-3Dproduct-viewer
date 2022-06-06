@@ -1,17 +1,13 @@
-/**
- * Changes a texture from One to another over time.
- */
 import { CanvasTexture, Material, Mesh, Texture, TextureLoader } from "three";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialTextureSwapEventData } from "../models/EventData/MaterialTextureSwapEventData";
+import { MaterialTextureSwapEventData } from "../models/event-data/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "../getOnProgressCallback";
 import { MaterialAnimationType } from "./MaterialAnimationType";
 import { addActiveEventItem, createAnimation } from "./CreateAnimation";
-import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
+import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
 import { clearEvents } from "../utility/ProductItemUtility";
 
-const _showDebugCanvas: boolean = false;
+const showDebugCanvas: boolean = false;
 
 interface DebugCanvas {
   debugCanvasElement: HTMLCanvasElement | undefined;
@@ -23,13 +19,14 @@ interface AnimatedMaterial {
   originalTexture: Texture;
 }
 
+/**
+ * Changes a texture from one to another over time.
+ */
 export class MaterialTextureChanger {
-  private productConfiguratorService: ProductConfiguratorService;
-
-
-  constructor(productConfiguratorService: ProductConfiguratorService) {
-    this.productConfiguratorService = productConfiguratorService;
-    productConfiguratorService.material_TextureSwap.subscribe(event => {
+  constructor(
+    private productConfiguratorService: ProductConfiguratorService,
+  ) {
+    productConfiguratorService.materialTextureSwap.subscribe(event => {
       this.swapTexture(event);
     });
   }
@@ -61,7 +58,7 @@ export class MaterialTextureChanger {
 
   private loadTexture(event: MaterialTextureSwapEventData, onLoaded: (texture: Texture) => void): void {
     if (event.addGlobalLoadingEvent) {
-      this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Started);
+      this.productConfiguratorService.loadingStarted.next();
     }
 
     const onProgressCallback = event.addGlobalLoadingEvent ? getOnProgressCallback(this.productConfiguratorService) : undefined;
@@ -69,7 +66,7 @@ export class MaterialTextureChanger {
     // Load the new texture
     new TextureLoader().load(event.textureUrl, (texture: Texture) => {
       if (event.addGlobalLoadingEvent) {
-        this.productConfiguratorService.dispatch(ProductConfigurationEvent.Loading_Finished);
+        this.productConfiguratorService.loadingFinished.next();
       }
       // For example to stop a loading spinner!
       event.onLoaded?.();
@@ -145,7 +142,7 @@ export class MaterialTextureChanger {
       canvas.width = width;
       canvas.height = height;
 
-      const { debugCanvasElement, debugCanvasContext } = this.trySetupDebugCanvas(canvas);
+      const { debugCanvasContext } = this.trySetupDebugCanvas(canvas);
       const renderMethod = this.getRenderMethod(event.animationType);
 
       const onProgress = (progress: number): void => {
@@ -212,7 +209,7 @@ export class MaterialTextureChanger {
       case MaterialAnimationType.FromTopToBottom:
         return this.renderFromTopToBottom;
       default:
-        return () => {};
+        return (): void => {};
     }
   }
 
@@ -242,7 +239,7 @@ export class MaterialTextureChanger {
     let debugCanvasElement: HTMLCanvasElement | undefined;
     let debugCanvasContext: CanvasRenderingContext2D | undefined;
 
-    if (_showDebugCanvas) {
+    if (showDebugCanvas) {
       debugCanvasElement = document.getElementById("debugCanvas") as HTMLCanvasElement;
       if (!debugCanvasElement) {
         debugCanvasElement = document.createElement("canvas");

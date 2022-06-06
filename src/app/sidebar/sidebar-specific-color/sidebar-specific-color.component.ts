@@ -1,14 +1,12 @@
 import { Component, Input, NgZone, OnInit } from "@angular/core";
 import { Color, Mesh } from "three";
-import { SelectableObject3DUserData } from "../../3D/models/SelectableMeshesOptions/SelectableObject3DUserData";
-import { SelectedSpecificColorsValue } from "../../3D/models/SelectableMeshesOptions/SelectedSpecificColorsValue";
+import { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
+import { SelectedSpecificColorsValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificColorsValue";
 import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
-import { MaterialAnimationType } from "../../3D/MaterialAnimators/MaterialAnimationType";
+import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { ProductConfigurationEvent } from "../../product-configurator-events";
-import { MaterialColorSwapEventData } from "../../3D/models/EventData/MaterialColorSwapEventData";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
-import { ActiveProductItemEventType } from "../../3D/models/ProductItem/ActiveProductItemEventType";
+import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveProductItemEventType";
 
 @Component({
   selector: "sidebar-specific-color",
@@ -78,7 +76,7 @@ export class SidebarSpecificColorComponent implements OnInit {
     this.currentValue = value;
     // Run this outside angular or it'll do angular things calls before & after each animation frame.
     this.ngZone.runOutsideAngular(() => {
-      this.productConfiguratorService.dispatch<MaterialColorSwapEventData>(ProductConfigurationEvent.Material_ColorSwap, {
+      this.productConfiguratorService.materialColorSwap.next({
         animationType: this.animationType,
         materials,
         targetColor: new Color(value),

@@ -1,12 +1,11 @@
-import { ProductItem } from "../models/ProductItem/ProductItem";
+import { ProductItem } from "../models/product-item/ProductItem";
 import { OnAnimationProgressCallback } from "./OnAnimationProgressCallback";
-import { CancelActiveEventCallback } from "../models/ProductItem/CancelActiveEventCallback";
-import { ActiveProductItemEventType } from "../models/ProductItem/ActiveProductItemEventType";
-import { ActiveProductItemEvent } from "../models/ProductItem/ActiveProductItemEvent";
+import { CancelActiveEventCallback } from "../models/product-item/CancelActiveEventCallback";
+import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
+import { ActiveProductItemEvent } from "../models/product-item/ActiveProductItemEvent";
 
 // TODO: Try and refactor all this into a better system at some point (so never!) or maybe take a promise as input to continue the promise?
-
-export function addActiveEventItem(productItem: ProductItem, eventType: ActiveProductItemEventType) {
+export function addActiveEventItem(productItem: ProductItem, eventType: ActiveProductItemEventType): ActiveProductItemEvent {
   const item: ActiveProductItemEvent = {
     cancelEvent: () => {
       const index = productItem.activeEvents.indexOf(item);
@@ -27,7 +26,7 @@ export function createAnimation(
   duration: number,
   onProgress: OnAnimationProgressCallback,
   onFinish?: (cancelled: boolean, complete: boolean) => void,
-  easingMethod?: (progress: number) => number
+  easingMethod?: (progress: number) => number,
 ): () => void {
   let isCancelled: boolean = false;
   let lastFrame: number = Date.now();
@@ -67,7 +66,7 @@ export function createAnimation(
     onAnimationFinished(complete);
   };
 
-  const onAnimationFinished = (complete: boolean) => {
+  const onAnimationFinished = (complete: boolean): void => {
     const index = productItem.activeEvents.indexOf(activeEvent);
     if (index !== -1) {
       productItem.activeEvents.splice(index, 1);
