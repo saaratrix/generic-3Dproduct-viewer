@@ -1,0 +1,1 @@
+.inline-spinner:after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:32px;height:32px;background-image:url(/assets/loading.svg);background-repeat:no-repeat}*{box-sizing:border-box}body,p{margin:0}.debug-canvas{position:absolute;top:0;left:0;width:256px;height:256px;z-index:1000}
