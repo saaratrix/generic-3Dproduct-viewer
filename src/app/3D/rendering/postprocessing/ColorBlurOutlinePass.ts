@@ -5,10 +5,10 @@ import {
   Color,
   DoubleSide,
   MeshBasicMaterial,
-  NoBlending,
+  NoBlending, RepeatWrapping,
   RGBAFormat,
   Scene,
-  ShaderMaterial,
+  ShaderMaterial, Texture,
   UniformsUtils,
   Vector2,
   WebGLRenderer,
@@ -20,6 +20,7 @@ import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { SelectedProductHighlighter } from "../../SelectedProductHighlighter";
+import { ClampToEdgeWrapping } from "three/src/constants";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
@@ -89,6 +90,13 @@ export class ColorBlurOutlinePass extends Pass {
   private readonly maskClearColor: Color = new Color(0x000000);
   private tempOldClearColor: Color = new Color();
 
+  private readonly start: number = 0;
+  private readonly length = 8;
+  private elapsed = 0;
+  private readonly interval = 60;
+
+  private readonly rainbowTexture: Texture;
+
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
     private selectedProductHighlighter: SelectedProductHighlighter,
@@ -125,8 +133,16 @@ export class ColorBlurOutlinePass extends Pass {
 
     this.fsQuad = new FullScreenQuad();
 
+    const rainbowImage = new Image(800, 600);
+    rainbowImage.addEventListener("load", () => this.rainbowTexture.needsUpdate = true);
+    this.rainbowTexture = new Texture(rainbowImage);
+    this.rainbowTexture.wrapS = RepeatWrapping;
+    rainbowImage.src = "assets/rainbow.png";
+
     this.outlineMaterial = this.createOutlineMaterial(hoverColor, selectedColor);
     this.initBlurRenderTargetsAndMaterials(resolution, renderTargetOptions);
+
+
     // copy material
     if (CopyShader === undefined) {
       console.error("THREE.OutlinePass relies on CopyShader");
@@ -197,6 +213,7 @@ export class ColorBlurOutlinePass extends Pass {
   }
 
   public render(renderer: WebGLRenderer, writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget, deltaTime: number, maskActive: boolean): void {
+    this.elapsed = (this.elapsed + deltaTime) % this.interval;
     this.renderOutline(renderer, readBuffer);
 
     if (maskActive) {
@@ -231,6 +248,9 @@ export class ColorBlurOutlinePass extends Pass {
     this.outlineMaterial.uniforms.maskTexture.value = this.maskRenderTarget.texture;
     this.outlineMaterial.uniforms.blurTexture.value = this.blurVerticalRenderTarget.texture;
     this.outlineMaterial.uniforms.blurHalfTexture.value = this.blurVerticalHalfRenderTarget2.texture;
+    const progress = this.elapsed / this.interval;
+    this.outlineMaterial.uniforms.startRadians.value = this.start + this.length * progress;
+    this.outlineMaterial.uniforms.rainbow.value = this.rainbowTexture;
     renderer.setRenderTarget(readBuffer);
     this.fsQuad.render(renderer);
 
@@ -295,16 +315,24 @@ export class ColorBlurOutlinePass extends Pass {
     return new ShaderMaterial({
       vertexShader:
         `varying vec2 vUv;
+        varying vec3 worldPosition;
         void main() {
           vUv = uv;
+          worldPosition = position;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }`,
 
       fragmentShader:
         `varying vec2 vUv;
+				varying vec3 worldPosition;
+
         uniform sampler2D maskTexture;
 				uniform sampler2D blurTexture;
 				uniform sampler2D blurHalfTexture;
+
+				uniform sampler2D rainbow;
+				uniform float startRadians;
+				uniform float lengthRadians;
 
 				uniform vec3 hoverOutlineColor;
 				uniform vec3 selectedOutlineColor;
@@ -322,9 +350,20 @@ export class ColorBlurOutlinePass extends Pass {
 
 					vec3 combinedBlur = min(blurColor.xyz + blurHalfColor.xyz, vec3(1.0, 1.0, 1.0));
 
-					vec4 hover = getOutlineColor(maskColor.r, combinedBlur.r, hoverOutlineColor);
+          vec2 clampedUv = vec2(worldPosition.xy * 0.5 + 0.5);
+          // 2.5 would be u = 0.5 because the outline texture is looping.
+          float u = startRadians + lengthRadians * clampedUv.x;
+          vec2 uv = vec2(u, clampedUv.y);
+
+					vec4 rainbowColor = texture2D(rainbow, uv);
+
+					vec4 hover = getOutlineColor(maskColor.r, combinedBlur.r, vec3(rainbowColor.xyz));
 					vec4 selected = getOutlineColor(maskColor.g, combinedBlur.g, selectedOutlineColor);
-					gl_FragColor = vec4(hover.xyz + selected.xyz, max(hover.w, selected.w));;
+
+					// gl_FragColor = vec4(rainbowColor.xyz, 1.0);
+					// gl_FragColor = vec4(uv, 0.0, 1.0);
+					// gl_FragColor = vec4(uv.xy, 0.0, 1.0);
+					gl_FragColor = vec4(hover.xyz + selected.xyz, max(hover.w, selected.w));
 				}`,
       uniforms: {
         maskTexture: { value: null },
@@ -332,6 +371,9 @@ export class ColorBlurOutlinePass extends Pass {
         blurHalfTexture: { value: null },
         hoverOutlineColor: { value: hoverColor },
         selectedOutlineColor: { value: selectedColor },
+        startRadians: { value: this.start },
+        lengthRadians: { value: this.length },
+        rainbow: { value: this.rainbowTexture },
       },
       transparent: true,
     });
