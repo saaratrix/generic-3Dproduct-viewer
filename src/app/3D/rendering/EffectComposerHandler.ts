@@ -3,14 +3,17 @@ import type { Subscription } from "rxjs";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { Camera, Color, Scene, Vector2, WebGLRenderer } from "three";
-import { ColorBlurOutlinePass } from "./postprocessing/ColorBlurOutlinePass";
+import { AnimatedTextureBlurOutlinePass } from "./postprocessing/AnimatedTextureBlurOutlinePass";
 import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 import { SelectedProductHighlighter } from "../SelectedProductHighlighter";
+import { generateRainbowTexture } from "./postprocessing/outline-texture-generators/generate-rainbow-texture";
+import { generateSingleColorTexture } from "./postprocessing/outline-texture-generators/generate-single-color-texture";
 
 export class EffectComposerHandler {
   private composer!: EffectComposer;
+  private outlinePass: AnimatedTextureBlurOutlinePass;
   private gammaCorrectionPass: ShaderPass;
 
   private subscription: Subscription;
@@ -29,13 +32,18 @@ export class EffectComposerHandler {
     const renderPass = new RenderPass(scene, camera);
     this.gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 
-    const hoverColor = new Color(181 / 255, 145 / 255, 199 / 255);
-    const selectedColor = new Color(255 / 255, 250 / 255, 250 / 255);
-    const outlinePass = new ColorBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera, hoverColor, selectedColor);
+    this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera);
+
+    const hoverTexture = generateRainbowTexture();
+    hoverTexture.addEventListener("load", () => this.outlinePass.setColors({ hover: hoverTexture }));
+
+
+    const selectedTexture = generateSingleColorTexture("snow");
+    this.outlinePass.setColors({ selected: selectedTexture });
 
     this.composer.addPass(renderPass);
     this.composer.addPass(this.gammaCorrectionPass);
-    this.composer.addPass(outlinePass);
+    this.composer.addPass(this.outlinePass);
   }
 
   dispose(): void {

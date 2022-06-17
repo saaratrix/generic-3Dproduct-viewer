@@ -22,9 +22,14 @@ import { ProductConfiguratorService } from "../../../product-configurator.servic
 import { SelectedProductHighlighter } from "../../SelectedProductHighlighter";
 import { ClampToEdgeWrapping } from "three/src/constants";
 
+interface ColorBlurOutlineTextures {
+  hover?: HTMLImageElement | HTMLCanvasElement;
+  selected?: HTMLImageElement | HTMLCanvasElement;
+}
+
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
-export class ColorBlurOutlinePass extends Pass {
+export class AnimatedTextureBlurOutlinePass extends Pass {
   /**
    * The hover mask material that renders the hovered meshes into a single colour.
    */
@@ -95,7 +100,8 @@ export class ColorBlurOutlinePass extends Pass {
   private elapsed = 0;
   private readonly interval = 60;
 
-  private readonly rainbowTexture: Texture;
+  private readonly hoverTexture: Texture;
+  private readonly selectedTexture: Texture;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -103,8 +109,6 @@ export class ColorBlurOutlinePass extends Pass {
     resolution: Vector2,
     private scene: Scene,
     private camera: Camera,
-    hoverColor: Color,
-    selectedColor: Color,
   ) {
     super();
 
@@ -133,15 +137,14 @@ export class ColorBlurOutlinePass extends Pass {
 
     this.fsQuad = new FullScreenQuad();
 
-    const rainbowImage = new Image(800, 600);
-    rainbowImage.addEventListener("load", () => this.rainbowTexture.needsUpdate = true);
-    this.rainbowTexture = new Texture(rainbowImage);
-    this.rainbowTexture.wrapS = RepeatWrapping;
-    rainbowImage.src = "assets/rainbow.png";
+    this.hoverTexture = new Texture();
+    this.hoverTexture.wrapS = RepeatWrapping;
 
-    this.outlineMaterial = this.createOutlineMaterial(hoverColor, selectedColor);
+    this.selectedTexture = new Texture();
+    this.selectedTexture.wrapS = RepeatWrapping;
+
+    this.outlineMaterial = this.createOutlineMaterial();
     this.initBlurRenderTargetsAndMaterials(resolution, renderTargetOptions);
-
 
     // copy material
     if (CopyShader === undefined) {
@@ -178,6 +181,17 @@ export class ColorBlurOutlinePass extends Pass {
 
     this.blurHorizontalHalfRenderTarget.setSize(resX, resY);
     this.blurHalfMaterial.uniforms.texSize.value.set(resX, resY);
+  }
+
+  setColors(colors: ColorBlurOutlineTextures): void {
+    if (colors.hover) {
+      this.hoverTexture.image = colors.hover;
+      this.hoverTexture.needsUpdate = true;
+    }
+    if (colors.selected) {
+      this.selectedTexture.image = colors.selected;
+      this.selectedTexture.needsUpdate = true;
+    }
   }
 
   private initBlurRenderTargetsAndMaterials(resolution: Vector2, renderTargetOptions: WebGLRenderTargetOptions): void {
@@ -250,7 +264,7 @@ export class ColorBlurOutlinePass extends Pass {
     this.outlineMaterial.uniforms.blurHalfTexture.value = this.blurVerticalHalfRenderTarget2.texture;
     const progress = this.elapsed / this.interval;
     this.outlineMaterial.uniforms.startRadians.value = this.start + this.length * progress;
-    this.outlineMaterial.uniforms.rainbow.value = this.rainbowTexture;
+    this.outlineMaterial.uniforms.hoverTexture.value = this.hoverTexture;
     renderer.setRenderTarget(readBuffer);
     this.fsQuad.render(renderer);
 
@@ -311,7 +325,7 @@ export class ColorBlurOutlinePass extends Pass {
     this.fsQuad.render(renderer);
   }
 
-  private createOutlineMaterial(hoverColor: Color, selectedColor: Color): ShaderMaterial {
+  private createOutlineMaterial(): ShaderMaterial {
     return new ShaderMaterial({
       vertexShader:
         `varying vec2 vUv;
@@ -330,12 +344,11 @@ export class ColorBlurOutlinePass extends Pass {
 				uniform sampler2D blurTexture;
 				uniform sampler2D blurHalfTexture;
 
-				uniform sampler2D rainbow;
+				uniform sampler2D hoverTexture;
+				uniform sampler2D selectedTexture;
+
 				uniform float startRadians;
 				uniform float lengthRadians;
-
-				uniform vec3 hoverOutlineColor;
-				uniform vec3 selectedOutlineColor;
 
 				vec4 getOutlineColor(float mask, float blur, vec3 outlineColor)
         {
@@ -351,16 +364,17 @@ export class ColorBlurOutlinePass extends Pass {
 					vec3 combinedBlur = min(blurColor.xyz + blurHalfColor.xyz, vec3(1.0, 1.0, 1.0));
 
           vec2 clampedUv = vec2(worldPosition.xy * 0.5 + 0.5);
-          // 2.5 would be u = 0.5 because the outline texture is looping.
+          // 1.5 would be u = 0.5 because the outline texture is looping.
           float u = startRadians + lengthRadians * clampedUv.x;
           vec2 uv = vec2(u, clampedUv.y);
 
-					vec4 rainbowColor = texture2D(rainbow, uv);
+					vec4 hoverColor = texture2D(hoverTexture, uv);
+					vec4 selectedColor = texture2D(selectedTexture, uv);
 
-					vec4 hover = getOutlineColor(maskColor.r, combinedBlur.r, vec3(rainbowColor.xyz));
-					vec4 selected = getOutlineColor(maskColor.g, combinedBlur.g, selectedOutlineColor);
+					vec4 hover = getOutlineColor(maskColor.r, combinedBlur.r, vec3(hoverColor.xyz));
+					vec4 selected = getOutlineColor(maskColor.g, combinedBlur.g, vec3(selectedColor.xyz));
 
-					// gl_FragColor = vec4(rainbowColor.xyz, 1.0);
+					// gl_FragColor = vec4(hoverColor.xyz, 1.0);
 					// gl_FragColor = vec4(uv, 0.0, 1.0);
 					// gl_FragColor = vec4(uv.xy, 0.0, 1.0);
 					gl_FragColor = vec4(hover.xyz + selected.xyz, max(hover.w, selected.w));
@@ -369,11 +383,10 @@ export class ColorBlurOutlinePass extends Pass {
         maskTexture: { value: null },
         blurTexture: { value: null },
         blurHalfTexture: { value: null },
-        hoverOutlineColor: { value: hoverColor },
-        selectedOutlineColor: { value: selectedColor },
+        hoverTexture: { value: this.hoverTexture },
+        selectedTexture: { value: this.selectedTexture },
         startRadians: { value: this.start },
         lengthRadians: { value: this.length },
-        rainbow: { value: this.rainbowTexture },
       },
       transparent: true,
     });
