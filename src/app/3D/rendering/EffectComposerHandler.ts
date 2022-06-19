@@ -2,14 +2,14 @@ import type { ProductConfiguratorService } from "../../product-configurator.serv
 import type { Subscription } from "rxjs";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { Camera, Color, Scene, Vector2, WebGLRenderer } from "three";
-import { AnimatedTextureBlurOutlinePass } from "./postprocessing/AnimatedTextureBlurOutlinePass";
+import { Camera, Scene, Vector2, WebGLRenderer } from "three";
+import { AnimatedTextureBlurOutlinePass } from "./postprocessing/animated-texture-blur-outline/AnimatedTextureBlurOutlinePass";
 import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 import { SelectedProductHighlighter } from "../SelectedProductHighlighter";
-import { generateRainbowTexture } from "./postprocessing/outline-texture-generators/generate-rainbow-texture";
-import { generateSingleColorTexture } from "./postprocessing/outline-texture-generators/generate-single-color-texture";
+import { generateRainbowTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-rainbow-texture";
+import { generateSingleColorTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-single-color-texture";
 
 export class EffectComposerHandler {
   private composer!: EffectComposer;
@@ -34,12 +34,8 @@ export class EffectComposerHandler {
 
     this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera);
 
-    const hoverTexture = generateRainbowTexture();
-    hoverTexture.addEventListener("load", () => this.outlinePass.setColors({ hover: hoverTexture }));
-
-
-    const selectedTexture = generateSingleColorTexture("snow");
-    this.outlinePass.setColors({ selected: selectedTexture });
+    this.outlinePass.setColors({ hover: generateRainbowTexture(0) });
+    this.outlinePass.setColors({ selected: generateSingleColorTexture("snow") });
 
     this.composer.addPass(renderPass);
     this.composer.addPass(this.gammaCorrectionPass);
