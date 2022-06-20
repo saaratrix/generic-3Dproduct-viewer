@@ -182,12 +182,18 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.tileCount = options.tileCount ?? this.tileCount;
 
     this.animateOutline = options.animateOutline ?? this.animateOutline;
-    if (!this.animateOutline && this.outlineMaterial) {
-      this.elapsed = 0;
-      this.outlineMaterial.uniforms.startRadians.value = this.startU;
+    this.interval = options.animationInterval ?? this.interval;
+
+    if (!this.outlineMaterial) {
+      return;
     }
 
-    this.interval = options.animationInterval ?? this.interval;
+    // TODO: Add dynamic properties for edgeThickness, edgeGlow
+    this.outlineMaterial.uniforms.tileCount.value = this.tileCount;
+    if (!this.animateOutline) {
+      this.elapsed = 0;
+      this.outlineMaterial.uniforms.startU.value = this.startU;
+    }
   }
 
   setSize(width: number, height: number): void {
@@ -293,7 +299,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
     if (this.animateOutline) {
       const progress = this.elapsed / this.interval;
-      this.outlineMaterial.uniforms.startRadians.value = this.startU + this.tileCount * progress;
+      this.outlineMaterial.uniforms.startU.value = this.startU + this.tileCount * progress;
     }
 
     renderer.setRenderTarget(readBuffer);
@@ -376,8 +382,8 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
         blurHalfTexture: { value: null },
         hoverTexture: { value: this.hoverTexture },
         selectedTexture: { value: this.selectedTexture },
-        startRadians: { value: this.startU },
-        lengthRadians: { value: this.tileCount },
+        startU: { value: this.startU },
+        tileCount: { value: this.tileCount },
       },
       transparent: true,
     });
@@ -395,8 +401,8 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     uniform sampler2D hoverTexture;
     uniform sampler2D selectedTexture;
 
-    uniform float startRadians;
-    uniform float lengthRadians;
+    uniform float startU;
+    uniform float tileCount;
 
     vec4 getOutlineColor(float mask, float blur, vec3 outlineColor)
     {
@@ -413,7 +419,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
       vec2 clampedUv = vec2(worldPosition.xy * 0.5 + 0.5);
       // 1.5 would be u = 0.5 because the outline texture is looping.
-      float u = startRadians + lengthRadians * clampedUv.x;
+      float u = startU + tileCount * clampedUv.x;
       vec2 uv = vec2(u, clampedUv.y);
 
       vec4 hoverColor = texture2D(hoverTexture, uv);
