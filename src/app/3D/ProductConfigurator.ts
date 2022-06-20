@@ -47,7 +47,7 @@ export class ProductConfigurator {
     this.scene = new Scene();
 
     const aspectRatio = width / height;
-    this.camera = new PerspectiveCamera(90, aspectRatio, 0.1, 10000);
+    this.camera = new PerspectiveCamera(70, aspectRatio, 0.1, 10000);
     this.camera.position.z = 100;
 
     this.scene.add(this.camera);
