@@ -88,12 +88,34 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
    */
   private readonly downsampleResolution: number = 2;
 
+  /**
+   * The thickness ouf the outline part closest to 3D model.
+   */
   private edgeThickness: number = 1;
+  /**
+   * The outer part of the edge.
+   */
   private edgeGlow: number = 2;
+  /**
+   * Start texture U coordinate value.
+   */
   private startU: number = 0;
+  /**
+   * How many times the texture repeats.
+   */
   private tileCount: number = 1;
+  /**
+   * Should the outline texture be animated? From start to start + tileCount.
+   */
   private animateOutline: boolean = true;
+  /**
+   * The duration of the animation in seconds.
+   * @private
+   */
   private interval: number = 60;
+  /**
+   * Elapsed animation time in seconds.
+   */
   private elapsed: number = 0;
 
   /**

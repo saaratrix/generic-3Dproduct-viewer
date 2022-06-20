@@ -17,5 +17,8 @@ export interface AnimatedTextureBlurOutlineOptions {
    * How many times the texture should tile or repeat itself.
    */
   tileCount?: number,
+  /**
+   * Animation interval in seconds.
+   */
   interval?: number,
 }
