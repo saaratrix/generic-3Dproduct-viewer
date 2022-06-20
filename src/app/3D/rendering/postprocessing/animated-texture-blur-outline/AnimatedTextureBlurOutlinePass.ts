@@ -182,7 +182,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.tileCount = options.tileCount ?? this.tileCount;
 
     this.animateOutline = options.animateOutline ?? this.animateOutline;
-    if (!this.animateOutline) {
+    if (!this.animateOutline && this.outlineMaterial) {
       this.elapsed = 0;
       this.outlineMaterial.uniforms.startRadians.value = this.startU;
     }

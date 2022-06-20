@@ -32,9 +32,11 @@ export class EffectComposerHandler {
     const renderPass = new RenderPass(scene, camera);
     this.gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 
-    this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera);
+    this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera, {
+      tileCount: 6,
+    });
 
-    this.outlinePass.setColors({ hover: generateRainbowTexture(0) });
+    this.outlinePass.setColors({ hover: generateRainbowTexture(Math.PI * 0.5) });
     this.outlinePass.setColors({ selected: generateSingleColorTexture("snow") });
 
     this.composer.addPass(renderPass);
