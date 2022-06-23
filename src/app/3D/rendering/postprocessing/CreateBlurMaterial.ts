@@ -29,7 +29,7 @@ export function createSeperableBlurMaterial(maxRadius: number): ShaderMaterial {
   return material;
 }
 
-export function createSeparableBlurFragmentShader(iterations: number): string {
+function createSeparableBlurFragmentShader(iterations: number): string {
   let fragmentShader = `#include <common>
     varying vec2 vUv;
     uniform sampler2D colorTexture;
