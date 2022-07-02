@@ -125,6 +125,7 @@ export class ProductConfigurator {
     window.addEventListener("resize", throttle(() => {
       const { width, height } = this.getRendererSize();
       this.renderer.setSize(width, height);
+      this.effectsComposerHandler.setSize(width, height);
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
@@ -136,7 +137,7 @@ export class ProductConfigurator {
     const snapshot = this.activatedRoute.snapshot;
     const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
-    this.productChanger.changeProduct(selectedItem);
+    this.productChanger.changeProduct(selectedItem).then();
   }
 
   private getRendererSize(): Vector2 {
