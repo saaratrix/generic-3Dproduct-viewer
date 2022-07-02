@@ -8,13 +8,16 @@ import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 import { SelectedProductHighlighter } from "../SelectedProductHighlighter";
-import { generateRainbowTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-rainbow-texture";
 import { generateSingleColorTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-single-color-texture";
+import { generateRainbowRadialTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-rainbow-radial-texture";
+import { intervalAnimation, IntervalAnimationHandle } from "./postprocessing/animated-texture-blur-outline/animations/interval-animation";
 
 export class EffectComposerHandler {
   private composer!: EffectComposer;
   private outlinePass: AnimatedTextureBlurOutlinePass;
   private gammaCorrectionPass: ShaderPass;
+
+  private animationHandle: IntervalAnimationHandle;
 
   private subscription: Subscription;
 
@@ -33,11 +36,20 @@ export class EffectComposerHandler {
     this.gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 
     this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera, {
-      tileCount: 6,
+      tileCount: 3,
+      animateOutline: false,
     });
 
-    this.outlinePass.setColors({ hover: generateRainbowTexture(Math.PI * 0.5) });
+    this.outlinePass.setColors({ hover: generateRainbowRadialTexture(0) });
     this.outlinePass.setColors({ selected: generateSingleColorTexture("snow") });
+
+    this.animationHandle = intervalAnimation({
+      duration: 20 * 1000,
+      onUpdate: (delta, current) => {
+        this.outlinePass.setColors({ hover: generateRainbowRadialTexture(current) });
+      },
+    });
+    this.animationHandle.start();
 
     this.composer.addPass(renderPass);
     this.composer.addPass(this.gammaCorrectionPass);
@@ -46,6 +58,7 @@ export class EffectComposerHandler {
 
   dispose(): void {
     this.subscription.unsubscribe();
+    this.animationHandle.stop();
   }
 
   private onSelectedProductChanged(product: ProductItem): void {
@@ -54,5 +67,9 @@ export class EffectComposerHandler {
 
   render(): void {
     this.composer.render();
+  }
+
+  setSize(width: number, height: number): void {
+    this.composer.setSize(width, height);
   }
 }

@@ -110,7 +110,6 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   private animateOutline: boolean = true;
   /**
    * The duration of the animation in seconds.
-   * @private
    */
   private interval: number = 60;
   /**
@@ -127,8 +126,8 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
    */
   private tempOldClearColor: Color = new Color();
 
-  private readonly hoverTexture: Texture;
-  private readonly selectedTexture: Texture;
+  private hoverTexture: Texture;
+  private selectedTexture: Texture;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -204,7 +203,11 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.tileCount = options.tileCount ?? this.tileCount;
 
     this.animateOutline = options.animateOutline ?? this.animateOutline;
-    this.interval = options.animationInterval ?? this.interval;
+
+    if (typeof options.animationInterval !== "undefined") {
+      // Convert from milliseconds to seconds.
+      this.interval = options.animationInterval / 1000;
+    }
 
     if (!this.outlineMaterial) {
       return;
@@ -236,13 +239,42 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
   setColors(colors: ColorBlurOutlineTextures): void {
     if (colors.hover) {
-      this.hoverTexture.image = colors.hover;
-      this.hoverTexture.needsUpdate = true;
+      this.setTexture("hoverTexture", colors.hover);
     }
     if (colors.selected) {
-      this.selectedTexture.image = colors.selected;
-      this.selectedTexture.needsUpdate = true;
+      this.setTexture("selectedTexture", colors.selected);
     }
+  }
+
+  private setTexture(key: "hoverTexture" | "selectedTexture", image: HTMLImageElement | HTMLCanvasElement): void {
+    let texture: Texture = this[key];
+
+    if (texture.image) {
+      const [oldWidth, oldHeight] = this.getTextureDimensions(texture.image);
+      const [newWidth, newHeight] = this.getTextureDimensions(image);
+
+      if (oldWidth !== newWidth || oldHeight !== newHeight) {
+        texture = new Texture();
+        texture.wrapS = RepeatWrapping;
+        this[key] = texture;
+        this.outlineMaterial.uniforms[key].value = texture;
+      }
+    }
+
+    texture.image = image;
+    texture.needsUpdate = true;
+  }
+
+  private getTextureDimensions(image: HTMLImageElement | HTMLCanvasElement | undefined): [width: number, height: number] {
+    if (!image) {
+      return [0, 0];
+    }
+
+    if (image.nodeName.toLowerCase() === "canvas") {
+      return [image.width, image.height];
+    }
+
+    return [(image as HTMLImageElement).naturalWidth, (image as HTMLImageElement).naturalHeight];
   }
 
   setOutputMode(mode: AnimatedTextureBlurOutlineOutputMode): void {

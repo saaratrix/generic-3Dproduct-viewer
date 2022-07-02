@@ -1,10 +1,10 @@
 /**
  * @param angle Angle in radians
  */
-import { generateGradientTexture } from "./generate-gradient-texture";
+import { generateLinearGradientTexture } from "./generate-linear-gradient-texture";
 
 export function generateRainbowTexture(angle: number): HTMLCanvasElement {
-  return generateGradientTexture({
+  return generateLinearGradientTexture({
     width: 1024,
     height: 1024,
     angle,
