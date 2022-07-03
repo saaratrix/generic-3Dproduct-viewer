@@ -34,6 +34,7 @@ module.exports = {
     // "@typescript-eslint/"
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
     "@typescript-eslint/explicit-function-return-type": ["error"],
     "@typescript-eslint/explicit-module-boundary-types": ["error"],
     "@typescript-eslint/member-delimiter-style": "off",

@@ -1,27 +1,28 @@
 import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
+import type {
+  Camera,
+  Scene,
+  WebGLRenderer } from "three";
 import {
   AdditiveBlending,
-  Camera,
   Color,
   DoubleSide,
   MeshBasicMaterial,
   NoBlending,
   RepeatWrapping,
   RGBAFormat,
-  Scene,
   ShaderMaterial,
   Texture,
   UniformsUtils,
   Vector2,
-  WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
 import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "../CreateBlurMaterial";
 import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
-import { ProductConfiguratorService } from "../../../../product-configurator.service";
-import { SelectedProductHighlighter } from "../../../SelectedProductHighlighter";
+import type { ProductConfiguratorService } from "../../../../product-configurator.service";
+import type { SelectedProductHighlighter } from "../../../SelectedProductHighlighter";
 import { AnimatedTextureBlurOutlineOutputMode } from "./AnimatedTextureBlurOutlineOutputMode";
 import type { AnimatedTextureBlurOutlineOptions } from "./AnimatedTextureBlurOutlineOptions";
 import type { ColorBlurOutlineTextures } from "./ColorBlurOutlineTextures";
@@ -243,6 +244,14 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     }
     if (colors.selected) {
       this.setTexture("selectedTexture", colors.selected);
+    }
+  }
+
+  updateTexture(texture: "hover" | "selected"): void {
+    if (texture === "hover") {
+      this.hoverTexture.needsUpdate = true;
+    } else if (texture === "selected") {
+      this.selectedTexture.needsUpdate = true;
     }
   }
 

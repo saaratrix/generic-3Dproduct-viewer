@@ -1,68 +1,47 @@
+import type { AnimationHandle } from "./animation-handle";
+
 export interface IntervalAnimationOptions {
   /**
-   * Duration in milliseconds.
+   * Maximum frame rate that request animation frame can be called.
    */
-  duration: number;
-
+  maxFps?: number,
   /**
-   * @param deltaProgress Value scaled between 0 -> 1 based on duration.
-   * @param currentProgress Value between 0 - 1 that basically is current += delta
+   * @param elapsed Elapsed in seconds.
    */
-  onUpdate: (deltaProgress: number, currentProgress: number) => void;
+  onUpdate: (elapsed: number) => void;
 
-  easing?: (value: number) => number;
-}
-
-export interface IntervalAnimationHandle {
-  start: () => void;
-  stop: () => void;
-  /**
-   * We include the options in the handle so they can be updated by reference directly.
-   */
-  options: IntervalAnimationOptions,
+  onDispose?: () => void;
 }
 
 /**
- * Returns a startable & stoppable animation.
+ * Returns an animation that happens as often as it can and calls onUpdate with elapsed time since last frame.
  * @param options
  */
-export function intervalAnimation(options: IntervalAnimationOptions): IntervalAnimationHandle {
+export function intervalAnimation(options: IntervalAnimationOptions): AnimationHandle<IntervalAnimationOptions> {
   let isRunning: boolean = false;
   let lastFrame: number;
-  let currentProgress = 0;
-
   let requestAnimationFrameId: number = -1;
 
   const animateLoop = (): void => {
-    const now = Date.now();
-    const elapsed = now - lastFrame;
+    const now = performance.now();
+    const elapsed = (now - lastFrame) / 1000;
     lastFrame = now;
 
-    const deltaProgress = elapsed / options.duration;
-    currentProgress += deltaProgress;
-    while (currentProgress > 1) {
-      currentProgress--;
-    }
-
-    if (options.easing) {
-      currentProgress = options.easing(currentProgress);
-    }
-
-    options.onUpdate(deltaProgress, currentProgress);
+    options.onUpdate(elapsed);
 
     if (isRunning) {
       requestAnimationFrameId = requestAnimationFrame(animateLoop);
     }
   };
 
-  return {
+  const handle: AnimationHandle<IntervalAnimationOptions> = {
     options,
     start: (): void => {
       if (isRunning) {
         return;
       }
 
-      lastFrame = Date.now();
+      lastFrame = performance.now();
       isRunning = true;
       requestAnimationFrameId = requestAnimationFrame(animateLoop);
     },
@@ -70,5 +49,14 @@ export function intervalAnimation(options: IntervalAnimationOptions): IntervalAn
       cancelAnimationFrame(requestAnimationFrameId);
       isRunning = false;
     },
+
+    dispose: (): void => {
+      handle.stop();
+      if (options.onDispose) {
+        options.onDispose();
+      }
+    },
   };
+
+  return handle;
 }
