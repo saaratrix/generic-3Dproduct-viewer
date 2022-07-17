@@ -57,7 +57,6 @@ export function getMetaballsSystem(renderer: WebGLRenderer, outlinePass: Animate
 
   const handle = intervalAnimation({
     onUpdate: (elapsed) => {
-      // console.log("fps", 1 / elapsed);
       moveBalls(balls, elapsed, width, height);
       hueOffset += elapsed * hueOffsetSpeed;
       if (hueOffset > 1) {

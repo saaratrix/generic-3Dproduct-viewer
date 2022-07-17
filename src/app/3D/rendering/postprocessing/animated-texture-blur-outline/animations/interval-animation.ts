@@ -2,10 +2,6 @@ import type { AnimationHandle } from "./animation-handle";
 
 export interface IntervalAnimationOptions {
   /**
-   * Maximum frame rate that request animation frame can be called.
-   */
-  maxFps?: number,
-  /**
    * @param elapsed Elapsed in seconds.
    */
   onUpdate: (elapsed: number) => void;
@@ -18,7 +14,7 @@ export interface IntervalAnimationOptions {
  * @param options
  */
 export function intervalAnimation(options: IntervalAnimationOptions): AnimationHandle<IntervalAnimationOptions> {
-  let isRunning: boolean = false;
+  let isAnimating: boolean = false;
   let lastFrame: number;
   let requestAnimationFrameId: number = -1;
 
@@ -29,7 +25,7 @@ export function intervalAnimation(options: IntervalAnimationOptions): AnimationH
 
     options.onUpdate(elapsed);
 
-    if (isRunning) {
+    if (isAnimating) {
       requestAnimationFrameId = requestAnimationFrame(animateLoop);
     }
   };
@@ -37,17 +33,17 @@ export function intervalAnimation(options: IntervalAnimationOptions): AnimationH
   const handle: AnimationHandle<IntervalAnimationOptions> = {
     options,
     start: (): void => {
-      if (isRunning) {
+      if (isAnimating) {
         return;
       }
 
       lastFrame = performance.now();
-      isRunning = true;
+      isAnimating = true;
       requestAnimationFrameId = requestAnimationFrame(animateLoop);
     },
     stop: (): void => {
       cancelAnimationFrame(requestAnimationFrameId);
-      isRunning = false;
+      isAnimating = false;
     },
 
     dispose: (): void => {

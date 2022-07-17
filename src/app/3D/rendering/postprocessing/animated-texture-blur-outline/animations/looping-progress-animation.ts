@@ -19,10 +19,11 @@ export interface ProgressAnimationOptions {
 
 /**
  * Loops over a duration returning the progress from 0 -> 1.
+ * Then it starts over at 0 -> 1 and repeats.
  * @param options
  */
 export function loopingProgressAnimation(options: ProgressAnimationOptions): AnimationHandle<ProgressAnimationOptions> {
-  let isRunning: boolean = false;
+  let isAnimating: boolean = false;
   let lastFrame: number;
   let currentProgress = 0;
 
@@ -45,7 +46,7 @@ export function loopingProgressAnimation(options: ProgressAnimationOptions): Ani
 
     options.onUpdate(elapsed / 1000, deltaProgress, currentProgress);
 
-    if (isRunning) {
+    if (isAnimating) {
       requestAnimationFrameId = requestAnimationFrame(animateLoop);
     }
   };
@@ -53,17 +54,17 @@ export function loopingProgressAnimation(options: ProgressAnimationOptions): Ani
   return {
     options,
     start: (): void => {
-      if (isRunning) {
+      if (isAnimating) {
         return;
       }
 
       lastFrame = performance.now();
-      isRunning = true;
+      isAnimating = true;
       requestAnimationFrameId = requestAnimationFrame(animateLoop);
     },
     stop: (): void => {
       cancelAnimationFrame(requestAnimationFrameId);
-      isRunning = false;
+      isAnimating = false;
     },
     dispose: (): void => {
       if (options.onDispose) {

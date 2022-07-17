@@ -9,15 +9,15 @@ import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 import type { SelectedProductHighlighter } from "../SelectedProductHighlighter";
-import type { AnimationHandle } from "./postprocessing/animated-texture-blur-outline/animations/animation-handle";
 import { generateLinearGradientTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-linear-gradient-texture";
 
+/**
+ * Combines the effects used for post processing.
+ */
 export class EffectComposerHandler {
   private composer!: EffectComposer;
   private outlinePass: AnimatedTextureBlurOutlinePass;
   private gammaCorrectionPass: ShaderPass;
-
-  private animationHandle?: AnimationHandle<unknown>;
 
   private subscription: Subscription;
 
@@ -50,7 +50,6 @@ export class EffectComposerHandler {
 
   dispose(): void {
     this.subscription.unsubscribe();
-    this.animationHandle?.stop();
   }
 
   private onSelectedProductChanged(product: ProductItem): void {
