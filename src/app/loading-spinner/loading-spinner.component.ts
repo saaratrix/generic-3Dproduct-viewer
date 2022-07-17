@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { Subscription } from "rxjs";
+import type { OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { Subscription } from "rxjs";
 
 interface LoadingData {
   loaded: number;

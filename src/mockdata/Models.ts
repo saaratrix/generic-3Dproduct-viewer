@@ -1,4 +1,4 @@
-import { Model3D } from "../app/3D/models/Model3D";
+import type { Model3D } from "../app/3D/models/Model3D";
 import {
   flowerPotModelLoadInfo, ikeaChearModelLoadInfo, ikeaTableModelLoadInfo,
   roseModelLoadInfo,

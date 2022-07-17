@@ -1,25 +1,15 @@
-import {
-  DoubleSide,
-  Group,
-  Material,
-  Mesh,
-  MeshPhongMaterial,
-  MeshStandardMaterial,
-  Object3D,
-  TextureLoader,
-  WebGLRenderTarget,
-} from "three";
+import type { Material, Mesh, MeshStandardMaterial, Object3D, WebGLRenderTarget } from "three";
+import { DoubleSide, Group, MeshPhongMaterial, TextureLoader } from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-
-import { MaterialInfo } from "./models/MaterialInfo";
-import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
-import { ProductConfiguratorService } from "../product-configurator.service";
+import type { MaterialInfo } from "./models/MaterialInfo";
+import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import type { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import type { ProductConfiguratorService } from "../product-configurator.service";
 import { getOnProgressCallback } from "./getOnProgressCallback";
-import { Model3D } from "./models/Model3D";
-import { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
-
+import type { Model3D } from "./models/Model3D";
+import type { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
 
 export class MeshLoader {
 

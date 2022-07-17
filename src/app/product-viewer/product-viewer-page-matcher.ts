@@ -1,4 +1,4 @@
-import { UrlMatchResult, UrlSegment } from "@angular/router";
+import type { UrlMatchResult, UrlSegment } from "@angular/router";
 
 export function productViewerPageMatcher(segments: UrlSegment[]): UrlMatchResult {
   const params: Record<string, UrlSegment> = {};

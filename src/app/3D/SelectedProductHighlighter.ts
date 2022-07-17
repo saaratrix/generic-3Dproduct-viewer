@@ -1,7 +1,7 @@
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { Subscription } from "rxjs";
-import { Mesh, WebGLRenderer } from "three";
-import { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { Subscription } from "rxjs";
+import type { Mesh, WebGLRenderer } from "three";
+import type { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
 
 export class SelectedProductHighlighter {
   private hoveredMesh: Mesh | undefined;

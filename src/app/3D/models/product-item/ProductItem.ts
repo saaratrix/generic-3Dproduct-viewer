@@ -1,8 +1,8 @@
-import { SubProductItem } from "./SubProductItem";
-import { Mesh, Object3D } from "three";
-import { Model3D } from "../Model3D";
-import { SelectableMeshesOption } from "../selectable-meshes-options/SelectableMeshesOption";
-import { ActiveProductItemEvent } from "./ActiveProductItemEvent";
+import type { SubProductItem } from "./SubProductItem";
+import type { Mesh, Object3D } from "three";
+import type { Model3D } from "../Model3D";
+import type { SelectableMeshesOption } from "../selectable-meshes-options/SelectableMeshesOption";
+import type { ActiveProductItemEvent } from "./ActiveProductItemEvent";
 
 export interface ProductItem {
   id: number;

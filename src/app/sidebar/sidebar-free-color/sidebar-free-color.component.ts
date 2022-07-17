@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { Color, Mesh } from "three";
+import type { OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import type { Mesh } from "three";
+import { Color } from "three";
 import { throttle } from "../../utility/throttle-decorator";
-import {
-  getMaterialsFromMesh,
-  setMaterialParameters,
-} from "../../3D/utility/MaterialUtility";
-import { ProductConfiguratorService } from "../../product-configurator.service";
+import { getMaterialsFromMesh, setMaterialParameters } from "../../3D/utility/MaterialUtility";
+import type { ProductConfiguratorService } from "../../product-configurator.service";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
 import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveProductItemEventType";
 

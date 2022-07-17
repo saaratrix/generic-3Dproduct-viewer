@@ -1,4 +1,4 @@
-import { SelectedOptions } from "./SelectedOptions";
+import type { SelectedOptions } from "./SelectedOptions";
 
 export interface SelectableMeshesOption {
   /**

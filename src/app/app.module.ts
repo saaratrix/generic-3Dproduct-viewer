@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { ModuleWithProviders, NgModule } from "@angular/core";
-
+import { NgModule } from "@angular/core";
+import type { ModuleWithProviders } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { ViewerThreejsComponent } from "./viewer-threejs/viewer-threejs.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";

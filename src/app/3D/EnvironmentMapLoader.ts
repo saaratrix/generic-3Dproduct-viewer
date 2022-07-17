@@ -1,6 +1,7 @@
-import { LinearEncoding, NearestFilter, WebGLRenderTarget } from "three";
+import type { WebGLRenderTarget } from "three";
+import { LinearEncoding, NearestFilter } from "three";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
-import { ProductConfigurator } from "./ProductConfigurator";
+import type { ProductConfigurator } from "./ProductConfigurator";
 import { getOnProgressCallback } from "./getOnProgressCallback";
 import { PMREMGenerator } from "three/src/extras/PMREMGenerator";
 

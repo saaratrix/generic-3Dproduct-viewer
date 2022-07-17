@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import type { ElementRef, OnInit } from "@angular/core";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { animate, query, style, transition, trigger } from "@angular/animations";
 
 const textDuration = 250;

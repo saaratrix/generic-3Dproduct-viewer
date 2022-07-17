@@ -1,4 +1,4 @@
-import { LinearGradientOptions } from "./gradient-options";
+import type { LinearGradientOptions } from "./gradient-options";
 
 export function generateLinearGradientTexture(options: LinearGradientOptions): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
