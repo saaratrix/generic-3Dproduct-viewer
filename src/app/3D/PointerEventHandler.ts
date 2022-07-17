@@ -1,9 +1,10 @@
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { Intersection, Mesh, Vector2 } from "three";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { Intersection, Mesh } from "three";
+import { Vector2 } from "three";
 import { throttle } from "../utility/throttle";
-import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
+import type { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
 import type { Subject } from "rxjs";
-import { isMesh } from "./3rd-party/three/IsMesh";
+import { isMesh } from "./3rd-party/three/is-threejs-type";
 
 interface PointerCoordinates {
   x: number;

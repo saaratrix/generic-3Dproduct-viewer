@@ -1,8 +1,5 @@
 import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
-import type {
-  Camera,
-  Scene,
-  WebGLRenderer } from "three";
+import type { Camera, Scene, WebGLRenderer } from "three";
 import {
   AdditiveBlending,
   Color,
@@ -26,6 +23,7 @@ import type { SelectedProductHighlighter } from "../../../SelectedProductHighlig
 import { AnimatedTextureBlurOutlineOutputMode } from "./AnimatedTextureBlurOutlineOutputMode";
 import type { AnimatedTextureBlurOutlineOptions } from "./AnimatedTextureBlurOutlineOptions";
 import type { ColorBlurOutlineTextures } from "./ColorBlurOutlineTextures";
+import { isRenderTarget, isTexture } from "../../../3rd-party/three/is-threejs-type";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
@@ -119,7 +117,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   private elapsed: number = 0;
 
   /**
-   * We need a black colour so it doesn't interfere with the RGB channels of the outline masks.
+   * We need a black colour, so it doesn't interfere with the RGB channels of the outline masks.
    */
   private readonly maskClearColor: Color = new Color(0x000000);
   /**
@@ -127,8 +125,8 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
    */
   private tempOldClearColor: Color = new Color();
 
-  private hoverTexture: Texture;
-  private selectedTexture: Texture;
+  private hoverTexture: Texture | WebGLRenderTarget;
+  private selectedTexture: Texture | WebGLRenderTarget;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -247,31 +245,60 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     }
   }
 
+  /**
+   * A way to just set needsUpdate = true.
+   */
   updateTexture(texture: "hover" | "selected"): void {
-    if (texture === "hover") {
+    if (texture === "hover" && isTexture(this.hoverTexture)) {
       this.hoverTexture.needsUpdate = true;
-    } else if (texture === "selected") {
+    } else if (texture === "selected" && isTexture(this.selectedTexture)) {
       this.selectedTexture.needsUpdate = true;
     }
   }
 
-  private setTexture(key: "hoverTexture" | "selectedTexture", image: HTMLImageElement | HTMLCanvasElement): void {
-    let texture: Texture = this[key];
+  /**
+   * Set the hover or selected texture with either an image or a render target.
+   */
+  private setTexture(key: "hoverTexture" | "selectedTexture", image: HTMLImageElement | HTMLCanvasElement | WebGLRenderTarget): void {
+    if (isRenderTarget(image)) {
+      this.setTextureRenderTarget(key, image as WebGLRenderTarget);
+    } else {
+      this.setTextureTexture(key, image as HTMLImageElement | HTMLCanvasElement);
+    }
+  }
 
-    if (texture.image) {
-      const [oldWidth, oldHeight] = this.getTextureDimensions(texture.image);
-      const [newWidth, newHeight] = this.getTextureDimensions(image);
-
-      if (oldWidth !== newWidth || oldHeight !== newHeight) {
-        texture = new Texture();
-        texture.wrapS = RepeatWrapping;
-        this[key] = texture;
-        this.outlineMaterial.uniforms[key].value = texture;
-      }
+  private setTextureRenderTarget(key: "hoverTexture" | "selectedTexture", renderTarget: WebGLRenderTarget): void {
+    if (this[key] === renderTarget) {
+      return;
     }
 
-    texture.image = image;
-    texture.needsUpdate = true;
+    this[key] = renderTarget;
+    this.outlineMaterial.uniforms[key].value = renderTarget.texture;
+  }
+
+  private setTextureTexture(key: "hoverTexture" | "selectedTexture", image: HTMLImageElement | HTMLCanvasElement): void {
+    let texture = this[key];
+    if (isRenderTarget(texture)) {
+      texture = new Texture(image);
+      texture.wrapS = RepeatWrapping;
+      this.outlineMaterial.uniforms[key].value = texture;
+      this[key] = texture;
+    } else if (isTexture(texture)) {
+      if (texture.image) {
+        const [oldWidth, oldHeight] = this.getTextureDimensions(texture.image);
+        const [newWidth, newHeight] = this.getTextureDimensions(image);
+
+        if (oldWidth !== newWidth || oldHeight !== newHeight) {
+          texture = new Texture();
+          texture.wrapS = RepeatWrapping;
+          this[key] = texture;
+          this.outlineMaterial.uniforms[key].value = texture;
+        }
+      }
+
+      texture.image = image;
+      texture.needsUpdate = true;
+    }
   }
 
   private getTextureDimensions(image: HTMLImageElement | HTMLCanvasElement | undefined): [width: number, height: number] {
@@ -323,6 +350,10 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.blurHalfMaterial.uniforms.kernelRadius.value = this.edgeGlow;
   }
 
+  public shouldRenderOutline(): boolean {
+    return this.selectedProductHighlighter.isAnyProductHighlighted();
+  }
+
   public render(renderer: WebGLRenderer, writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget, deltaTime: number, maskActive: boolean): void {
     this.elapsed = (this.elapsed + deltaTime) % this.interval;
     this.renderOutline(renderer, readBuffer);
@@ -340,7 +371,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   }
 
   private renderOutline(renderer: WebGLRenderer, readBuffer: WebGLRenderTarget): void {
-    if (!this.selectedProductHighlighter.isAnyProductHighlighted()) {
+    if (!this.shouldRenderOutline()) {
       return;
     }
 

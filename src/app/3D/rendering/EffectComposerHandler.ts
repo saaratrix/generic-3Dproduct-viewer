@@ -9,18 +9,15 @@ import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 import type { SelectedProductHighlighter } from "../SelectedProductHighlighter";
-import { generateSingleColorTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-single-color-texture";
-import { generateRainbowRadialTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-rainbow-radial-texture";
-import { getMetaballsSystem } from "./postprocessing/animated-texture-blur-outline/animations/meta-balls";
 import type { AnimationHandle } from "./postprocessing/animated-texture-blur-outline/animations/animation-handle";
-import { AnimatedTextureBlurOutlineOutputMode } from "./postprocessing/animated-texture-blur-outline/AnimatedTextureBlurOutlineOutputMode";
+import { generateLinearGradientTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-linear-gradient-texture";
 
 export class EffectComposerHandler {
   private composer!: EffectComposer;
   private outlinePass: AnimatedTextureBlurOutlinePass;
   private gammaCorrectionPass: ShaderPass;
 
-  private animationHandle: AnimationHandle<unknown>;
+  private animationHandle?: AnimationHandle<unknown>;
 
   private subscription: Subscription;
 
@@ -38,31 +35,13 @@ export class EffectComposerHandler {
     const renderPass = new RenderPass(scene, camera);
     this.gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 
+    const tileCount = 5;
     this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera, {
-      tileCount: 1,
-      animateOutline: false,
+      tileCount,
+      animateOutline: true,
     });
 
-    this.outlinePass.setOutputMode(AnimatedTextureBlurOutlineOutputMode.HoverTexture);
-
-
-    this.outlinePass.setColors({ selected: generateSingleColorTexture("snow") });
-
-    const { canvas, handle } = getMetaballsSystem(() => {
-      this.outlinePass.updateTexture("hover");
-    });
-    this.animationHandle = handle;
-
-    this.outlinePass.setColors({ hover: canvas });
-    handle.start();
-
-    // this.animationHandle = progressAnimation({
-    //   duration: 20 * 1000,
-    //   onUpdate: (elapsed, delta, current) => {
-    //     this.outlinePass.setColors({ hover: generateRainbowRadialTexture(current) });
-    //   },
-    // });
-    // this.animationHandle.start();
+    this.generateOutlineTextures(tileCount);
 
     this.composer.addPass(renderPass);
     this.composer.addPass(this.gammaCorrectionPass);
@@ -71,7 +50,7 @@ export class EffectComposerHandler {
 
   dispose(): void {
     this.subscription.unsubscribe();
-    this.animationHandle.stop();
+    this.animationHandle?.stop();
   }
 
   private onSelectedProductChanged(product: ProductItem): void {
@@ -84,5 +63,39 @@ export class EffectComposerHandler {
 
   setSize(width: number, height: number): void {
     this.composer.setSize(width, height);
+  }
+
+  private generateOutlineTextures(tileCount: number): void {
+    let dimensions = Math.min(Math.max(window.innerWidth, 256) / tileCount, 1024);
+    // Nearest power of 2
+    // Source: https://stackoverflow.com/a/42799104/2437350
+    dimensions = 1 << 31 - Math.clz32(dimensions);
+    this.outlinePass.setColors({ selected: generateLinearGradientTexture({
+      width: dimensions,
+      height: dimensions,
+      // Keeping the steps the same between the two textures so it pops less when you select.
+      steps: [
+        { offset: 0, color: "#807d7d" },
+        { offset: 0.1, color: "#807d7d" },
+        { offset: 0.4, color: "snow" },
+        { offset: 0.6, color: "snow" },
+        { offset: 0.9, color: "#807d7d" },
+        { offset: 1, color: "#807d7d" },
+      ],
+      angle: Math.PI / 2,
+    }) });
+    this.outlinePass.setColors({ hover: generateLinearGradientTexture({
+      width: dimensions,
+      height: dimensions,
+      steps: [
+        { offset: 0, color: "hsl(283,29%,40%)" },
+        { offset: 0.1, color: "hsl(283,29%,40%)" },
+        { offset: 0.4, color: "hsl(283,29%,65%)" },
+        { offset: 0.6, color: "hsl(283,29%,65%)" },
+        { offset: 0.9, color: "hsl(283,29%,40%)" },
+        { offset: 1, color: "hsl(283,29%,40%)" },
+      ],
+      angle: Math.PI / 2,
+    }) });
   }
 }

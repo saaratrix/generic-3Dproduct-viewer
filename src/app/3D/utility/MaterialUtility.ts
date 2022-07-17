@@ -1,5 +1,5 @@
-import { Material, Mesh, MeshPhongMaterial, MeshStandardMaterial } from "three";
-import { ColorMaterial } from "../3rd-party/three/ColorMaterial";
+import type { Material, Mesh, MeshPhongMaterial, MeshStandardMaterial } from "three";
+import type { ColorMaterial } from "../3rd-party/three/ColorMaterial";
 
 export function isColorMaterial(material: Material): material is ColorMaterial {
   const colorMaterial = material as ColorMaterial;

@@ -1,4 +1,4 @@
-import { GradientStop } from "./gradient-options";
+import type { GradientStop } from "./gradient-options";
 import { generateRadialGradientTexture } from "./generate-radial-gradient-texture";
 
 /**
@@ -23,7 +23,7 @@ export function generateRainbowRadialTexture(offset: number): HTMLCanvasElement 
 
   colors.sort((a, z) => {
     if (a.end > 1 && z.end <= 1) {
-        return -1;
+      return -1;
     }
 
     return a.end - z.end;

@@ -1,4 +1,4 @@
-import { GradientOptions } from "./gradient-options";
+import type { GradientOptions } from "./gradient-options";
 
 export function generateRadialGradientTexture(options: GradientOptions): HTMLCanvasElement {
   const width = options.width;
