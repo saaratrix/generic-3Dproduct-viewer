@@ -1,5 +1,5 @@
-import { ActiveProductItemEventType } from "./ActiveProductItemEventType";
-import { CancelActiveEventCallback } from "./CancelActiveEventCallback";
+import type { ActiveProductItemEventType } from "./ActiveProductItemEventType";
+import type { CancelActiveEventCallback } from "./CancelActiveEventCallback";
 
 export interface ActiveProductItemEvent {
   type: ActiveProductItemEventType;

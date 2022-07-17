@@ -1,6 +1,6 @@
-import { ProductItem } from "../product-item/ProductItem";
-import { MaterialAnimationType } from "../../material-animators/MaterialAnimationType";
-import { Color, Material, Object3D } from "three";
+import type { ProductItem } from "../product-item/ProductItem";
+import type { MaterialAnimationType } from "../../material-animators/MaterialAnimationType";
+import type { Color, Material, Object3D } from "three";
 
 export interface MaterialColorSwapEventData {
   animationType: MaterialAnimationType;

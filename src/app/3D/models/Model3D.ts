@@ -1,5 +1,5 @@
-import { MaterialInfo } from "./MaterialInfo";
-import { Euler, Vector3 } from "three";
+import type { MaterialInfo } from "./MaterialInfo";
+import type { Euler, Vector3 } from "three";
 
 export interface Model3D {
   filename: string;

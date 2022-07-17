@@ -1,9 +1,9 @@
-import { ProductItem } from "../app/3D/models/product-item/ProductItem";
+import type { ProductItem } from "../app/3D/models/product-item/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
 import { SelectedOptionsType } from "../app/3D/models/selectable-meshes-options/SelectedOptionsType";
 import { MaterialAnimationType } from "../app/3D/material-animators/MaterialAnimationType";
-import { SelectedSpecificTexturesValue } from "../app/3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
+import type { SelectedSpecificTexturesValue } from "../app/3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
 
 export function createFlowerPot(id: number): ProductItem {
   return {

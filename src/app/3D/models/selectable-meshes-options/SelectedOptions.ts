@@ -1,6 +1,6 @@
-import { SelectedOptionsType } from "./SelectedOptionsType";
-import { SelectedSpecificColorsValue } from "./SelectedSpecificColorsValue";
-import { SelectedSpecificTexturesValue } from "./SelectedSpecificTexturesValue";
+import type { SelectedOptionsType } from "./SelectedOptionsType";
+import type { SelectedSpecificColorsValue } from "./SelectedSpecificColorsValue";
+import type { SelectedSpecificTexturesValue } from "./SelectedSpecificTexturesValue";
 
 export interface SelectedOptions {
   type: SelectedOptionsType;

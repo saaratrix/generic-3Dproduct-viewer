@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
-import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { Subscription } from "rxjs";
+import type { ChangeDetectorRef, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import type { AnimationEvent } from "@angular/animations";
+import { animate, state, style, transition, trigger } from "@angular/animations";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { Subscription } from "rxjs";
 import { SelectedOptionsType } from "../3D/models/selectable-meshes-options/SelectedOptionsType";
-import { SelectableObject3DUserData } from "../3D/models/selectable-meshes-options/SelectableObject3DUserData";
-import { Mesh } from "three";
+import type { SelectableObject3DUserData } from "../3D/models/selectable-meshes-options/SelectableObject3DUserData";
+import type { Mesh } from "three";
 
 @Component({
   selector: "app-sidebar",

@@ -1,6 +1,7 @@
-import { CanvasTexture, Material, Mesh, Texture, TextureLoader } from "three";
-import { ProductConfiguratorService } from "../../product-configurator.service";
-import { MaterialTextureSwapEventData } from "../models/event-data/MaterialTextureSwapEventData";
+import type { Material, Mesh, Texture } from "three";
+import { CanvasTexture, TextureLoader } from "three";
+import type { ProductConfiguratorService } from "../../product-configurator.service";
+import type { MaterialTextureSwapEventData } from "../models/event-data/MaterialTextureSwapEventData";
 import { getOnProgressCallback } from "../getOnProgressCallback";
 import { MaterialAnimationType } from "./MaterialAnimationType";
 import { addActiveEventItem, createAnimation } from "./CreateAnimation";

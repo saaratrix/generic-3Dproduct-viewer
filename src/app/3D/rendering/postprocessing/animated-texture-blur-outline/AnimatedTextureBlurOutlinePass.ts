@@ -1,33 +1,42 @@
 import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
+import type { Camera, Scene, WebGLRenderer } from "three";
 import {
   AdditiveBlending,
-  Camera,
   Color,
   DoubleSide,
   MeshBasicMaterial,
   NoBlending,
   RepeatWrapping,
   RGBAFormat,
-  Scene,
   ShaderMaterial,
   Texture,
   UniformsUtils,
   Vector2,
-  WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
 import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
-import { createSeperableBlurMaterial } from "../CreateBlurMaterial";
+import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
 import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
-import { ProductConfiguratorService } from "../../../../product-configurator.service";
-import { SelectedProductHighlighter } from "../../../SelectedProductHighlighter";
+import type { ProductConfiguratorService } from "../../../../product-configurator.service";
+import type { SelectedProductHighlighter } from "../../../SelectedProductHighlighter";
 import { AnimatedTextureBlurOutlineOutputMode } from "./AnimatedTextureBlurOutlineOutputMode";
 import type { AnimatedTextureBlurOutlineOptions } from "./AnimatedTextureBlurOutlineOptions";
 import type { ColorBlurOutlineTextures } from "./ColorBlurOutlineTextures";
+import { isRenderTarget, isTexture } from "../../../3rd-party/three/is-threejs-type";
+import { createOutlineMaterial } from "./CreateOutlineMaterial";
+
+type TexturePropertyKey = "hoverTexture" | "selectedTexture";
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
+/**
+ * This is an outline effect pass that creates an external outline by blurring the rendered mesh and comparing it to the sharp render.
+ * It has different hover and selected textures for the colour and can tile the texture and animates the texture UV positions.
+ *
+ * As it uses textures the input textures can be single colour, gradients, animated gradients etc.
+ * There are some examples in the `./outline-texture-generators/ folder that can be used.
+ */
 export class AnimatedTextureBlurOutlinePass extends Pass {
   /**
    * The hover mask material that renders the hovered meshes into a single colour.
@@ -110,7 +119,6 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   private animateOutline: boolean = true;
   /**
    * The duration of the animation in seconds.
-   * @private
    */
   private interval: number = 60;
   /**
@@ -119,7 +127,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   private elapsed: number = 0;
 
   /**
-   * We need a black colour so it doesn't interfere with the RGB channels of the outline masks.
+   * We need a black colour, so it doesn't interfere with the RGB channels of the outline masks.
    */
   private readonly maskClearColor: Color = new Color(0x000000);
   /**
@@ -127,8 +135,8 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
    */
   private tempOldClearColor: Color = new Color();
 
-  private readonly hoverTexture: Texture;
-  private readonly selectedTexture: Texture;
+  private hoverTexture: Texture | WebGLRenderTarget;
+  private selectedTexture: Texture | WebGLRenderTarget;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -167,13 +175,11 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
     this.fsQuad = new FullScreenQuad();
 
-    this.hoverTexture = new Texture();
-    this.hoverTexture.wrapS = RepeatWrapping;
+    this.hoverTexture = this.createNewTexture();
 
-    this.selectedTexture = new Texture();
-    this.selectedTexture.wrapS = RepeatWrapping;
+    this.selectedTexture = this.createNewTexture();
 
-    this.outlineMaterial = this.createOutlineMaterial(AnimatedTextureBlurOutlineOutputMode.Normal);
+    this.outlineMaterial = this.createOutlineMaterial();
     this.initBlurRenderTargetsAndMaterials(resolution, renderTargetOptions);
 
     // copy material
@@ -204,7 +210,11 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.tileCount = options.tileCount ?? this.tileCount;
 
     this.animateOutline = options.animateOutline ?? this.animateOutline;
-    this.interval = options.animationInterval ?? this.interval;
+
+    if (typeof options.animationInterval !== "undefined") {
+      // Convert from milliseconds to seconds.
+      this.interval = options.animationInterval / 1000;
+    }
 
     if (!this.outlineMaterial) {
       return;
@@ -236,18 +246,91 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
   setColors(colors: ColorBlurOutlineTextures): void {
     if (colors.hover) {
-      this.hoverTexture.image = colors.hover;
-      this.hoverTexture.needsUpdate = true;
+      this.setTexture("hoverTexture", colors.hover);
     }
     if (colors.selected) {
-      this.selectedTexture.image = colors.selected;
+      this.setTexture("selectedTexture", colors.selected);
+    }
+  }
+
+  /**
+   * A way to just set needsUpdate = true.
+   */
+  updateTexture(texture: "hover" | "selected"): void {
+    if (texture === "hover" && isTexture(this.hoverTexture)) {
+      this.hoverTexture.needsUpdate = true;
+    } else if (texture === "selected" && isTexture(this.selectedTexture)) {
       this.selectedTexture.needsUpdate = true;
     }
   }
 
+  /**
+   * Set the hover or selected texture with either an image or a render target.
+   */
+  private setTexture(key: TexturePropertyKey, image: HTMLImageElement | HTMLCanvasElement | WebGLRenderTarget): void {
+    if (isRenderTarget(image)) {
+      this.setTextureRenderTarget(key, image as WebGLRenderTarget);
+    } else {
+      this.setTextureTexture(key, image as HTMLImageElement | HTMLCanvasElement);
+    }
+  }
+
+  private setTextureRenderTarget(key: TexturePropertyKey, renderTarget: WebGLRenderTarget): void {
+    if (this[key] === renderTarget) {
+      return;
+    }
+
+    this[key] = renderTarget;
+    this.outlineMaterial.uniforms[key].value = renderTarget.texture;
+  }
+
+  private setTextureTexture(key: TexturePropertyKey, image: HTMLImageElement | HTMLCanvasElement): void {
+    let texture = this[key];
+    if (isRenderTarget(texture)) {
+      texture = this.createAndSetTexture(key);
+    } else if (isTexture(texture)) {
+      if (texture.image) {
+        const [oldWidth, oldHeight] = this.getTextureDimensions(texture.image);
+        const [newWidth, newHeight] = this.getTextureDimensions(image);
+
+        if (oldWidth !== newWidth || oldHeight !== newHeight) {
+          texture = this.createAndSetTexture(key);
+        }
+      }
+
+      texture.image = image;
+      texture.needsUpdate = true;
+    }
+  }
+
+  private createNewTexture(): Texture {
+    const texture = new Texture();
+    texture.wrapS = RepeatWrapping;
+    return texture;
+  }
+
+  private createAndSetTexture(key: TexturePropertyKey): Texture {
+    const texture = this.createNewTexture();
+    this.outlineMaterial.uniforms[key].value = texture;
+    this[key] = texture;
+    return texture;
+  }
+
+  private getTextureDimensions(image: HTMLImageElement | HTMLCanvasElement | undefined): [width: number, height: number] {
+    if (!image) {
+      return [0, 0];
+    }
+
+    if (image.nodeName.toLowerCase() === "canvas") {
+      return [image.width, image.height];
+    }
+
+    return [(image as HTMLImageElement).naturalWidth, (image as HTMLImageElement).naturalHeight];
+  }
+
   setOutputMode(mode: AnimatedTextureBlurOutlineOutputMode): void {
     this.outlineMaterial.dispose();
-    this.outlineMaterial = this.createOutlineMaterial(mode);
+    this.outlineMaterial = this.createOutlineMaterial();
   }
 
   private initBlurRenderTargetsAndMaterials(resolution: Vector2, renderTargetOptions: WebGLRenderTargetOptions): void {
@@ -282,6 +365,10 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.blurHalfMaterial.uniforms.kernelRadius.value = this.edgeGlow;
   }
 
+  public shouldRenderOutline(): boolean {
+    return this.selectedProductHighlighter.isAnyProductHighlighted();
+  }
+
   public render(renderer: WebGLRenderer, writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget, deltaTime: number, maskActive: boolean): void {
     this.elapsed = (this.elapsed + deltaTime) % this.interval;
     this.renderOutline(renderer, readBuffer);
@@ -299,7 +386,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   }
 
   private renderOutline(renderer: WebGLRenderer, readBuffer: WebGLRenderTarget): void {
-    if (!this.selectedProductHighlighter.isAnyProductHighlighted()) {
+    if (!this.shouldRenderOutline()) {
       return;
     }
 
@@ -384,91 +471,13 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.fsQuad.render(renderer);
   }
 
-  private createOutlineMaterial(outputMode: AnimatedTextureBlurOutlineOutputMode): ShaderMaterial {
-    const fragmentShader = this.createOutlineFragmentShader(outputMode);
-
-    return new ShaderMaterial({
-      vertexShader:
-        `varying vec2 vUv;
-        varying vec3 worldPosition;
-        void main() {
-          vUv = uv;
-          worldPosition = position;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }`,
-
-      fragmentShader,
-      uniforms: {
-        maskTexture: { value: null },
-        blurTexture: { value: null },
-        blurHalfTexture: { value: null },
-        hoverTexture: { value: this.hoverTexture },
-        selectedTexture: { value: this.selectedTexture },
-        startU: { value: this.startU },
-        tileCount: { value: this.tileCount },
-      },
-      transparent: true,
+  private createOutlineMaterial(): ShaderMaterial {
+    return createOutlineMaterial({
+      outputMode: AnimatedTextureBlurOutlineOutputMode.Normal,
+      hoverTexture: (this.hoverTexture as WebGLRenderTarget)?.texture || this.hoverTexture,
+      selectedTexture: (this.selectedTexture as WebGLRenderTarget)?.texture || this.selectedTexture,
+      startU: this.startU,
+      tileCount: this.tileCount,
     });
-  }
-
-  private createOutlineFragmentShader(outputMode: AnimatedTextureBlurOutlineOutputMode): string {
-    let fragmentShader = `
-    varying vec2 vUv;
-    varying vec3 worldPosition;
-
-    uniform sampler2D maskTexture;
-    uniform sampler2D blurTexture;
-    uniform sampler2D blurHalfTexture;
-
-    uniform sampler2D hoverTexture;
-    uniform sampler2D selectedTexture;
-
-    uniform float startU;
-    uniform float tileCount;
-
-    vec4 getOutlineColor(float mask, float blur, vec3 outlineColor)
-    {
-      float blurOutline = clamp((blur - mask) * 2.5, 0.0, 1.0);
-      return vec4(outlineColor.x * blurOutline, outlineColor.y * blurOutline, outlineColor.z * blurOutline, blurOutline);
-    }
-
-    void main() {
-      vec4 maskColor = texture2D(maskTexture, vUv);
-      vec4 blurColor = texture2D(blurTexture, vUv);
-      vec4 blurHalfColor = texture2D(blurHalfTexture, vUv);
-
-      vec3 combinedBlur = min(blurColor.xyz + blurHalfColor.xyz, vec3(1.0, 1.0, 1.0));
-
-      vec2 clampedUv = vec2(worldPosition.xy * 0.5 + 0.5);
-      // 1.5 would be u = 0.5 because the outline texture is looping.
-      float u = startU + tileCount * clampedUv.x;
-      vec2 uv = vec2(u, clampedUv.y);
-
-      vec4 hoverColor = texture2D(hoverTexture, uv);
-      vec4 selectedColor = texture2D(selectedTexture, uv);
-
-      vec4 hover = getOutlineColor(maskColor.r, combinedBlur.r, vec3(hoverColor.xyz));
-      vec4 selected = getOutlineColor(maskColor.g, combinedBlur.g, vec3(selectedColor.xyz));
-    `;
-
-    switch (outputMode) {
-      case AnimatedTextureBlurOutlineOutputMode.Normal:
-        fragmentShader += `
-          gl_FragColor = vec4(hover.xyz + selected.xyz, max(hover.w, selected.w));
-        }`;
-        break;
-      case AnimatedTextureBlurOutlineOutputMode.HoverTexture:
-        fragmentShader += `
-          gl_FragColor = vec4(hoverColor.xyz, 1.0);
-        }`;
-        break;
-      case AnimatedTextureBlurOutlineOutputMode.SelectedTexture:
-        fragmentShader += `
-          gl_FragColor = vec4(selectedColor.xyz, 1.0);
-        }`;
-        break;
-    }
-
-    return fragmentShader;
   }
 }

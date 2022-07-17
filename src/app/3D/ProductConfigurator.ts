@@ -1,10 +1,11 @@
-import { Color, DirectionalLight, Light, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from "three";
+import type { Light, WebGLRenderer } from "three";
+import { Color, DirectionalLight, PerspectiveCamera, Scene, Vector2 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { ProductConfiguratorService } from "../product-configurator.service";
+import type { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
 import { MaterialTextureChanger } from "./material-animators/MaterialTextureChanger";
 import { Injectable } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import type { ActivatedRoute, Router } from "@angular/router";
 import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
 import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
@@ -125,6 +126,7 @@ export class ProductConfigurator {
     window.addEventListener("resize", throttle(() => {
       const { width, height } = this.getRendererSize();
       this.renderer.setSize(width, height);
+      this.effectsComposerHandler.setSize(width, height);
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
@@ -136,7 +138,7 @@ export class ProductConfigurator {
     const snapshot = this.activatedRoute.snapshot;
     const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
-    this.productChanger.changeProduct(selectedItem);
+    this.productChanger.changeProduct(selectedItem).then();
   }
 
   private getRendererSize(): Vector2 {

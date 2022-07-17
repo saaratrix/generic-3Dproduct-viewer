@@ -1,7 +1,8 @@
-import { Component, ElementRef, NgZone, ViewChild } from "@angular/core";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import * as THREE from "three";
+import type { ElementRef, NgZone } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { ActivatedRoute, Router } from "@angular/router";
+import type * as THREE from "three";
 import { ProductConfigurator } from "../3D/ProductConfigurator";
 
 @Component({

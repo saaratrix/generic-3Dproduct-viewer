@@ -1,19 +1,6 @@
-export interface GradientOptions {
-  width: number,
-  height: number,
-  /**
-   * Angle in radians.
-   */
-  angle?: number;
-  steps: GradientStop[];
-}
+import type { LinearGradientOptions } from "./gradient-options";
 
-export interface GradientStop {
-  offset: number,
-  color: string,
-}
-
-export function generateGradientTexture(options: GradientOptions): HTMLCanvasElement {
+export function generateLinearGradientTexture(options: LinearGradientOptions): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
 
   const width = options.width;

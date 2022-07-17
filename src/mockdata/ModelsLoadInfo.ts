@@ -1,4 +1,4 @@
-import { MaterialInfo } from "../app/3D/models/MaterialInfo";
+import type { MaterialInfo } from "../app/3D/models/MaterialInfo";
 
 export interface Model3DLoadInfo {
   filename: string;

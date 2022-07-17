@@ -1,5 +1,5 @@
-import { ProductConfigurationEvent } from "../../../product-configurator-events";
-import { MaterialTextureSwapEventData } from "../event-data/MaterialTextureSwapEventData";
+import type { ProductConfigurationEvent } from "../../../product-configurator-events";
+import type { MaterialTextureSwapEventData } from "../event-data/MaterialTextureSwapEventData";
 
 export interface SubProductItem {
   id: number;

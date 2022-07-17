@@ -1,6 +1,6 @@
-import { ProductItem } from "../product-item/ProductItem";
-import { MaterialAnimationType } from "../../material-animators/MaterialAnimationType";
-import { Material } from "three";
+import type { ProductItem } from "../product-item/ProductItem";
+import type { MaterialAnimationType } from "../../material-animators/MaterialAnimationType";
+import type { Material } from "three";
 
 export interface MaterialTextureSwapEventData {
   // If we should show the global loading spinner while loading the texture.

@@ -2,15 +2,18 @@ import type { ProductConfiguratorService } from "../../product-configurator.serv
 import type { Subscription } from "rxjs";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { Camera, Scene, Vector2, WebGLRenderer } from "three";
+import type { Camera, Scene, WebGLRenderer } from "three";
+import { Vector2 } from "three";
 import { AnimatedTextureBlurOutlinePass } from "./postprocessing/animated-texture-blur-outline/AnimatedTextureBlurOutlinePass";
 import type { ProductItem } from "../models/product-item/ProductItem";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
-import { SelectedProductHighlighter } from "../SelectedProductHighlighter";
-import { generateRainbowTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-rainbow-texture";
-import { generateSingleColorTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-single-color-texture";
+import type { SelectedProductHighlighter } from "../SelectedProductHighlighter";
+import { generateLinearGradientTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-linear-gradient-texture";
 
+/**
+ * Combines the effects used for post processing.
+ */
 export class EffectComposerHandler {
   private composer!: EffectComposer;
   private outlinePass: AnimatedTextureBlurOutlinePass;
@@ -32,12 +35,13 @@ export class EffectComposerHandler {
     const renderPass = new RenderPass(scene, camera);
     this.gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 
+    const tileCount = 5;
     this.outlinePass = new AnimatedTextureBlurOutlinePass(productConfiguratorService, selectedProductHighlighter, renderer.getSize(new Vector2(0, 0)), scene, camera, {
-      tileCount: 6,
+      tileCount,
+      animateOutline: true,
     });
 
-    this.outlinePass.setColors({ hover: generateRainbowTexture(Math.PI * 0.5) });
-    this.outlinePass.setColors({ selected: generateSingleColorTexture("snow") });
+    this.generateOutlineTextures(tileCount);
 
     this.composer.addPass(renderPass);
     this.composer.addPass(this.gammaCorrectionPass);
@@ -54,5 +58,43 @@ export class EffectComposerHandler {
 
   render(): void {
     this.composer.render();
+  }
+
+  setSize(width: number, height: number): void {
+    this.composer.setSize(width, height);
+  }
+
+  private generateOutlineTextures(tileCount: number): void {
+    let dimensions = Math.min(Math.max(window.innerWidth, 256) / tileCount, 1024);
+    // Nearest power of 2
+    // Source: https://stackoverflow.com/a/42799104/2437350
+    dimensions = 1 << 31 - Math.clz32(dimensions);
+    this.outlinePass.setColors({ selected: generateLinearGradientTexture({
+      width: dimensions,
+      height: dimensions,
+      // Keeping the steps the same between the two textures so it pops less when you select.
+      steps: [
+        { offset: 0, color: "#807d7d" },
+        { offset: 0.1, color: "#807d7d" },
+        { offset: 0.4, color: "snow" },
+        { offset: 0.6, color: "snow" },
+        { offset: 0.9, color: "#807d7d" },
+        { offset: 1, color: "#807d7d" },
+      ],
+      angle: Math.PI / 2,
+    }) });
+    this.outlinePass.setColors({ hover: generateLinearGradientTexture({
+      width: dimensions,
+      height: dimensions,
+      steps: [
+        { offset: 0, color: "hsl(283,29%,40%)" },
+        { offset: 0.1, color: "hsl(283,29%,40%)" },
+        { offset: 0.4, color: "hsl(283,29%,65%)" },
+        { offset: 0.6, color: "hsl(283,29%,65%)" },
+        { offset: 0.9, color: "hsl(283,29%,40%)" },
+        { offset: 1, color: "hsl(283,29%,40%)" },
+      ],
+      angle: Math.PI / 2,
+    }) });
   }
 }

@@ -1,10 +1,12 @@
-import { Component, Input, NgZone, OnInit } from "@angular/core";
-import { Color, Mesh } from "three";
-import { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
-import { SelectedSpecificColorsValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificColorsValue";
+import type { NgZone, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import type { Mesh } from "three";
+import { Color } from "three";
+import type { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
+import type { SelectedSpecificColorsValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificColorsValue";
 import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
 import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
-import { ProductConfiguratorService } from "../../product-configurator.service";
+import type { ProductConfiguratorService } from "../../product-configurator.service";
 import { clearEvents } from "../../3D/utility/ProductItemUtility";
 import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveProductItemEventType";
 

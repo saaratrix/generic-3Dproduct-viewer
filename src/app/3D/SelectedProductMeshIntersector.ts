@@ -1,9 +1,10 @@
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { Intersection, Mesh, PerspectiveCamera, Raycaster, Vector2 } from "three";
-import { Subscription } from "rxjs";
-import { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
-import { SelectableMeshesOption } from "./models/selectable-meshes-options/SelectableMeshesOption";
-import { ProductItem } from "./models/product-item/ProductItem";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { Intersection, Mesh, PerspectiveCamera, Vector2 } from "three";
+import { Raycaster } from "three";
+import type { Subscription } from "rxjs";
+import type { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
+import type { SelectableMeshesOption } from "./models/selectable-meshes-options/SelectableMeshesOption";
+import type { ProductItem } from "./models/product-item/ProductItem";
 
 export class SelectedProductMeshIntersector {
   private raycaster: Raycaster = new Raycaster();

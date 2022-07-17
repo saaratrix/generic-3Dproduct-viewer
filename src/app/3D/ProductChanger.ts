@@ -1,12 +1,12 @@
-import { ProductConfigurator } from "./ProductConfigurator";
-import { ProductItem } from "./models/product-item/ProductItem";
+import type { ProductConfigurator } from "./ProductConfigurator";
+import type { ProductItem } from "./models/product-item/ProductItem";
 import { MeshLoader } from "./MeshLoader";
-import { ProductConfiguratorService } from "../product-configurator.service";
+import type { ProductConfiguratorService } from "../product-configurator.service";
 import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
-import { Model3D } from "./models/Model3D";
-import { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
-import { SubProductItem } from "./models/product-item/SubProductItem";
+import type { Model3D } from "./models/Model3D";
+import type { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
+import type { SubProductItem } from "./models/product-item/SubProductItem";
 
 export class ProductChanger {
   private readonly productConfiguratorService: ProductConfiguratorService;

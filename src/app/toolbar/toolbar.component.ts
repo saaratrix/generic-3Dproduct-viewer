@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { Subscription } from "rxjs";
-import { ProductItem } from "../3D/models/product-item/ProductItem";
+import type { OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import type { ProductConfiguratorService } from "../product-configurator.service";
+import type { Subscription } from "rxjs";
+import type { ProductItem } from "../3D/models/product-item/ProductItem";
 
 
 @Component({

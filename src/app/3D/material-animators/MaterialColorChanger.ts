@@ -1,8 +1,9 @@
-import { ProductConfiguratorService } from "../../product-configurator.service";
+import type { ProductConfiguratorService } from "../../product-configurator.service";
 import { MaterialAnimationType } from "./MaterialAnimationType";
-import { MaterialColorSwapEventData } from "../models/event-data/MaterialColorSwapEventData";
-import { Color, Material, Mesh } from "three";
-import { ColorMaterial } from "../3rd-party/three/ColorMaterial";
+import type { MaterialColorSwapEventData } from "../models/event-data/MaterialColorSwapEventData";
+import type { Material, Mesh } from "three";
+import { Color } from "three";
+import type { ColorMaterial } from "../3rd-party/three/ColorMaterial";
 import { isColorMaterial } from "../utility/MaterialUtility";
 import { createAnimation } from "./CreateAnimation";
 import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";

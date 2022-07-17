@@ -1,5 +1,5 @@
-import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
-import { ProductItem } from "../models/product-item/ProductItem";
+import type { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
+import type { ProductItem } from "../models/product-item/ProductItem";
 
 export function clearEvents(productItem: ProductItem, types: ActiveProductItemEventType[], completeEvent: boolean): void {
   for (let i = 0; i < productItem.activeEvents.length;) {

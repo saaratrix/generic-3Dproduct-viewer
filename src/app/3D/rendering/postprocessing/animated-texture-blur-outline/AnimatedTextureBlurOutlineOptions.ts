@@ -6,7 +6,7 @@ export interface AnimatedTextureBlurOutlineOptions {
    */
   animateOutline?: boolean,
   /**
-   * How long for a full cycle where the texture is back to its start position.
+   * How long for a full cycle in milliseconds where the texture is back to its start position.
    */
   animationInterval?: number,
   /**
