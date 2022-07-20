@@ -1,8 +1,9 @@
-import type { Object3D, Mesh } from "three";
+import type { Object3D } from "three";
 import type { Texture, WebGLRenderer, WebGLRenderTarget } from "three";
+import type { PolygonalObject3D } from "./polygonal-object-3D";
 
-export function isMesh(object: Object3D): object is Mesh {
-  return (object as Mesh).isMesh;
+export function isPolygonalObject3D(object: Object3D): object is PolygonalObject3D {
+  return !!(object as PolygonalObject3D).geometry;
 }
 
 export function isRenderTarget(object: unknown): object is WebGLRenderer {

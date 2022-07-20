@@ -2,13 +2,12 @@ import type { OnDestroy } from "@angular/core";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import type { ProductItem } from "./3D/models/product-item/ProductItem";
-import { createFlowerPot, createRose, createWuffels } from "../mockdata/UnrealisticItems";
-import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "../mockdata/RealisticItems";
 import { ProductConfigurationEvent } from "./product-configurator-events";
 import type { LoadingProgressEventData } from "./3D/models/event-data/LoadingProgressEventData";
 import type { MaterialTextureSwapEventData } from "./3D/models/event-data/MaterialTextureSwapEventData";
-import type { Mesh, Vector2 } from "three";
+import type { Vector2 } from "three";
 import type { MaterialColorSwapEventData } from "./3D/models/event-data/MaterialColorSwapEventData";
+import type { PolygonalObject3D } from "./3D/3rd-party/three/polygonal-object-3D";
 
 @Injectable({
   providedIn: "root",
@@ -38,27 +37,16 @@ export class ProductConfiguratorService implements OnDestroy {
   public materialColorSwap: Subject<MaterialColorSwapEventData>;
   public materialTextureSwap: Subject<MaterialTextureSwapEventData>;
 
-  public meshSelected: Subject<Mesh>;
-  public meshDeselected: Subject<Mesh>;
-  public meshPointerEnter: Subject<Mesh>;
-  public meshPointerLeave: Subject<Mesh>;
+  public object3DSelected: Subject<PolygonalObject3D>;
+  public object3DDeselected: Subject<PolygonalObject3D>;
+  public object3DPointerEnter: Subject<PolygonalObject3D>;
+  public object3DPointerLeave: Subject<PolygonalObject3D>;
 
   public selectedProductChanged: Subject<ProductItem>;
 
   public toolbarChangeProduct: Subject<ProductItem>;
 
   constructor() {
-    let id = 0;
-
-    // Who needs a database!
-    this.items.push(createFlowerPot(id++));
-    this.items.push(createRose(id++));
-    this.items.push(createWuffels(id++));
-    this.items.push(createWayfairTable(id++));
-    this.items.push(createWayfairChair(id++));
-    this.items.push(createIkeaChear(id++));
-    this.items.push(createIkeaTable(id++));
-
     this.canvasResized = this.createSubject<Vector2>(ProductConfigurationEvent.CanvasResized);
 
     this.loadingStarted = this.createSubject<void>(ProductConfigurationEvent.LoadingStarted);
@@ -68,10 +56,10 @@ export class ProductConfiguratorService implements OnDestroy {
     this.materialColorSwap = this.createSubject<MaterialColorSwapEventData>(ProductConfigurationEvent.MaterialColorSwap);
     this.materialTextureSwap = this.createSubject<MaterialTextureSwapEventData>(ProductConfigurationEvent.MaterialTextureSwap);
 
-    this.meshSelected = this.createSubject<Mesh>(ProductConfigurationEvent.MeshSelected);
-    this.meshDeselected = this.createSubject<Mesh>(ProductConfigurationEvent.MeshDeselected);
-    this.meshPointerEnter = this.createSubject<Mesh>(ProductConfigurationEvent.MeshPointerEnter);
-    this.meshPointerLeave = this.createSubject<Mesh>(ProductConfigurationEvent.MeshPointerLeave);
+    this.object3DSelected = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DSelected);
+    this.object3DDeselected = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DDeselected);
+    this.object3DPointerEnter = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DPointerEnter);
+    this.object3DPointerLeave = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DPointerLeave);
 
     this.selectedProductChanged = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProductChanged);
 

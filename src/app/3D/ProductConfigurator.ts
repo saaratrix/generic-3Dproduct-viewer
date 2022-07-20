@@ -1,14 +1,14 @@
-import type { Light, WebGLRenderer } from "three";
-import { Color, DirectionalLight, PerspectiveCamera, Scene, Vector2 } from "three";
+import type { Light } from "three";
+import { Color, DirectionalLight, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import type { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
 import { ProductChanger } from "./ProductChanger";
 import { MaterialTextureChanger } from "./material-animators/MaterialTextureChanger";
 import { Injectable } from "@angular/core";
-import type { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PointerEventHandler } from "./PointerEventHandler";
 import { SelectedProductHighlighter } from "./SelectedProductHighlighter";
-import { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
+import { SelectedProductObjectIntersector } from "./SelectedProductObjectIntersector";
 import { MaterialColorChanger } from "./material-animators/MaterialColorChanger";
 import { throttle } from "../utility/throttle";
 import { EffectComposerHandler } from "./rendering/EffectComposerHandler";
@@ -28,7 +28,7 @@ export class ProductConfigurator {
   private productChanger: ProductChanger;
   private materialColorChanger: MaterialColorChanger;
   private textureChanger: MaterialTextureChanger;
-  private selectedProductMeshIntersector: SelectedProductMeshIntersector;
+  private selectedProductObjectIntersector: SelectedProductObjectIntersector;
   private pointerEventHandler: PointerEventHandler;
   private selectedProductHighlighter: SelectedProductHighlighter;
 
@@ -67,8 +67,8 @@ export class ProductConfigurator {
     this.productChanger = new ProductChanger(this);
     this.materialColorChanger = new MaterialColorChanger(this.productConfiguratorService);
     this.textureChanger = new MaterialTextureChanger(this.productConfiguratorService);
-    this.selectedProductMeshIntersector = new SelectedProductMeshIntersector(this.camera, this.productConfiguratorService);
-    this.pointerEventHandler = new PointerEventHandler(this.productConfiguratorService, this.selectedProductMeshIntersector);
+    this.selectedProductObjectIntersector = new SelectedProductObjectIntersector(this.camera, this.productConfiguratorService);
+    this.pointerEventHandler = new PointerEventHandler(this.productConfiguratorService, this.selectedProductObjectIntersector);
     this.selectedProductHighlighter = new SelectedProductHighlighter(this.renderer, this.productConfiguratorService);
 
     this.pointerEventHandler.initPointerEvents(this.renderer.domElement);

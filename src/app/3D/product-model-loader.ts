@@ -1,4 +1,4 @@
-import type { Material, Mesh, MeshStandardMaterial, Object3D, WebGLRenderTarget } from "three";
+import type { Material, MeshStandardMaterial, Object3D, WebGLRenderTarget } from "three";
 import { DoubleSide, Group, MeshPhongMaterial, TextureLoader } from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
@@ -10,8 +10,9 @@ import type { ProductConfiguratorService } from "../product-configurator.service
 import { getOnProgressCallback } from "./getOnProgressCallback";
 import type { Model3D } from "./models/Model3D";
 import type { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
+import { isPolygonalObject3D } from "./3rd-party/three/is-threejs-type";
 
-export class MeshLoader {
+export class ProductModelLoader {
 
   private readonly productConfiguratorService: ProductConfiguratorService;
   private readonly environmentLoader: EnvironmentMapLoader;
@@ -22,9 +23,9 @@ export class MeshLoader {
   }
 
   /**
-   * Loads an .obj mesh with either an mtl file or raw textures.
+   * Loads model differently based on file extension.
    */
-  public loadMesh(model: Model3D): Promise<ModelLoadedEventData> {
+  public loadModel(model: Model3D): Promise<ModelLoadedEventData> {
     const promise = new Promise<ModelLoadedEventData>((resolve) => {
 
       const fileParts: string[] = model.filename.split(".");
@@ -62,15 +63,14 @@ export class MeshLoader {
           materialCreator.preload();
 
           object.children.forEach((child) => {
-            const mesh = child as Mesh;
-            if (!mesh) {
+            if (!isPolygonalObject3D(child)) {
               return;
             }
 
-            const name: string = (mesh.material as Material).name;
+            const name: string = (child.material as Material).name;
 
             if (materialCreator.materials[ name ]) {
-              mesh.material = materialCreator.materials[ name ];
+              child.material = materialCreator.materials[ name ];
             }
           });
 
@@ -93,12 +93,11 @@ export class MeshLoader {
         }
 
         object.children.forEach((child) => {
-          const mesh = child as Mesh;
-          if (!mesh) {
+          if (!isPolygonalObject3D(child)) {
             return;
           }
 
-          mesh.material = material;
+          child.material = material;
         });
 
         if (materialInfo.renderBackface) {
@@ -175,13 +174,14 @@ export class MeshLoader {
 
   private trySetEnvironmentTexture( children: Object3D[], texture: WebGLRenderTarget): void {
     for (const child of children) {
-      const mesh = child as Mesh;
-      if (mesh.material) {
-        const material = mesh.material as MeshStandardMaterial;
-        material.envMap = texture.texture;
-        material.envMapIntensity = 0.0625;
-        material.needsUpdate = true;
+      if (!isPolygonalObject3D(child)) {
+        continue;
       }
+
+      const material = child.material as MeshStandardMaterial;
+      material.envMap = texture.texture;
+      material.envMapIntensity = 0.0625;
+      material.needsUpdate = true;
 
       if (child.children) {
         this.trySetEnvironmentTexture(child.children, texture);
@@ -191,10 +191,11 @@ export class MeshLoader {
 
   private trySetBackfaceRendering(children: Object3D[]): void {
     for (const child of children) {
-      const mesh = child as Mesh;
-      if (mesh.material) {
-        (mesh.material as Material).side = DoubleSide;
+      if (!isPolygonalObject3D(child)) {
+        continue;
       }
+
+      (child.material as Material).side = DoubleSide;
 
       if (child.children) {
         this.trySetBackfaceRendering(child.children);

@@ -1,12 +1,13 @@
 import type { ProductConfiguratorService } from "../../product-configurator.service";
 import { MaterialAnimationType } from "./MaterialAnimationType";
 import type { MaterialColorSwapEventData } from "../models/event-data/MaterialColorSwapEventData";
-import type { Material, Mesh } from "three";
+import type { Material } from "three";
 import { Color } from "three";
-import type { ColorMaterial } from "../3rd-party/three/ColorMaterial";
+import type { ColorMaterial } from "../3rd-party/three/color-material";
 import { isColorMaterial } from "../utility/MaterialUtility";
 import { createAnimation } from "./CreateAnimation";
 import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
+import { isPolygonalObject3D } from "../3rd-party/three/is-threejs-type";
 
 interface AnimatableColorItem {
   startColor: Color;
@@ -62,12 +63,11 @@ export class MaterialColorChanger {
 
     if (event.rootObject) {
       event.rootObject.traverse((o) => {
-        const mesh = o as Mesh;
-        if (!mesh.isMesh) {
+        if (!isPolygonalObject3D(o)) {
           return;
         }
 
-        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        const materials = Array.isArray(o.material) ? o.material : [o.material];
         this.tryAddAnimatableItems(materials, items, event.targetColor);
       });
     }

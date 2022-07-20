@@ -1,4 +1,4 @@
-import type { Material, Mesh, Texture } from "three";
+import type { Material, Texture } from "three";
 import { CanvasTexture, TextureLoader } from "three";
 import type { ProductConfiguratorService } from "../../product-configurator.service";
 import type { MaterialTextureSwapEventData } from "../models/event-data/MaterialTextureSwapEventData";
@@ -7,6 +7,7 @@ import { MaterialAnimationType } from "./MaterialAnimationType";
 import { addActiveEventItem, createAnimation } from "./CreateAnimation";
 import { ActiveProductItemEventType } from "../models/product-item/ActiveProductItemEventType";
 import { clearEvents } from "../utility/ProductItemUtility";
+import { isPolygonalObject3D } from "../3rd-party/three/is-threejs-type";
 
 const showDebugCanvas: boolean = false;
 
@@ -182,13 +183,12 @@ export class MaterialTextureChanger {
       }
     } else {
       event.productItem.object3D!.traverse(o => {
-        const mesh = o as Mesh;
-        if (!mesh.isMesh) {
+        if (!isPolygonalObject3D(o)) {
           return;
         }
 
-        const meshMaterials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-        for (const material of meshMaterials) {
+        const objectMaterials = Array.isArray(o.material) ? o.material : [o.material];
+        for (const material of objectMaterials) {
           if (material[event.textureSlot]) {
             materials.push({
               material,

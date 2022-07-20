@@ -1,9 +1,10 @@
-import type { ElementRef, NgZone } from "@angular/core";
+import { ElementRef, NgZone } from "@angular/core";
 import { Component, ViewChild } from "@angular/core";
-import type { ProductConfiguratorService } from "../product-configurator.service";
-import type { ActivatedRoute, Router } from "@angular/router";
+import { ProductConfiguratorService } from "../product-configurator.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import type * as THREE from "three";
 import { ProductConfigurator } from "../3D/ProductConfigurator";
+import { loadMockData } from "../../mockdata/load-mock-data";
 
 @Component({
   selector: "app-product-viewer",
@@ -22,6 +23,8 @@ export class ProductViewerComponent {
     private router: Router,
     private zone: NgZone,
   ) {
+    loadMockData(productConfiguratorService);
+
     this.productConfiguratorService.loadingStarted.subscribe(() => {
       this.loadingsStarted++;
     });
@@ -48,5 +51,4 @@ export class ProductViewerComponent {
       productConfigurator.loadInitialItem();
     }, 1);
   }
-
 }

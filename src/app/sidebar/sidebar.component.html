@@ -5,18 +5,18 @@
   (@openClosed.done)="openClosedDone($event)"
 >
   <div *ngIf="isContentVisible">
-    <ng-container *ngIf="activeMesh" [ngSwitch]="type">
+    <ng-container *ngIf="activeObject3D" [ngSwitch]="type">
       <sidebar-free-color
         *ngSwitchCase="SelectedOptionsType.FreeColor"
-        [mesh]="activeMesh"
+        [object]="activeObject3D"
       ></sidebar-free-color>
       <sidebar-specific-color
         *ngSwitchCase="SelectedOptionsType.SpecificColors"
-        [mesh]="activeMesh"
+        [object]="activeObject3D"
       ></sidebar-specific-color>
       <sidebar-specific-texture
         *ngSwitchCase="SelectedOptionsType.SpecificTextures"
-        [mesh]="activeMesh"
+        [object3D]="activeObject3D"
       ></sidebar-specific-texture>
     </ng-container>
   </div>

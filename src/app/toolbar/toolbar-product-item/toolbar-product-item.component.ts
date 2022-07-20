@@ -1,7 +1,7 @@
 import type { ElementRef, AfterViewInit } from "@angular/core";
 import { Component, Input, ViewChild } from "@angular/core";
 import type { ProductItem } from "../../3D/models/product-item/ProductItem";
-import type { ProductConfiguratorService } from "../../product-configurator.service";
+import { ProductConfiguratorService } from "../../product-configurator.service";
 
 @Component({
   selector: "app-toolbar-product-item",

@@ -1,12 +1,13 @@
-import type { NgZone, OnInit } from "@angular/core";
+import { NgZone, OnInit } from "@angular/core";
 import { Component, Input } from "@angular/core";
-import type { Mesh, Texture } from "three";
-import type { SelectedSpecificTexture } from "../../3D/models/selectable-meshes-options/SelectedSpecificTexture";
+import type { Texture } from "three";
+import type { SelectedSpecificTexture } from "../../3D/models/selectable-object-3ds-options/SelectedSpecificTexture";
 import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
-import type { ProductConfiguratorService } from "../../product-configurator.service";
-import type { SelectableObject3DUserData } from "../../3D/models/selectable-meshes-options/SelectableObject3DUserData";
-import { getMaterialsFromMesh, getMaterialsFromMeshes } from "../../3D/utility/MaterialUtility";
-import type { SelectedSpecificTexturesValue } from "../../3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
+import { ProductConfiguratorService } from "../../product-configurator.service";
+import type { SelectableObject3DUserData } from "../../3D/models/selectable-object-3ds-options/SelectableObject3DUserData";
+import { getMaterialsFromObject, getMaterialsFromObjects } from "../../3D/utility/MaterialUtility";
+import type { SelectedSpecificTexturesValue } from "../../3D/models/selectable-object-3ds-options/SelectedSpecificTexturesValue";
+import type { PolygonalObject3D } from "../../3D/3rd-party/three/polygonal-object-3D";
 
 @Component({
   selector: "sidebar-specific-texture",
@@ -14,7 +15,7 @@ import type { SelectedSpecificTexturesValue } from "../../3D/models/selectable-m
   styleUrls: ["./sidebar-specific-texture.component.scss"],
 })
 export class SidebarSpecificTextureComponent implements OnInit {
-  @Input() mesh!: Mesh;
+  @Input() object3D!: PolygonalObject3D;
 
   currentValue: string = "";
   // Texture values are the texture urls.
@@ -29,8 +30,8 @@ export class SidebarSpecificTextureComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const userdata = this.mesh.userData as SelectableObject3DUserData;
-    const values = userdata.selectableMeshesOption.value as SelectedSpecificTexturesValue;
+    const userdata = this.object3D.userData as SelectableObject3DUserData;
+    const values = userdata.selectableObjectsOption.value as SelectedSpecificTexturesValue;
 
     if (values.textures) {
       this.values = values.textures;
@@ -43,7 +44,7 @@ export class SidebarSpecificTextureComponent implements OnInit {
   }
 
   private setCurrentTextureValue(): void {
-    const materials = getMaterialsFromMesh(this.mesh);
+    const materials = getMaterialsFromObject(this.object3D);
     let imageSrc: string = "";
     this.currentValue = "";
     if (this.values.length === 0) {
@@ -80,13 +81,13 @@ export class SidebarSpecificTextureComponent implements OnInit {
     this.currentValue = value;
     this.loadingValues[value] = true;
 
-    const userData = this.mesh.userData as SelectableObject3DUserData;
-    const meshes = [this.mesh];
-    if (userData.siblings) {
-      meshes.push(...userData.siblings);
+    const userData = this.object3D.userData as SelectableObject3DUserData;
+    const objects = [this.object3D];
+    if (userData.related) {
+      objects.push(...userData.related);
     }
 
-    const materials = getMaterialsFromMeshes(meshes);
+    const materials = getMaterialsFromObjects(objects);
     const onLoaded = (): void => {
       this.ngZone.run(() => {
         delete this.loadingValues[value];

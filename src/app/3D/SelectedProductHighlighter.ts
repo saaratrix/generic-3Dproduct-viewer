@@ -1,104 +1,105 @@
 import type { ProductConfiguratorService } from "../product-configurator.service";
 import type { Subscription } from "rxjs";
-import type { Mesh, WebGLRenderer } from "three";
-import type { SelectableObject3DUserData } from "./models/selectable-meshes-options/SelectableObject3DUserData";
+import type { WebGLRenderer } from "three";
+import type { SelectableObject3DUserData } from "./models/selectable-object-3ds-options/SelectableObject3DUserData";
+import type { PolygonalObject3D } from "./3rd-party/three/polygonal-object-3D";
 
 export class SelectedProductHighlighter {
-  private hoveredMesh: Mesh | undefined;
-  private selectedMesh: Mesh | undefined;
+  private hoveredObject: PolygonalObject3D | undefined;
+  private selectedObject: PolygonalObject3D | undefined;
 
   private subscriptions: Subscription[] = [];
 
   constructor(renderer: WebGLRenderer, private productConfiguratorService: ProductConfiguratorService) {
     this.subscriptions.push(
-      this.productConfiguratorService.meshPointerEnter.subscribe((mesh) => {
-        this.hoveredMesh = mesh;
-        this.setHoverMaterial(mesh);
+      this.productConfiguratorService.object3DPointerEnter.subscribe((object) => {
+        this.hoveredObject = object;
+        this.setHoverMaterial(object);
       }),
-      this.productConfiguratorService.meshPointerLeave.subscribe((mesh) => {
-        this.hoveredMesh = undefined;
-        this.clearHoverMaterial(mesh);
+      this.productConfiguratorService.object3DPointerLeave.subscribe((object) => {
+        this.hoveredObject = undefined;
+        this.clearHoverMaterial(object);
       }),
       // Selection
-      this.productConfiguratorService.meshSelected.subscribe(mesh => {
-        this.selectedMesh = mesh;
-        this.setSelectedMaterial(mesh);
+      this.productConfiguratorService.object3DSelected.subscribe(object => {
+        this.selectedObject = object;
+        this.setSelectedMaterial(object);
       }),
-      this.productConfiguratorService.meshDeselected.subscribe(mesh => {
-        this.selectedMesh = undefined;
-        this.clearSelectedMaterial(mesh);
+      this.productConfiguratorService.object3DDeselected.subscribe(object => {
+        this.selectedObject = undefined;
+        this.clearSelectedMaterial(object);
       }),
     );
   }
 
   dispose(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.hoveredMesh = undefined;
-    this.selectedMesh = undefined;
+    this.hoveredObject = undefined;
+    this.selectedObject = undefined;
   }
 
   isAnyProductHighlighted(): boolean {
-    return !!(this.hoveredMesh || this.selectedMesh);
+    return !!(this.hoveredObject || this.selectedObject);
   }
 
-  private setSelectedMaterial(mesh: Mesh): void {
-    this.enableLayer(mesh, 2);
-    if (this.hoveredMesh && this.areMeshOrSiblingsEqual(mesh, this.hoveredMesh)) {
-      this.clearHoverMaterial(this.hoveredMesh);
+  private setSelectedMaterial(object: PolygonalObject3D): void {
+    this.enableLayer(object, 2);
+    if (this.hoveredObject && this.areObjectOrRelatedEqual(object, this.hoveredObject)) {
+      this.clearHoverMaterial(this.hoveredObject);
     }
   }
 
-  private clearSelectedMaterial(mesh: Mesh): void {
-    this.disableLayer(mesh, 2);
-    if (this.hoveredMesh && this.areMeshOrSiblingsEqual(mesh, this.hoveredMesh)) {
-      this.setHoverMaterial(this.hoveredMesh);
+  private clearSelectedMaterial(object: PolygonalObject3D): void {
+    this.disableLayer(object, 2);
+    if (this.hoveredObject && this.areObjectOrRelatedEqual(object, this.hoveredObject)) {
+      this.setHoverMaterial(this.hoveredObject);
     }
   }
 
-  private setHoverMaterial(mesh: Mesh): void {
-    if (this.selectedMesh && this.areMeshOrSiblingsEqual(mesh, this.selectedMesh)) {
+  private setHoverMaterial(object: PolygonalObject3D): void {
+    if (this.selectedObject && this.areObjectOrRelatedEqual(object, this.selectedObject)) {
       return;
     }
-    this.enableLayer(mesh, 1);
+    this.enableLayer(object, 1);
   }
 
-  private clearHoverMaterial(mesh: Mesh): void {
-    this.disableLayer(mesh, 1);
+  private clearHoverMaterial(object: PolygonalObject3D): void {
+    this.disableLayer(object, 1);
   }
 
-  private areMeshOrSiblingsEqual(a: Mesh, b: Mesh): boolean {
+  private areObjectOrRelatedEqual(a: PolygonalObject3D, b: PolygonalObject3D): boolean {
     if (a === b) {
       return true;
     }
 
-    const allA = [a, ...((a.userData as SelectableObject3DUserData)?.siblings ?? [])];
-    const allB = [b, ...((b.userData as SelectableObject3DUserData)?.siblings ?? [])];
+    const allA = [a, ...((a.userData as SelectableObject3DUserData)?.related ?? [])];
+    const allB = [b, ...((b.userData as SelectableObject3DUserData)?.related ?? [])];
 
     return allA.some(a => allB.some(b => b === a));
   }
 
-  private enableLayer(mesh: Mesh, channel: number): void {
-    mesh.layers.enable(channel);
+  private enableLayer(object: PolygonalObject3D, channel: number): void {
+    object.layers.enable(channel);
 
-    const userData = mesh.userData as SelectableObject3DUserData;
-    if (!Array.isArray(userData?.siblings)) {
+    const userData = object.userData as SelectableObject3DUserData;
+    if (!Array.isArray(userData?.related)) {
       return;
     }
 
-    for (const sibling of userData.siblings) {
+    for (const sibling of userData.related) {
       sibling.layers.enable(channel);
     }
   }
 
-  private disableLayer(mesh: Mesh, channel: number): void {
-    mesh.layers.disable(channel);
+  private disableLayer(object: PolygonalObject3D, channel: number): void {
+    object.layers.disable(channel);
 
-    const userData = mesh.userData as SelectableObject3DUserData;
-    if (!Array.isArray(userData?.siblings)) {
+    const userData = object.userData as SelectableObject3DUserData;
+    if (!Array.isArray(userData?.related)) {
       return;
     }
 
-    for (const sibling of userData.siblings) {
+    for (const sibling of userData.related) {
       sibling.layers.disable(channel);
     }
   }
