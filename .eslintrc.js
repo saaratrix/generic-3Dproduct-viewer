@@ -15,6 +15,7 @@ module.exports = {
     "arrow-spacing": ["error", { before: true, after: true }],
     "block-spacing": ["error", "always"],
     "comma-spacing": ["error", { after: true }],
+    "computed-property-spacing": ["error", "never"],
     "curly": ["error", "all"],
     "eqeqeq": ["error", "smart"],
     "function-paren-newline": ["error", "multiline-arguments"],

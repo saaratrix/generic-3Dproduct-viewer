@@ -9,7 +9,7 @@ describe("ViewerThreejsComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewerThreejsComponent ],
+      declarations: [ViewerThreejsComponent],
     }).compileComponents();
   }));
 

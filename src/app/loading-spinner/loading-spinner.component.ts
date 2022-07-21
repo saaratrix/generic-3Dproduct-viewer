@@ -33,7 +33,7 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.progressSubscription = this.productConfiguratorService.loadingProgress.subscribe(event => {
-      let loadingData: LoadingData = this.loadingsMap[ event.id ];
+      let loadingData: LoadingData = this.loadingsMap[event.id];
 
       if (!loadingData) {
         loadingData = {
@@ -41,7 +41,7 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
           total: event.total,
         };
 
-        this.loadingsMap[ event.id ] = loadingData;
+        this.loadingsMap[event.id] = loadingData;
         this.loadings.push(loadingData);
       } else {
         loadingData.loaded = event.loaded;

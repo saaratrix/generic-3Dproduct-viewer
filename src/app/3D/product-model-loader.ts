@@ -29,7 +29,7 @@ export class ProductModelLoader {
     const promise = new Promise<ModelLoadedEventData>((resolve) => {
 
       const fileParts: string[] = model.filename.split(".");
-      const fileExtension = fileParts[ fileParts.length - 1 ].toLowerCase();
+      const fileExtension = fileParts[fileParts.length - 1].toLowerCase();
 
       let promise: Promise<Object3D | undefined> | undefined;
       if (fileExtension === "obj") {
@@ -69,8 +69,8 @@ export class ProductModelLoader {
 
             const name: string = (o.material as Material).name;
 
-            if (materialCreator.materials[ name ]) {
-              o.material = materialCreator.materials[ name ];
+            if (materialCreator.materials[name]) {
+              o.material = materialCreator.materials[name];
             }
           });
 

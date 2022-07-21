@@ -1,19 +1,6 @@
 import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
 import type { Camera, Scene, WebGLRenderer } from "three";
-import {
-  AdditiveBlending,
-  Color,
-  DoubleSide,
-  MeshBasicMaterial,
-  NoBlending,
-  RepeatWrapping,
-  RGBAFormat,
-  ShaderMaterial,
-  Texture,
-  UniformsUtils,
-  Vector2,
-  WebGLRenderTarget,
-} from "three";
+import { AdditiveBlending, Color, DoubleSide, MeshBasicMaterial, NoBlending, RepeatWrapping, RGBAFormat, ShaderMaterial, Texture, UniformsUtils, Vector2, WebGLRenderTarget } from "three";
 import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
@@ -179,7 +166,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
     this.selectedTexture = this.createNewTexture();
 
-    this.outlineMaterial = this.createOutlineMaterial();
+    this.outlineMaterial = this.createOutlineMaterial(AnimatedTextureBlurOutlineOutputMode.Normal);
     this.initBlurRenderTargetsAndMaterials(resolution, renderTargetOptions);
 
     // copy material
@@ -330,7 +317,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
   setOutputMode(mode: AnimatedTextureBlurOutlineOutputMode): void {
     this.outlineMaterial.dispose();
-    this.outlineMaterial = this.createOutlineMaterial();
+    this.outlineMaterial = this.createOutlineMaterial(mode);
   }
 
   private initBlurRenderTargetsAndMaterials(resolution: Vector2, renderTargetOptions: WebGLRenderTargetOptions): void {
@@ -374,14 +361,14 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.renderOutline(renderer, readBuffer);
 
     if (maskActive) {
-      renderer.state.buffers.stencil.setTest( true );
+      renderer.state.buffers.stencil.setTest(true);
     }
 
     if (this.renderToScreen) {
       this.fsQuad.material = this.materialCopy;
       this.copyUniforms.tDiffuse.value = readBuffer.texture;
-      renderer.setRenderTarget( null );
-      this.fsQuad.render( renderer );
+      renderer.setRenderTarget(null);
+      this.fsQuad.render(renderer);
     }
   }
 
@@ -471,9 +458,9 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.fsQuad.render(renderer);
   }
 
-  private createOutlineMaterial(): ShaderMaterial {
+  private createOutlineMaterial(outputMode: AnimatedTextureBlurOutlineOutputMode): ShaderMaterial {
     return createOutlineMaterial({
-      outputMode: AnimatedTextureBlurOutlineOutputMode.Normal,
+      outputMode,
       hoverTexture: (this.hoverTexture as WebGLRenderTarget)?.texture || this.hoverTexture,
       selectedTexture: (this.selectedTexture as WebGLRenderTarget)?.texture || this.selectedTexture,
       startU: this.startU,

@@ -22,7 +22,7 @@ export class EnvironmentMapLoader {
     const promise: Promise<WebGLRenderTarget> = new Promise((resolve) => {
       const renderer = this.productConfigurator.renderer;
 
-      new EXRLoader().load( file, ( texture ) => {
+      new EXRLoader().load(file, (texture) => {
         texture.minFilter = NearestFilter;
         texture.encoding = LinearEncoding;
 
