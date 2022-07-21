@@ -53,7 +53,7 @@ export class ProductModelLoader {
   /**
    * Loads the material based on the MaterialInfo input.
    */
-  public async loadMaterial(object: Object3D, materialInfo: MaterialInfo): Promise<void> {
+  public async loadMaterial(object: Group, materialInfo: MaterialInfo): Promise<void> {
     const promise = new Promise<void>((resolve) => {
       if (materialInfo.mtl) {
         const mtlLoader = new MTLLoader();
@@ -62,20 +62,20 @@ export class ProductModelLoader {
           // Load the materials
           materialCreator.preload();
 
-          object.children.forEach((child) => {
-            if (!isPolygonalObject3D(child)) {
+          object.traverse((o) => {
+            if (!isPolygonalObject3D(o)) {
               return;
             }
 
-            const name: string = (child.material as Material).name;
+            const name: string = (o.material as Material).name;
 
             if (materialCreator.materials[ name ]) {
-              child.material = materialCreator.materials[ name ];
+              o.material = materialCreator.materials[ name ];
             }
           });
 
           if (materialInfo.renderBackface) {
-            this.trySetBackfaceRendering([ object ]);
+            this.trySetBackfaceRendering([object]);
           }
 
           resolve();
@@ -101,7 +101,7 @@ export class ProductModelLoader {
         });
 
         if (materialInfo.renderBackface) {
-          this.trySetBackfaceRendering([ object ]);
+          this.trySetBackfaceRendering([object]);
         }
 
         resolve();
@@ -120,9 +120,9 @@ export class ProductModelLoader {
     const promise: Promise<Object3D> = new Promise((resolve) => {
       const objLoader = new OBJLoader();
       // TODO: Add error handling.
-      objLoader.load( file, async (group: Group) => {
+      objLoader.load(file, async (group: Group) => {
         await this.loadMaterial(group, materialInfo);
-        this.setReceiveShadows([ group ] );
+        this.setReceiveShadows([group]);
         resolve(group);
       }, getOnProgressCallback(this.productConfiguratorService));
     });
@@ -138,7 +138,7 @@ export class ProductModelLoader {
 
       const environmentPromise = this.environmentLoader.loadEnvironment(environmentMapUrl);
       // TODO: Add error handling.
-      loader.load( file, async (gltfObject: GLTF) => {
+      loader.load(file, async (gltfObject: GLTF) => {
         // Set the environment texture
         environmentPromise.then((texture: WebGLRenderTarget) => {
           const rootObject = new Group();
@@ -172,7 +172,7 @@ export class ProductModelLoader {
     }
   }
 
-  private trySetEnvironmentTexture( children: Object3D[], texture: WebGLRenderTarget): void {
+  private trySetEnvironmentTexture(children: Object3D[], texture: WebGLRenderTarget): void {
     for (const child of children) {
       if (!isPolygonalObject3D(child)) {
         continue;
@@ -191,11 +191,9 @@ export class ProductModelLoader {
 
   private trySetBackfaceRendering(children: Object3D[]): void {
     for (const child of children) {
-      if (!isPolygonalObject3D(child)) {
-        continue;
+      if (isPolygonalObject3D(child)) {
+        (child.material as Material).side = DoubleSide;
       }
-
-      (child.material as Material).side = DoubleSide;
 
       if (child.children) {
         this.trySetBackfaceRendering(child.children);
