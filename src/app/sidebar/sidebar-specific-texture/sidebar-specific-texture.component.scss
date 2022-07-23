@@ -1,5 +1,5 @@
-@import "./src/styles/vars";
-@import "./src/styles/_mixins.scss";
+@use "./src/styles/vars";
+@use "./src/styles/mixins";
 
 .specific-color-values {
   padding: 0;
@@ -12,8 +12,8 @@
   max-width: 100%;
   padding: 0;
   cursor: pointer;
-  width: $input-texture-size;
-  height: $input-texture-size;
+  width: vars.$input-texture-size;
+  height: vars.$input-texture-size;
 }
 
 .item-content {
@@ -23,8 +23,8 @@
 }
 
 .active {
-  border: 1px solid $active-color;
+  border: 1px solid vars.$active-color;
 }
 
-@include inline-spinner-size($inline-spinner-default-size * 2);
-@include remove-input-color-border();
+@include mixins.inline-spinner-size(vars.$inline-spinner-default-size * 2);
+@include mixins.remove-input-color-border();

@@ -1,10 +1,10 @@
-@import "./src/styles/vars";
+@use "./src/styles/vars";
 
 $size: 64px;
-$smallSize: 48px;
+$small-size: 48px;
 
 .active {
-  border: 1px solid $active-color;
+  border: 1px solid vars.$active-color;
 }
 
 .product-item {
@@ -19,11 +19,11 @@ img {
   user-select: none;
 
   @media screen and (max-width: 480px) {
-    width: $smallSize;
-    height: $smallSize;
+    width: $small-size;
+    height: $small-size;
   }
 
   &:hover:not(.active) {
-    border: 1px solid $active-hover-color;
+    border: 1px solid vars.$active-hover-color;
   }
 }
