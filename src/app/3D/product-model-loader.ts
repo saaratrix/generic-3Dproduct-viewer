@@ -2,15 +2,15 @@ import type { Material, MeshStandardMaterial, Object3D, WebGLRenderTarget } from
 import { DoubleSide, Group, MeshPhongMaterial, TextureLoader } from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-import type { MaterialInfo } from "./models/MaterialInfo";
+import type { MaterialInfo } from "./models/material-info";
 import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import type { EnvironmentMapLoader } from "./EnvironmentMapLoader";
+import type { EnvironmentMapLoader } from "./environment-map-loader";
 import type { ProductConfiguratorService } from "../product-configurator.service";
-import { getOnProgressCallback } from "./getOnProgressCallback";
-import type { Model3D } from "./models/Model3D";
-import type { ModelLoadedEventData } from "./models/event-data/ModelLoadedEventData";
-import { isPolygonalObject3D } from "./3rd-party/three/is-threejs-type";
+import { getOnProgressCallback } from "./get-on-progress-callback";
+import type { Model3D } from "./models/model-3D";
+import type { ModelLoadedEventData } from "./models/event-data/model-loaded-event-data";
+import { isPolygonalObject3D } from "./3rd-party/three/types/is-three-js-custom-type";
 
 export class ProductModelLoader {
 

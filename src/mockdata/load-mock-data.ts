@@ -1,6 +1,6 @@
 import type { ProductConfiguratorService } from "../app/product-configurator.service";
-import { createFlowerPot, createRose, createWuffels } from "./UnrealisticItems";
-import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "./RealisticItems";
+import { createFlowerPot, createRose, createWuffels } from "./unrealistic-items";
+import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from "./realistic-items";
 
 export function loadMockData(productConfiguratorService: ProductConfiguratorService): void {
   let id = 0;
