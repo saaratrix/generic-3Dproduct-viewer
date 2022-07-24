@@ -4,7 +4,7 @@ import type { AnimationHandle } from "../animations/animation-handle";
 import { RGBAFormat, ShaderMaterial, Texture, Vector2, WebGLRenderTarget } from "three";
 import type { WebGLRenderer } from "three";
 import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass";
-import type { AnimatedTextureBlurOutlinePass } from "../AnimatedTextureBlurOutlinePass";
+import type { AnimatedTextureBlurOutlinePass } from "../animated-texture-blur-outline-pass";
 
 // This file was just for fun playing around with different outline effects and with meta balls :)
 

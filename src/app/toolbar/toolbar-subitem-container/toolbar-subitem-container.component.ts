@@ -1,7 +1,7 @@
 import type { ElementRef, AfterViewInit, OnChanges, SimpleChanges } from "@angular/core";
 import { Component, HostListener, Input, ViewChild } from "@angular/core";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import type { ProductItem } from "../../3D/models/product-item/ProductItem";
+import type { ProductItem } from "../../3D/models/product-item/product-item";
 import { throttle } from "../../utility/throttle-decorator";
 
 @Component({

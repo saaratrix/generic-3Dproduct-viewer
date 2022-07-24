@@ -1,13 +1,13 @@
 import { NgZone, OnInit } from "@angular/core";
 import { Component, Input } from "@angular/core";
 import type { Texture } from "three";
-import type { SelectedSpecificTexture } from "../../3D/models/selectable-object-3ds-options/SelectedSpecificTexture";
-import { MaterialAnimationType } from "../../3D/material-animators/MaterialAnimationType";
+import type { SelectedSpecificTexture } from "../../3D/models/selectable-object-3ds-options/selected-specific-texture";
+import { MaterialAnimationType } from "../../3D/material-animators/material-animation-type";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import type { SelectableObject3DUserData } from "../../3D/models/selectable-object-3ds-options/SelectableObject3DUserData";
-import { getMaterialsFromObject, getMaterialsFromObjects } from "../../3D/utility/MaterialUtility";
-import type { SelectedSpecificTexturesValue } from "../../3D/models/selectable-object-3ds-options/SelectedSpecificTexturesValue";
-import type { PolygonalObject3D } from "../../3D/3rd-party/three/polygonal-object-3D";
+import type { SelectableObject3DUserData } from "../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
+import { getMaterialsFromObject, getMaterialsFromObjects } from "../../3D/utility/material-utility";
+import type { SelectedSpecificTexturesValue } from "../../3D/models/selectable-object-3ds-options/selected-specific-textures-value";
+import type { PolygonalObject3D } from "../../3D/3rd-party/three/types/polygonal-object-3D";
 
 @Component({
   selector: "sidebar-specific-texture",

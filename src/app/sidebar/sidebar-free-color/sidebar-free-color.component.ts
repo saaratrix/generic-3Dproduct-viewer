@@ -2,11 +2,11 @@ import type { OnInit } from "@angular/core";
 import { Component, Input } from "@angular/core";
 import { Color } from "three";
 import { throttle } from "../../utility/throttle-decorator";
-import { getMaterialsFromObject, setMaterialParameters } from "../../3D/utility/MaterialUtility";
+import { getMaterialsFromObject, setMaterialParameters } from "../../3D/utility/material-utility";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import { clearEvents } from "../../3D/utility/ProductItemUtility";
-import { ActiveProductItemEventType } from "../../3D/models/product-item/ActiveProductItemEventType";
-import type { PolygonalObject3D } from "../../3D/3rd-party/three/polygonal-object-3D";
+import { clearEvents } from "../../3D/utility/product-item-event-utility";
+import { ActiveProductItemEventType } from "../../3D/models/product-item/active-product-item-event-type";
+import type { PolygonalObject3D } from "../../3D/3rd-party/three/types/polygonal-object-3D";
 
 @Component({
   selector: "sidebar-free-color",

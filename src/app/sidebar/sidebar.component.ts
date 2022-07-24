@@ -5,9 +5,9 @@ import type { AnimationEvent } from "@angular/animations";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ProductConfiguratorService } from "../product-configurator.service";
 import type { Subscription } from "rxjs";
-import { SelectedOptionsType } from "../3D/models/selectable-object-3ds-options/SelectedOptionsType";
-import type { SelectableObject3DUserData } from "../3D/models/selectable-object-3ds-options/SelectableObject3DUserData";
-import type { PolygonalObject3D } from "../3D/3rd-party/three/polygonal-object-3D";
+import { SelectedOptionsType } from "../3D/models/selectable-object-3ds-options/selected-options-type";
+import type { SelectableObject3DUserData } from "../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
+import type { PolygonalObject3D } from "../3D/3rd-party/three/types/polygonal-object-3D";
 
 @Component({
   selector: "app-sidebar",

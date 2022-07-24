@@ -1,5 +1,5 @@
-@import "./src/styles/vars";
-@import "./src/styles/mixins";
+@use "./src/styles/vars";
+@use "./src/styles/mixins";
 
 .specific-color-values {
   padding: 0;
@@ -12,8 +12,8 @@
   max-width: 100%;
   padding: 0;
   cursor: pointer;
-  width: $input-color-size;
-  height: $input-color-size;
+  width: vars.$input-color-size;
+  height: vars.$input-color-size;
 }
 
 .item-content {
@@ -22,7 +22,7 @@
 }
 
 .active {
-  border: 1px solid $active-color;
+  border: 1px solid vars.$active-color;
 }
 
-@include remove-input-color-border();
+@include mixins.remove-input-color-border();

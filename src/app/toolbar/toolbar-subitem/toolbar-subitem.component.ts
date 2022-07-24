@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
-import type { SubProductItem } from "../../3D/models/product-item/SubProductItem";
+import type { SubProductItem } from "../../3D/models/product-item/sub-product-item";
 import { ProductConfiguratorService } from "../../product-configurator.service";
-import type { ProductItem } from "../../3D/models/product-item/ProductItem";
+import type { ProductItem } from "../../3D/models/product-item/product-item";
 
 @Component({
   selector: "app-toolbar-subitem",
