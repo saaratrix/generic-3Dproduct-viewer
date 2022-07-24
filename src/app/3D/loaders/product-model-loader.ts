@@ -60,14 +60,12 @@ export class ProductModelLoader {
 
   public trySetEnvironmentTexture(children: Object3D[], texture: WebGLRenderTarget): void {
     for (const child of children) {
-      if (!isPolygonalObject3D(child)) {
-        continue;
+      if (isPolygonalObject3D(child)) {
+        const material = child.material as MeshStandardMaterial;
+        material.envMap = texture.texture;
+        material.envMapIntensity = 0.0625;
+        material.needsUpdate = true;
       }
-
-      const material = child.material as MeshStandardMaterial;
-      material.envMap = texture.texture;
-      material.envMapIntensity = 0.0625;
-      material.needsUpdate = true;
 
       if (child.children) {
         this.trySetEnvironmentTexture(child.children, texture);
