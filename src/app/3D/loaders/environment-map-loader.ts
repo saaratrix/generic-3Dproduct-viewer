@@ -1,8 +1,8 @@
 import type { WebGLRenderTarget } from "three";
 import { LinearEncoding, NearestFilter } from "three";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
-import type { ProductConfigurator } from "./product-configurator";
-import { getOnProgressCallback } from "./get-on-progress-callback";
+import type { ProductConfigurator } from "../product-configurator";
+import { getOnProgressCallback } from "../get-on-progress-callback";
 import { PMREMGenerator } from "three/src/extras/PMREMGenerator";
 
 export class EnvironmentMapLoader {
