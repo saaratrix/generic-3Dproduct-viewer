@@ -1,10 +1,11 @@
 import type { ProductConfiguratorService } from "../product-configurator.service";
-import type { Intersection, Mesh } from "three";
+import type { Intersection } from "three";
 import { Vector2 } from "three";
 import { throttle } from "../utility/throttle";
-import type { SelectedProductMeshIntersector } from "./SelectedProductMeshIntersector";
+import type { SelectedProductObjectIntersector } from "./SelectedProductObjectIntersector";
 import type { Subject } from "rxjs";
-import { isMesh } from "./3rd-party/three/is-threejs-type";
+import { isPolygonalObject3D } from "./3rd-party/three/is-threejs-type";
+import type { PolygonalObject3D } from "./3rd-party/three/polygonal-object-3D";
 
 interface PointerCoordinates {
   x: number;
@@ -17,16 +18,16 @@ export class PointerEventHandler {
 
   private pointerdownPosition: PointerCoordinates | undefined = undefined;
 
-  private currentHoveredMesh: Mesh | undefined;
-  private currentSelectedMesh: Mesh | undefined;
+  private currentHoveredObject: PolygonalObject3D | undefined;
+  private currentSelectedObject: PolygonalObject3D | undefined;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
-    private selectedProductMeshIntersector: SelectedProductMeshIntersector,
+    private selectedProductObjectIntersector: SelectedProductObjectIntersector,
   ) {
     this.productConfiguratorService.selectedProductChanged.subscribe(() => {
-      this.tryDeselectCurrentHoveredMesh();
-      this.tryDeselectCurrentMesh();
+      this.tryDeselectCurrentHoveredObject();
+      this.tryDeselectCurrentObject();
     });
   }
 
@@ -72,11 +73,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshPointerEnter, "currentHoveredMesh", this.tryDeselectCurrentHoveredMesh);
+    this.trySetObjectAndEmitEvents(event, this.productConfiguratorService.object3DPointerEnter, "currentHoveredObject", this.tryDeselectCurrentHoveredObject);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
-    this.tryDeselectCurrentHoveredMesh();
+    this.tryDeselectCurrentHoveredObject();
     this.pointerdownPosition = undefined;
   };
 
@@ -86,11 +87,11 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetMeshAndEmitEvents(event, this.productConfiguratorService.meshSelected, "currentSelectedMesh", this.tryDeselectCurrentMesh);
+    this.trySetObjectAndEmitEvents(event, this.productConfiguratorService.object3DSelected, "currentSelectedObject", this.tryDeselectCurrentObject);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
-  private trySetMeshAndEmitEvents(pointerEvent: PointerEvent, subject: Subject<Mesh>, selectedKey: "currentSelectedMesh" | "currentHoveredMesh", deselectMethod: () => void): void {
+  private trySetObjectAndEmitEvents(pointerEvent: PointerEvent, subject: Subject<PolygonalObject3D>, selectedKey: "currentSelectedObject" | "currentHoveredObject", deselectMethod: () => void): void {
     const intersections = this.getIntersections(pointerEvent);
 
     if (intersections.length === 0) {
@@ -111,7 +112,7 @@ export class PointerEventHandler {
       }
     }
 
-    if (!isMesh(selectedObject)) {
+    if (!isPolygonalObject3D(selectedObject)) {
       return;
     }
 
@@ -127,24 +128,24 @@ export class PointerEventHandler {
 
   private getIntersections(event: PointerEvent | MouseEvent): Intersection[] {
     this.setPointerPosition(event);
-    return this.selectedProductMeshIntersector.getIntersections(this.pointerPosition);
+    return this.selectedProductObjectIntersector.getIntersections(this.pointerPosition);
   }
 
-  private tryDeselectCurrentHoveredMesh(): void {
-    if (!this.currentHoveredMesh) {
+  private tryDeselectCurrentHoveredObject(): void {
+    if (!this.currentHoveredObject) {
       return;
     }
 
-    this.productConfiguratorService.meshPointerLeave.next(this.currentHoveredMesh);
-    this.currentHoveredMesh = undefined;
+    this.productConfiguratorService.object3DPointerLeave.next(this.currentHoveredObject);
+    this.currentHoveredObject = undefined;
   }
 
-  private tryDeselectCurrentMesh(): void {
-    if (!this.currentSelectedMesh) {
+  private tryDeselectCurrentObject(): void {
+    if (!this.currentSelectedObject) {
       return;
     }
 
-    this.productConfiguratorService.meshDeselected.next(this.currentSelectedMesh);
-    this.currentSelectedMesh = undefined;
+    this.productConfiguratorService.object3DDeselected.next(this.currentSelectedObject);
+    this.currentSelectedObject = undefined;
   }
 }

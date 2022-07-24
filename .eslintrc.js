@@ -11,9 +11,11 @@ module.exports = {
   rules: {
     // Nuu-linter rules!
     // ESLint rules: https://eslint.org/docs/rules/
+    "array-bracket-spacing": ["error", "never"],
     "arrow-spacing": ["error", { before: true, after: true }],
     "block-spacing": ["error", "always"],
     "comma-spacing": ["error", { after: true }],
+    "computed-property-spacing": ["error", "never"],
     "curly": ["error", "all"],
     "eqeqeq": ["error", "smart"],
     "function-paren-newline": ["error", "multiline-arguments"],
@@ -30,11 +32,11 @@ module.exports = {
     "object-property-newline": ["error",  { allowAllPropertiesOnSameLine: true }],
     "quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
     "space-before-blocks": ["error", "always"],
+    "space-in-parens": ["error", "never"],
     // Typescript ESLint rules: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin/docs/rules
     // "@typescript-eslint/"
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
-    "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
     "@typescript-eslint/explicit-function-return-type": ["error"],
     "@typescript-eslint/explicit-module-boundary-types": ["error"],
     "@typescript-eslint/member-delimiter-style": "off",

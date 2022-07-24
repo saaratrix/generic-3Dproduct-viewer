@@ -1,19 +1,6 @@
 import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
 import type { Camera, Scene, WebGLRenderer } from "three";
-import {
-  AdditiveBlending,
-  Color,
-  DoubleSide,
-  MeshBasicMaterial,
-  NoBlending,
-  RepeatWrapping,
-  RGBAFormat,
-  ShaderMaterial,
-  Texture,
-  UniformsUtils,
-  Vector2,
-  WebGLRenderTarget,
-} from "three";
+import { AdditiveBlending, Color, DoubleSide, MeshBasicMaterial, NoBlending, RepeatWrapping, RGBAFormat, ShaderMaterial, Texture, UniformsUtils, Vector2, WebGLRenderTarget } from "three";
 import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { createSeperableBlurMaterial } from "./CreateBlurMaterial";
@@ -31,7 +18,7 @@ type TexturePropertyKey = "hoverTexture" | "selectedTexture";
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
 /**
- * This is an outline effect pass that creates an external outline by blurring the rendered mesh and comparing it to the sharp render.
+ * This is an outline effect pass that creates an external outline by blurring the rendered object3D and comparing it to the sharp render.
  * It has different hover and selected textures for the colour and can tile the texture and animates the texture UV positions.
  *
  * As it uses textures the input textures can be single colour, gradients, animated gradients etc.
@@ -39,11 +26,11 @@ type TexturePropertyKey = "hoverTexture" | "selectedTexture";
  */
 export class AnimatedTextureBlurOutlinePass extends Pass {
   /**
-   * The hover mask material that renders the hovered meshes into a single colour.
+   * The hover mask material that renders the hovered object 3Ds into a single colour.
    */
   private readonly hoverMaskMaterial: MeshBasicMaterial;
   /**
-   * The selected mask material that renders the selected meshes into a single colour.
+   * The selected mask material that renders the selected object 3Ds into a single colour.
    */
   private readonly selectedMaskMaterial: MeshBasicMaterial;
 
@@ -149,7 +136,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     super();
 
     // We use additive blending and depthWrite = false to sum the outlines together.
-    // Otherwise, the outlines would happen where the meshes intersect instead of outlining each mesh individually.
+    // Otherwise, the outlines would happen where the object 3Ds intersect instead of outlining each object3D individually.
     this.hoverMaskMaterial = new MeshBasicMaterial({
       color: 0xff0000,
       side: DoubleSide,
@@ -179,7 +166,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
     this.selectedTexture = this.createNewTexture();
 
-    this.outlineMaterial = this.createOutlineMaterial();
+    this.outlineMaterial = this.createOutlineMaterial(AnimatedTextureBlurOutlineOutputMode.Normal);
     this.initBlurRenderTargetsAndMaterials(resolution, renderTargetOptions);
 
     // copy material
@@ -330,7 +317,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
   setOutputMode(mode: AnimatedTextureBlurOutlineOutputMode): void {
     this.outlineMaterial.dispose();
-    this.outlineMaterial = this.createOutlineMaterial();
+    this.outlineMaterial = this.createOutlineMaterial(mode);
   }
 
   private initBlurRenderTargetsAndMaterials(resolution: Vector2, renderTargetOptions: WebGLRenderTargetOptions): void {
@@ -374,14 +361,14 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.renderOutline(renderer, readBuffer);
 
     if (maskActive) {
-      renderer.state.buffers.stencil.setTest( true );
+      renderer.state.buffers.stencil.setTest(true);
     }
 
     if (this.renderToScreen) {
       this.fsQuad.material = this.materialCopy;
       this.copyUniforms.tDiffuse.value = readBuffer.texture;
-      renderer.setRenderTarget( null );
-      this.fsQuad.render( renderer );
+      renderer.setRenderTarget(null);
+      this.fsQuad.render(renderer);
     }
   }
 
@@ -419,7 +406,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
   }
 
   /**
-   * Render the mask texture which is two separate colours depending if the mesh is hovered or selected.
+   * Render the mask texture which is two separate colours depending on if the object is hovered or selected.
    */
   private renderMaskTexture(renderer: WebGLRenderer): void {
     renderer.setRenderTarget(this.maskRenderTarget);
@@ -446,8 +433,8 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.blurMaterial.uniforms.direction.value = this.blurHorizontalDirection;
     this.fsQuad.render(renderer);
 
-    // Rendering a second time in a vertical direction fixes some issues with the lines for pointy meshes in a vertical direction.
-    // For example otherwise the outline doesn't fully cover the mesh.
+    // Rendering a second time in a vertical direction fixes some issues with the lines for pointy objects in a vertical direction.
+    // For example otherwise the outline doesn't fully cover the object.
     renderer.setRenderTarget(this.blurVerticalRenderTarget);
     renderer.clear();
     this.blurMaterial.uniforms.colorTexture.value = this.blurHorizontalRenderTarget.texture;
@@ -471,9 +458,9 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.fsQuad.render(renderer);
   }
 
-  private createOutlineMaterial(): ShaderMaterial {
+  private createOutlineMaterial(outputMode: AnimatedTextureBlurOutlineOutputMode): ShaderMaterial {
     return createOutlineMaterial({
-      outputMode: AnimatedTextureBlurOutlineOutputMode.Normal,
+      outputMode,
       hoverTexture: (this.hoverTexture as WebGLRenderTarget)?.texture || this.hoverTexture,
       selectedTexture: (this.selectedTexture as WebGLRenderTarget)?.texture || this.selectedTexture,
       startU: this.startU,

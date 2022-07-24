@@ -5,15 +5,15 @@ import { ShaderMaterial, Vector2 } from "three";
 export function createSeperableBlurMaterial(maxRadius: number): ShaderMaterial {
   const fragmentShader = createSeparableBlurFragmentShader(maxRadius);
 
-  const material = new ShaderMaterial( {
+  const material = new ShaderMaterial({
     defines: {
       MAX_RADIUS: maxRadius,
     },
 
     uniforms: {
       colorTexture: { value: null },
-      texSize: { value: new Vector2( 0.5, 0.5 ) },
-      direction: { value: new Vector2( 0.5, 0.5 ) },
+      texSize: { value: new Vector2(0.5, 0.5) },
+      direction: { value: new Vector2(0.5, 0.5) },
       kernelRadius: { value: 1.0 },
     },
 

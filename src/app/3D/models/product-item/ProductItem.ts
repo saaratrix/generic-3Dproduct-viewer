@@ -1,8 +1,9 @@
 import type { SubProductItem } from "./SubProductItem";
-import type { Mesh, Object3D } from "three";
+import type { Object3D } from "three";
 import type { Model3D } from "../Model3D";
-import type { SelectableMeshesOption } from "../selectable-meshes-options/SelectableMeshesOption";
+import type { SelectableObject3DsOption } from "../selectable-object-3ds-options/SelectableObject3DsOption";
 import type { ActiveProductItemEvent } from "./ActiveProductItemEvent";
+import type { PolygonalObject3D } from "../../3rd-party/three/polygonal-object-3D";
 
 export interface ProductItem {
   id: number;
@@ -16,13 +17,12 @@ export interface ProductItem {
   tooltip: string;
   subItems: SubProductItem[];
   selectedSubItem?: SubProductItem | number | null;
-  selectableMeshesOptions?: SelectableMeshesOption[];
+  selectableObject3DsOptions?: SelectableObject3DsOption[];
 
   // Variables generated at runtime:
-
   activeEvents: ActiveProductItemEvent[];
   // The root object3D
   object3D?: Object3D;
-  // The cached intersections from parsing selectableMeshesOptions so we only have to do it once.
-  selectableMeshIntersections?: Mesh[];
+  // The cached intersections from parsing selectableObjectsOptions, so we only have to do it once.
+  selectableObject3DIntersections?: PolygonalObject3D[];
 }

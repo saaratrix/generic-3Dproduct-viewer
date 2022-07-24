@@ -1,12 +1,13 @@
-import type { ChangeDetectorRef, NgZone, OnDestroy, OnInit } from "@angular/core";
+import type { OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, NgZone } from "@angular/core";
 import { Component } from "@angular/core";
 import type { AnimationEvent } from "@angular/animations";
 import { animate, state, style, transition, trigger } from "@angular/animations";
-import type { ProductConfiguratorService } from "../product-configurator.service";
+import { ProductConfiguratorService } from "../product-configurator.service";
 import type { Subscription } from "rxjs";
-import { SelectedOptionsType } from "../3D/models/selectable-meshes-options/SelectedOptionsType";
-import type { SelectableObject3DUserData } from "../3D/models/selectable-meshes-options/SelectableObject3DUserData";
-import type { Mesh } from "three";
+import { SelectedOptionsType } from "../3D/models/selectable-object-3ds-options/SelectedOptionsType";
+import type { SelectableObject3DUserData } from "../3D/models/selectable-object-3ds-options/SelectableObject3DUserData";
+import type { PolygonalObject3D } from "../3D/3rd-party/three/polygonal-object-3D";
 
 @Component({
   selector: "app-sidebar",
@@ -31,7 +32,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public isOpened: boolean = false;
   public isContentVisible: boolean = this.isOpened;
   public type: SelectedOptionsType = SelectedOptionsType.None;
-  public activeMesh: Mesh | undefined;
+  public activeObject3D: PolygonalObject3D | undefined;
 
   private subscriptions: Subscription[] = [];
 
@@ -42,21 +43,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // TODO: Performance Improvement - Currently it triggers 2 animations which triggers detectChanges so I think we ideally should have Mesh_SelectedNew, Mesh_SelectedChanged so we don't have to trigger both states.
+    // TODO: Performance Improvement - Currently it triggers 2 animations which triggers detectChanges so I think we ideally should have Object3DSelectedNew, Object3DSelectedChanged so we don't have to trigger both states.
     this.subscriptions.push(
-      this.productConfiguratorService.meshDeselected.subscribe(() => {
+      this.productConfiguratorService.object3DDeselected.subscribe(() => {
         this.zone.run(() => {
           this.isOpened = false;
-          this.activeMesh = undefined;
+          this.activeObject3D = undefined;
           this.type = SelectedOptionsType.None;
         });
       }),
-      this.productConfiguratorService.meshSelected.subscribe(mesh => {
+      this.productConfiguratorService.object3DSelected.subscribe(object => {
         this.zone.run(() => {
           this.isOpened = true;
-          const userData = mesh.userData as SelectableObject3DUserData;
-          this.activeMesh = mesh;
-          this.type = userData.selectableMeshesOption.type;
+          const userData = object.userData as SelectableObject3DUserData;
+          this.activeObject3D = object;
+          this.type = userData.selectableObjectsOption.type;
         });
       }),
     );

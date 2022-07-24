@@ -1,6 +1,6 @@
 import type { ProductConfigurator } from "./ProductConfigurator";
 import type { ProductItem } from "./models/product-item/ProductItem";
-import { MeshLoader } from "./MeshLoader";
+import { ProductModelLoader } from "./product-model-loader";
 import type { ProductConfiguratorService } from "../product-configurator.service";
 import { Box3, Object3D, Vector3 } from "three";
 import { EnvironmentMapLoader } from "./EnvironmentMapLoader";
@@ -37,7 +37,7 @@ export class ProductChanger {
     }
 
     this.productConfiguratorService.selectedProduct = product;
-    const meshLoader = new MeshLoader(this.productConfiguratorService, this.environmentMapLoader);
+    const modelLoader = new ProductModelLoader(this.productConfiguratorService, this.environmentMapLoader);
 
     let obj: Object3D | undefined = product.object3D;
     if (!obj) {
@@ -47,7 +47,7 @@ export class ProductChanger {
       const promises: Promise<ModelLoadedEventData>[] = [];
 
       for (const model of product.models) {
-        promises.push(meshLoader.loadMesh(model));
+        promises.push(modelLoader.loadModel(model));
       }
 
       const loadedModels: ModelLoadedEventData[] = await Promise.all(promises);
@@ -57,7 +57,7 @@ export class ProductChanger {
           continue;
         }
 
-        this.setMeshTransform(loadedModel.object, loadedModel.model);
+        this.setObject3DTransform(loadedModel.object, loadedModel.model);
         obj.attach(loadedModel.object);
       }
       // Finally set the whole object at origin.
@@ -89,7 +89,7 @@ export class ProductChanger {
   /**
    * Set position, rotation and scale for the object.
    */
-  public setMeshTransform(object: Object3D, model: Model3D): void {
+  public setObject3DTransform(object: Object3D, model: Model3D): void {
     if (model.position) {
       object.position.add(model.position);
     }

@@ -1,28 +1,28 @@
 import type { ProductItem } from "../app/3D/models/product-item/ProductItem";
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./Models";
 import { Euler, Vector3 } from "three";
-import { SelectedOptionsType } from "../app/3D/models/selectable-meshes-options/SelectedOptionsType";
+import { SelectedOptionsType } from "../app/3D/models/selectable-object-3ds-options/SelectedOptionsType";
 import { MaterialAnimationType } from "../app/3D/material-animators/MaterialAnimationType";
-import type { SelectedSpecificTexturesValue } from "../app/3D/models/selectable-meshes-options/SelectedSpecificTexturesValue";
+import type { SelectedSpecificTexturesValue } from "../app/3D/models/selectable-object-3ds-options/SelectedSpecificTexturesValue";
 
 export function createFlowerPot(id: number): ProductItem {
   return {
     id,
     name: "flowerpot",
     thumbnail: "assets/models/thumbnail_pot.png",
-    models: [ getFlowerPotModel() ],
+    models: [getFlowerPotModel()],
     hasFloor: false,
     useGammaSpace: false,
     tooltip: "A very good looking flower pot.",
     subItems: [],
-    selectableMeshesOptions: [
+    selectableObject3DsOptions: [
       {
-        includedMeshes: ["Cylinder.002_Cylinder.006_M_flower"],
+        includedObjects: ["Cylinder.002_Cylinder.006_M_flower"],
         options: {
           type: SelectedOptionsType.FreeColor,
         },
       }, {
-        includedMeshes: ["Cylinder.002_Cylinder.006_M_pot"],
+        includedObjects: ["Cylinder.002_Cylinder.006_M_pot"],
         options: {
           type: SelectedOptionsType.SpecificColors,
           value: {
@@ -72,13 +72,13 @@ export function createRose(id: number): ProductItem {
     id,
     name: "roses",
     thumbnail: "assets/models/thumbnail_rose.png",
-    models: [ rose1, rose2, centerRose, rose4, rose5 ],
+    models: [rose1, rose2, centerRose, rose4, rose5],
     hasFloor: false,
     useGammaSpace: false,
     tooltip: "A special gift a long time ago.",
     subItems: [],
-    selectableMeshesOptions: [{
-      noSiblings: true,
+    selectableObject3DsOptions: [{
+      noRelatedObjects: true,
       options: {
         type: SelectedOptionsType.SpecificTextures,
         value: selectedOptionsValue,
@@ -94,12 +94,12 @@ export function createWuffels(id: number): ProductItem {
     id,
     name: "Wuffels",
     thumbnail: "assets/models/thumbnail_wuffels.png",
-    models: [ getWuffelsModel() ],
+    models: [getWuffelsModel()],
     hasFloor: true,
     useGammaSpace: false,
     tooltip: "Wuffels! Wuff!",
     subItems: [],
-    selectableMeshesOptions: [],
+    selectableObject3DsOptions: [],
 
     activeEvents: [],
   };
