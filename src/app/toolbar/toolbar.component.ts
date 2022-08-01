@@ -4,7 +4,6 @@ import { ProductConfiguratorService } from "../product-configurator.service";
 import type { Subscription } from "rxjs";
 import type { ProductItem } from "../3D/models/product-item/product-item";
 
-
 @Component({
   selector: "app-toolbar",
   templateUrl: "./toolbar.component.html",

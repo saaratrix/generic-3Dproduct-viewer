@@ -1,3 +1,5 @@
+@use "../../styles/variables/zindex";
+
 $width: 300px;
 
 :host {
@@ -17,7 +19,7 @@ $width: 300px;
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: zindex.$content;
 
   width: $width;
   padding: 0.5em;

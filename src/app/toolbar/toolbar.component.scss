@@ -1,5 +1,7 @@
+@use "../../styles/variables/zindex";
+
 .toolbar-container {
-  z-index: 2;
+  z-index: zindex.$above-canvas;;
   position: absolute;
   bottom: 5px;
 
