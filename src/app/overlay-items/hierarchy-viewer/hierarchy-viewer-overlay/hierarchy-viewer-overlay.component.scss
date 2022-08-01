@@ -1,0 +1,9 @@
+@use "~src/styles/variables/zindex";
+
+:host {
+  position: absolute;
+  top: 0;
+  // From the .icon class, 2.5 * 1.25 is 3.125!
+  left: 3.125em;
+  z-index: zindex.$above-canvas;
+}

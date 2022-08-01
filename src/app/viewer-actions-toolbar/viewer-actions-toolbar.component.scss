@@ -1,0 +1,11 @@
+@use "../../styles/variables/zindex";
+
+.tools-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: zindex.$above-canvas;
+
+  display: flex;
+  flex-direction: column;
+}
