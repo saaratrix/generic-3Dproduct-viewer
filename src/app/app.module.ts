@@ -51,5 +51,6 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
   ],
   providers: [],
   bootstrap: [AppComponent],
+  exports: [],
 })
 export class AppModule { }

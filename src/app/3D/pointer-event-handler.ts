@@ -6,6 +6,7 @@ import type { SelectedProductObjectIntersector } from "./selected-product-object
 import type { Subject } from "rxjs";
 import { isPolygonalObject3D } from "./3rd-party/three/types/is-three-js-custom-type";
 import type { PolygonalObject3D } from "./3rd-party/three/types/polygonal-object-3D";
+import { Subscription } from "rxjs";
 
 interface PointerCoordinates {
   x: number;
@@ -21,14 +22,27 @@ export class PointerEventHandler {
   private currentHoveredObject: PolygonalObject3D | undefined;
   private currentSelectedObject: PolygonalObject3D | undefined;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
     private selectedProductObjectIntersector: SelectedProductObjectIntersector,
   ) {
-    this.productConfiguratorService.selectedProductChanged.subscribe(() => {
-      this.tryDeselectCurrentHoveredObject();
-      this.tryDeselectCurrentObject();
-    });
+    this.subscriptions.push(
+      this.productConfiguratorService.selectedProductChanged.subscribe(() => {
+        this.tryDeselectCurrentHoveredObject();
+        this.tryDeselectCurrentObject();
+      }),
+      this.productConfiguratorService.object3DPointerEnter.subscribe(object => this.currentHoveredObject = object),
+      this.productConfiguratorService.object3DPointerLeave.subscribe(() => this.currentHoveredObject = undefined),
+      this.productConfiguratorService.object3DSelected.subscribe(object => this.currentSelectedObject = object),
+      this.productConfiguratorService.object3DDeselected.subscribe(() => this.currentSelectedObject = undefined),
+    );
+
+  }
+
+  public dispose(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   public initPointerEvents(element: HTMLElement): void {
@@ -82,7 +96,7 @@ export class PointerEventHandler {
   };
 
   private onClick(event: PointerEvent): void {
-    // button = 0 for left clicks on a mouse.
+    // button = 0 for left-clicks on a mouse.
     if (event.pointerType === "mouse" && event.button !== 0) {
       return;
     }
@@ -116,7 +130,6 @@ export class PointerEventHandler {
       return;
     }
 
-    this[selectedKey] = selectedObject;
     subject.next(selectedObject);
   }
 
@@ -137,7 +150,6 @@ export class PointerEventHandler {
     }
 
     this.productConfiguratorService.object3DPointerLeave.next(this.currentHoveredObject);
-    this.currentHoveredObject = undefined;
   }
 
   private tryDeselectCurrentObject(): void {
@@ -146,6 +158,5 @@ export class PointerEventHandler {
     }
 
     this.productConfiguratorService.object3DDeselected.next(this.currentSelectedObject);
-    this.currentSelectedObject = undefined;
   }
 }

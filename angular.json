@@ -29,6 +29,11 @@
             "styles": [
               "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles/variables"
+              ]
+            },
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,

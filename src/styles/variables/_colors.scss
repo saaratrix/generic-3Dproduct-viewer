@@ -1,0 +1,15 @@
+$background: hsl(0, 0%, 22%);
+$border: hsl(0, 0%, 50%);
+$text: snow;
+
+$active: hsl(180, 100%, 50%);
+$active-hover: hsl(180, 100%, 40%);
+
+@mixin color-variables {
+  --color-background: #{$background};
+  --color-border: #{$border};
+  --color-text: #{$text};
+
+  --color-active: #{$active};
+  --color-active-hover: #{$active-hover};
+}

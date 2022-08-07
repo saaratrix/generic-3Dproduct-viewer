@@ -38,6 +38,10 @@ export class OverlayService implements OnDestroy {
     });
   }
 
+  getOverlayItem(item: OverlayItem): ComponentRef<OverlayItem> | undefined {
+    return this.overlays.find(o => o.instance === item);
+  }
+
   /**
    * Try and remove the overlay but not instantly as it might want to animate the state change.
    * @param overlay

@@ -1,0 +1,12 @@
+<p
+  #displayName
+  class="node"
+  [class.is-interactable]="isHoverable"
+  [class.is-selectable]="isSelectable"
+  style="margin-left: {{ marginLeft }}"
+  (pointerenter)="setHoveredObject()"
+  (pointerleave)="unsetHoveredObject()"
+  (click)="selectObject()"
+  (keyup.enter)="selectObject()"
+>{{ name }}</p>
+<hierarchy-tree-node *ngFor="let child of node.children" [node]="child" [depth]="depth + 1"></hierarchy-tree-node>

@@ -22,7 +22,7 @@
 }
 
 .active {
-  border: 1px solid vars.$active-color;
+  border: 1px solid var(--color-active);
 }
 
 @include mixins.remove-input-color-border();

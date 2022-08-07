@@ -1,0 +1,12 @@
+<div
+  class="hierarchy-container"
+  [class.is-open]="isOpened"
+  [@openClosed]="isOpened ? 'open' : 'closed'"
+  (@openClosed.start)="openClosedStart($event)"
+  (@openClosed.done)="openClosedDone($event)"
+>
+  <div class="hierarchy-body">
+    <div (click)="close()">X</div>
+    <hierarchy-tree></hierarchy-tree>
+  </div>
+</div>

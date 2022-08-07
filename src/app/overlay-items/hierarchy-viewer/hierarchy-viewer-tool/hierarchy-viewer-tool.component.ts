@@ -1,7 +1,7 @@
 import { Component, ComponentRef, OnDestroy, OnInit } from "@angular/core";
 import { OverlayService } from "../../../overlay/overlay.service";
 import { Subscription } from "rxjs";
-import { HierarchyViewerOverlayComponent } from "../hierarchy-viewer-overlay/hierarchy-viewer-overlay.component";
+import { HierarchyOverlayComponent } from "../hierarchy-overlay/hierarchy-overlay.component";
 
 @Component({
   selector: "hierarchy-viewer-tool",
@@ -10,7 +10,7 @@ import { HierarchyViewerOverlayComponent } from "../hierarchy-viewer-overlay/hie
 })
 export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
 
-  private hierarchyComponentRef: ComponentRef<HierarchyViewerOverlayComponent> | undefined;
+  private hierarchyComponentRef: ComponentRef<HierarchyOverlayComponent> | undefined;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -25,7 +25,7 @@ export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.hierarchyComponentRef = event.component as ComponentRef<HierarchyViewerOverlayComponent>;
+        this.hierarchyComponentRef = event.component as ComponentRef<HierarchyOverlayComponent>;
       }),
     );
     this.subscriptions.add(
@@ -45,7 +45,7 @@ export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
 
   toggleHierarchyViewer(): void {
     if (!this.hierarchyComponentRef) {
-      this.viewerToolsService.addOverlay(this, HierarchyViewerOverlayComponent);
+      this.viewerToolsService.addOverlay(this, HierarchyOverlayComponent);
       return;
     }
 

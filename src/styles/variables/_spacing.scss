@@ -1,0 +1,7 @@
+$spacer-50: 0.5em;
+$spacer-100: 1em;
+
+@mixin spacing-variables {
+  --spacer-50: #{$spacer-50};
+  --spacer-100: #{$spacer-100};
+}

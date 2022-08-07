@@ -40,7 +40,7 @@ export class ToolbarInstructionsComponent implements OnInit {
   }
 
   /**
-   * If a user clicks the X button they have read the text and we'll set a localStorage variable to make it persistent.
+   * If a user clicks the X button they have read the text, and we'll set a localStorage variable to make it persistent.
    */
   public closeInstructionsButton(): void {
     // Don't show the tutorial again!
