@@ -1,0 +1,26 @@
+@mixin hover-interaction() {
+  &:hover {
+    color: var(--color-active-hover);
+    @content;
+  }
+}
+
+@mixin focus-interaction() {
+  &:focus {
+    color: var(--color-active-hover);
+    @content;
+  }
+}
+
+@mixin active-interaction() {
+  &:active {
+    color: var(--color-active);
+    @content;
+  }
+}
+
+@mixin hover-focus-active-default-interaction() {
+  @include hover-interaction;
+  @include focus-interaction;
+  @include active-interaction;
+}

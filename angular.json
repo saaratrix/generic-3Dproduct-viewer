@@ -31,7 +31,8 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/styles/variables"
+                "src/styles/variables",
+                "src/styles/mixins"
               ]
             },
             "scripts": [],

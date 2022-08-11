@@ -1,5 +1,5 @@
 @use "./src/styles/vars";
-@use "./src/styles/mixins";
+@use "../../../styles/mixins/mixins";
 
 .specific-color-values {
   padding: 0;

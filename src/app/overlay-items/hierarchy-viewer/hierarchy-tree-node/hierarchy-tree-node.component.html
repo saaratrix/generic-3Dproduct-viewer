@@ -1,15 +1,20 @@
 <div
   #displayName
   class="node"
-  [class.is-interactable]="isHoverable"
+  [class.is-hoverable]="isHoverable"
   [class.is-selectable]="isSelectable"
   style="margin-left: {{ marginLeft }}"
   (pointerenter)="setHoveredObject()"
   (pointerleave)="unsetHoveredObject()"
   (click)="selectObject()"
   (keyup.enter)="selectObject()"
+  [tabIndex]="isHoverable ? 1 : -1"
 >
   <i class="icon">&#xea03;</i>
   <span class="display-name">{{ name }}</span>
+  <div class="options">
+    <input type="checkbox" [checked]="node.visible">
+  </div>
 </div>
 <hierarchy-tree-node *ngFor="let child of node.children" [node]="child" [depth]="depth + 1"></hierarchy-tree-node>
+

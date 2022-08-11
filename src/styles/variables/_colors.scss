@@ -3,6 +3,9 @@ $border: hsl(0, 0%, 50%);
 $text: snow;
 
 $alternative: hsl(250, 100%, 75%);
+
+$disabled: hsl(229, 15%, 50%);
+
 $active: hsl(170, 100%, 75%);
 $active-hover: hsl(170, 100%, 65%);
 
@@ -13,6 +16,7 @@ $active-hover: hsl(170, 100%, 65%);
 
   --color-alternative: #{$alternative};
 
+  --color-disabled: #{$disabled};
   --color-active: #{$active};
   --color-active-hover: #{$active-hover};
 }

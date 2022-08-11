@@ -1,22 +1,35 @@
 @use 'spacing';
+@use "interactions";
+
+:host {
+  display: inline-flex;
+  flex-direction: column;
+}
 
 .node {
-  display: flex;
-  gap: spacing.$spacer-50;
+  display: inline-flex;
+  gap: var(--spacer-50);
+
+  margin-top: var(--spacer-25);
 }
 
 .icon {
   font-size: 1em;
+  color: var(--color-disabled);
 }
 
-.is-interactable {
+.display-name {
+  flex: 1 1 auto;
+}
+
+.is-hoverable {
+  color: var(--color-text);
+
   .icon {
     color: var(--color-alternative);
   }
 
-  &:hover {
-    color: var(--color-active-hover);
-
+  &:hover, &:focus {
     .icon {
       color: var(--color-active-hover);
     }
@@ -24,15 +37,23 @@
 }
 
 .is-selectable {
-  &:active {
-    color: var(--color-active);
+  cursor: pointer;
 
+  &:hover, &:focus {
+    color: var(--color-active-hover);
+  }
+
+  @include interactions.active-interaction {
     .icon {
       color: var(--color-active);
     }
   }
 }
 
-.is-selectable {
-  cursor: pointer;
+.options {
+  position: sticky;
+  right: 0;
+  background-color: var(--color-background);
+  padding-left: var(--spacer-50);
+  text-align: right;
 }

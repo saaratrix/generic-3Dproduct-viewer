@@ -6,7 +6,12 @@
   (@openClosed.done)="openClosedDone($event)"
 >
   <div class="hierarchy-body">
-    <div (click)="close()">X</div>
+    <div
+      class="close"
+      [tabIndex]="1"
+      (click)="close()"
+      (keyup.enter)="close()"
+    >X</div>
     <hierarchy-tree></hierarchy-tree>
   </div>
 </div>
