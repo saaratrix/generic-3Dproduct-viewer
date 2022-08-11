@@ -1,0 +1,38 @@
+@use 'spacing';
+
+.node {
+  display: flex;
+  gap: spacing.$spacer-50;
+}
+
+.icon {
+  font-size: 1em;
+}
+
+.is-interactable {
+  .icon {
+    color: var(--color-alternative);
+  }
+
+  &:hover {
+    color: var(--color-active-hover);
+
+    .icon {
+      color: var(--color-active-hover);
+    }
+  }
+}
+
+.is-selectable {
+  &:active {
+    color: var(--color-active);
+
+    .icon {
+      color: var(--color-active);
+    }
+  }
+}
+
+.is-selectable {
+  cursor: pointer;
+}

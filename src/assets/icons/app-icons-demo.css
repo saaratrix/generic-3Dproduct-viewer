@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "app-icons";
+  src: url("app-icons.woff2") format("woff2"),
+  url("app-icons.woff?t=1660161342792") format("woff"),
+  url('app-icons.ttf?t=1660161342792') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+}
+
+.icon-hierarchy-group:before { content: "\ea01"; }
+.icon-hierarchy-list:before { content: "\ea02"; }
+.icon-hierarchy-mesh:before { content: "\ea03"; }
+
+[class^="icon-"], [class*="icon-"] {
+  font-family: 'app-icons' !important;
+  font-size:12px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
