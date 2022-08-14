@@ -1,6 +1,8 @@
 @use 'spacing';
 @use "interactions";
 
+$animation: 0.075s ease-in;
+
 :host {
   display: inline-flex;
   flex-direction: column;
@@ -13,13 +15,50 @@
   margin-top: var(--spacer-25);
 }
 
+.node-children {
+  display: inline-flex;
+  flex-direction: column;
+  // Tried using height and overflow-y but that broke the .options sticky
+  // While height would look nicer as as it doesn't scale the items the animation is short enough to not really notice.
+  transition: transform $animation;
+  // Otherwise it scales to center.
+  transform-origin: top;
+  transform: scaleY(1);
+
+  &.is-collapsed {
+    transform: scaleY(0);
+  }
+}
+
 .icon {
   font-size: 1em;
   color: var(--color-disabled);
 }
 
-.display-name {
+.display {
+  display: inline-flex;
+  gap: var(--spacer-50);
+  align-items: center;
   flex: 1 1 auto;
+}
+
+.child-icons {
+  display: inline-flex;
+  gap: var(--spacer-25);
+  flex-wrap: wrap;
+
+  opacity: 1;
+  transition: opacity $animation;
+
+  font-size: 0.85em;
+
+  .icon {
+    color: var(--color-alternative);
+  }
+
+  &.is-expanded {
+    opacity: 0;
+  }
 }
 
 .is-hoverable {
@@ -40,10 +79,20 @@
   cursor: pointer;
 
   &:hover, &:focus {
-    color: var(--color-active-hover);
+    background-color: var(--color-active-bg-hover);
+
+    .options {
+      background-color: var(--color-active-bg-hover);
+    }
   }
 
-  @include interactions.active-interaction {
+  &:active {
+    background-color: var(--color-active-bg);
+
+    .options {
+      background-color: var(--color-active-bg);
+    }
+
     .icon {
       color: var(--color-active);
     }
@@ -57,3 +106,43 @@
   padding-left: var(--spacer-50);
   text-align: right;
 }
+
+.toggle-expanded {
+  display: inline-flex;
+  align-items: center;
+  // Set width and add padding to center the expander arrow.
+  width: 16px;
+  padding-left: 4px;
+  cursor: pointer;
+
+  &.is-expanded {
+    .arrow {
+      transform: rotateZ(90deg);
+    }
+  }
+
+  &:hover {
+    .arrow {
+      border-left-color: var(--color-active-hover);
+    }
+  }
+
+  &:active {
+    .arrow {
+      border-left-color: var(--color-active);
+    }
+  }
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 8px solid var(--color-text);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  margin-right: 9px;
+  transform: rotateZ(0);
+  transition: transform $animation;
+}
+
+

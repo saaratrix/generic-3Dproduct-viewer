@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import type { Object3D } from "three";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { isPolygonalObject3D } from "../../../3D/3rd-party/three/types/is-three-js-custom-type";
@@ -6,21 +6,34 @@ import { isSelectableObject3dUserData } from "../../../3D/models/selectable-obje
 import { SelectedOptionsType } from "../../../3D/models/selectable-object-3ds-options/selected-options-type";
 import type { PolygonalObject3D } from "../../../3D/3rd-party/three/types/polygonal-object-3D";
 
+type NodeIcon = "&#xea01;" | "&#xea03;";
+
+interface NodeChild {
+  node: Object3D;
+  icon: NodeIcon;
+}
+
 @Component({
   selector: "hierarchy-tree-node",
   templateUrl: "./hierarchy-tree-node.component.html",
   styleUrls: ["./hierarchy-tree-node.component.scss"],
 })
 export class HierarchyTreeNodeComponent implements OnInit {
-  @ViewChild("displayName", { static: true }) displayNameElement!: ElementRef<HTMLElement>;
+  @ViewChild("nodeElement", { static: true }) nodeElementRef!: ElementRef<HTMLElement>;
 
   @Input() node!: Object3D;
   @Input() depth!: number;
 
   name!: string;
+  nodeIcon: NodeIcon | "" = "";
   marginLeft: string = "0";
   isHoverable!: boolean;
   isSelectable!: boolean;
+
+  children: NodeChild[] = [];
+
+  canExpand: boolean = false;
+  isExpanded: boolean = true;
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -29,8 +42,17 @@ export class HierarchyTreeNodeComponent implements OnInit {
   ngOnInit(): void {
     this.marginLeft = this.getMarginLeft();
     this.name = this.getName();
+    this.nodeIcon = this.nodeToIcon(this.node);
     this.isHoverable = this.isNodeHoverable();
     this.isSelectable = this.isNodeSelectable();
+    this.canExpand = this.node.children.length > 0;
+
+    for (const child of this.node.children) {
+      this.children.push({
+        node: child,
+        icon: this.nodeToIcon(child),
+      });
+    }
   }
 
   private getName(): string {
@@ -43,7 +65,7 @@ export class HierarchyTreeNodeComponent implements OnInit {
     }
 
     const regex = /(\d+(?:\.\d+)?)(\s*[a-zA-Z]+)/i;
-    const computedStyle = getComputedStyle(this.displayNameElement.nativeElement);
+    const computedStyle = getComputedStyle(this.nodeElementRef.nativeElement);
     const match = regex.exec(computedStyle.getPropertyValue("--margin-per-depth"));
     if (!match) {
       return "0";
@@ -90,5 +112,13 @@ export class HierarchyTreeNodeComponent implements OnInit {
     }
 
     this.productConfiguratorService.object3DSelected.next(this.node as PolygonalObject3D);
+  }
+
+  nodeToIcon(node: Object3D): NodeIcon {
+    if (isPolygonalObject3D(node)) {
+      return "&#xea03;";
+    }
+
+    return "&#xea01;";
   }
 }
