@@ -22,6 +22,10 @@ export class SelectedProductHighlighter {
       }),
       // Selection
       this.productConfiguratorService.object3DSelected.subscribe(object => {
+        if (this.selectedObject) {
+          this.clearSelectedMaterial(this.selectedObject);
+        }
+
         this.selectedObject = object;
         this.setSelectedMaterial(object);
       }),
