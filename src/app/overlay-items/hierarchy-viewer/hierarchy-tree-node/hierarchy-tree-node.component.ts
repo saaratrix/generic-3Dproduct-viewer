@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import type { Object3D } from "three";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { isPolygonalObject3D } from "../../../3D/3rd-party/three/types/is-three-js-custom-type";
@@ -18,7 +18,6 @@ interface NodeChild {
   selector: "hierarchy-tree-node",
   templateUrl: "./hierarchy-tree-node.component.html",
   styleUrls: ["./hierarchy-tree-node.component.scss"],
-  // Angular
   animations: [
     trigger("expandedCollapsed", [
       state("collapsed", style({
@@ -135,5 +134,11 @@ export class HierarchyTreeNodeComponent implements OnInit {
     }
 
     return "&#xea01;";
+  }
+
+  toggleVisibility(event: Event): void {
+    this.node.visible = !this.node.visible;
+    event.stopPropagation();
+    event.stopImmediatePropagation();
   }
 }

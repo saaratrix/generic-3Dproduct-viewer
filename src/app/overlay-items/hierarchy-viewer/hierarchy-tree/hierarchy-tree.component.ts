@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { Subscription } from "rxjs";
 import type { ProductItem } from "../../../3D/models/product-item/product-item";
@@ -10,12 +10,12 @@ import type { Object3D } from "three";
   styleUrls: ["./hierarchy-tree.component.scss"],
 })
 export class HierarchyTreeComponent implements OnInit, OnDestroy {
-  rootNode: Object3D | undefined;
+  rootNodes: Object3D[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
-
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private productConfiguratorService: ProductConfiguratorService,
   ) { }
 
@@ -34,6 +34,6 @@ export class HierarchyTreeComponent implements OnInit, OnDestroy {
   }
 
   setupTree(product: ProductItem): void {
-    this.rootNode = product.object3D;
+    this.rootNodes = product.object3D ? [product.object3D] : [];
   }
 }

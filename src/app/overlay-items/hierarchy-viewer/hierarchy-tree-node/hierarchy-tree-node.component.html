@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="options">
-    <input type="checkbox" [checked]="node.visible">
+    <input type="checkbox" [checked]="node.visible" (click)="toggleVisibility($event)" (keyup.enter)="toggleVisibility($event)">
   </div>
 </div>
 <div
