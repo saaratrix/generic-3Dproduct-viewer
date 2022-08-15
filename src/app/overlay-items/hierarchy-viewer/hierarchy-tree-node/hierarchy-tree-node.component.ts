@@ -1,10 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import type { Object3D } from "three";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { isPolygonalObject3D } from "../../../3D/3rd-party/three/types/is-three-js-custom-type";
 import { isSelectableObject3dUserData } from "../../../3D/models/selectable-object-3ds-options/is-selectable-object-3d-user-data";
 import { SelectedOptionsType } from "../../../3D/models/selectable-object-3ds-options/selected-options-type";
 import type { PolygonalObject3D } from "../../../3D/3rd-party/three/types/polygonal-object-3D";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 type NodeIcon = "&#xea01;" | "&#xea03;";
 
@@ -17,6 +18,20 @@ interface NodeChild {
   selector: "hierarchy-tree-node",
   templateUrl: "./hierarchy-tree-node.component.html",
   styleUrls: ["./hierarchy-tree-node.component.scss"],
+  // Angular
+  animations: [
+    trigger("expandedCollapsed", [
+      state("collapsed", style({
+        height: "0",
+      })),
+      state("expanded", style({
+        height: "*",
+      })),
+      transition("expanded <=> collapsed", [
+        animate("0.05s"),
+      ]),
+    ]),
+  ],
 })
 export class HierarchyTreeNodeComponent implements OnInit {
   @ViewChild("nodeElement", { static: true }) nodeElementRef!: ElementRef<HTMLElement>;

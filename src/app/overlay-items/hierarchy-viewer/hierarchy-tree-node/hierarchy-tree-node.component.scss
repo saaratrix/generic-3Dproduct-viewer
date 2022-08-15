@@ -1,33 +1,26 @@
 @use 'spacing';
 @use "interactions";
 
-$animation: 0.075s ease-in;
+$animation: 0.05s ease-in;
 
 :host {
   display: inline-flex;
   flex-direction: column;
+  // This makes height: 0; work for the animation
+  overflow-y: hidden;
 }
 
 .node {
   display: inline-flex;
   gap: var(--spacer-50);
-
   margin-top: var(--spacer-25);
+
+
 }
 
 .node-children {
   display: inline-flex;
   flex-direction: column;
-  // Tried using height and overflow-y but that broke the .options sticky
-  // While height would look nicer as as it doesn't scale the items the animation is short enough to not really notice.
-  transition: transform $animation;
-  // Otherwise it scales to center.
-  transform-origin: top;
-  transform: scaleY(1);
-
-  &.is-collapsed {
-    transform: scaleY(0);
-  }
 }
 
 .icon {

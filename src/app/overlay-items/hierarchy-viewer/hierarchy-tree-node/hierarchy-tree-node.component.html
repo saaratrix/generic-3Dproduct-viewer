@@ -10,7 +10,7 @@
   (blur)="unsetHoveredObject()"
   (click)="selectObject()"
   (keyup.enter)="selectObject()"
-  [tabIndex]="isHoverable ? 0 : ''"
+  [attr.tabindex]="isSelectable ? 0 : undefined"
 >
   <div
     *ngIf="canExpand"
@@ -34,7 +34,7 @@
 <div
   *ngIf="children.length"
   class="node-children"
-  [class.is-collapsed]="!isExpanded"
+  [@expandedCollapsed]="isExpanded ? 'expanded' : 'collapsed'"
 >
   <hierarchy-tree-node *ngFor="let child of children" [node]="child.node" [depth]="depth + 1"></hierarchy-tree-node>
 </div>
