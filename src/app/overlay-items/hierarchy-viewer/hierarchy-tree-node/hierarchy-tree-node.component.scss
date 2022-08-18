@@ -55,12 +55,12 @@ $animation: 0.05s ease-in;
 .is-hoverable {
   color: var(--color-text);
 
-  .icon {
+  .node-type.icon {
     color: var(--color-alternative);
   }
 
   &:hover, &:focus {
-    .icon {
+    .node-type.icon {
       color: var(--color-active-hover);
     }
   }
@@ -84,7 +84,7 @@ $animation: 0.05s ease-in;
       background-color: var(--color-active-bg);
     }
 
-    .icon {
+    .node-type.icon {
       color: var(--color-active);
     }
   }
@@ -135,5 +135,24 @@ $animation: 0.05s ease-in;
   transform: rotateZ(0);
   transition: transform $animation;
 }
+
+.visible.icon {
+  padding: 0 var(--spacer-25);
+  cursor: pointer;
+
+  @include interactions.active-interaction() {
+    &.active {
+      color: var(--color-active);
+    }
+  };
+
+  &.active {
+    color: var(--color-text);
+  }
+}
+
+
+
+
 
 

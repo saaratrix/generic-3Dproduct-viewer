@@ -20,7 +20,7 @@
   >
     <span class="arrow"></span>
   </div>
-  <i class="icon" [innerHTML]="nodeIcon"></i>
+  <i class="node-type icon" [innerHTML]="nodeIcon"></i>
   <div class="display">
     <span class="display-name">{{ name }}</span>
     <div *ngIf="canExpand" class="child-icons" [class.is-expanded]="isExpanded">
@@ -28,7 +28,13 @@
     </div>
   </div>
   <div class="options">
-    <input type="checkbox" [checked]="node.visible" (click)="toggleVisibility($event)" (keyup.enter)="toggleVisibility($event)">
+    <div
+      class="visible icon"
+      [class.active]="node.visible"
+      tabIndex="0"
+      (click)="toggleVisibility($event)"
+      (keyup.enter)="toggleVisibility($event)"
+    >👁</div>
   </div>
 </div>
 <div
