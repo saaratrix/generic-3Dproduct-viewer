@@ -3,6 +3,8 @@ import type { PolygonalObject3D } from "../../3rd-party/three/types/polygonal-ob
 
 export interface SelectableObject3DUserData {
   selectableObjectsOption: SelectedOptions;
+
+  isPickingDisabled?: boolean;
   /**
    * Related Object3Ds
    */

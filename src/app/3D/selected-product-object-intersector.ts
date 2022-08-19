@@ -47,7 +47,9 @@ export class SelectedProductObjectIntersector {
   public getIntersections(pointerPosition: Vector2): Intersection[] {
     this.raycaster.far = this.camera.far;
     this.raycaster.setFromCamera(pointerPosition, this.camera);
-    return this.raycaster.intersectObjects(this.intersectableObjects, false);
+
+    const intersectableObjects = this.intersectableObjects.filter(i => !(i.userData as SelectableObject3DUserData).isPickingDisabled);
+    return this.raycaster.intersectObjects(intersectableObjects, false);
   }
 
   private parseSelectableObjectsOption(productItem: ProductItem, option: SelectableObject3DsOption): void {
@@ -68,7 +70,7 @@ export class SelectedProductObjectIntersector {
         return;
       }
       const userData = object.userData as SelectableObject3DUserData;
-      userData.selectableObjectsOption = option.options;
+      userData.selectableObjectsOption = { ...option.options };
       intersectableObjects.push(object);
     });
 

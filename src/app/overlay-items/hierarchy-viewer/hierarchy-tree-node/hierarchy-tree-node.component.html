@@ -3,6 +3,7 @@
   class="node"
   [class.is-hoverable]="isHoverable"
   [class.is-selectable]="isSelectable"
+  [class.is-selected]="isSelected"
   style="margin-left: {{ marginLeft }}"
   (pointerenter)="setHoveredObject()"
   (pointerleave)="unsetHoveredObject()"
@@ -27,6 +28,7 @@
       <i *ngFor="let child of children" class="icon" [innerHTML]="child.icon"></i>
     </div>
   </div>
+  <div class="options-space"></div>
   <div class="options">
     <div
       class="visible icon"

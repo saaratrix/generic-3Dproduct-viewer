@@ -3,16 +3,30 @@
 
 $animation: 0.05s ease-in;
 
+@mixin selected() {
+  background-color: var(--color-active-bg);
+
+  .options {
+    background-color: var(--color-active-bg);
+  }
+
+  .node-type.icon {
+    color: var(--color-active);
+  }
+}
+
 :host {
   display: inline-flex;
   flex-direction: column;
-  // This makes height: 0; work for the animation
-  overflow-y: hidden;
+  // overflow-x removes a 1px jump for the options if scrolled all the way to the right.
+  // overflow-y makes height: 0; work for the animation
+  overflow: hidden;
 }
 
 .node {
   display: inline-flex;
   gap: var(--spacer-50);
+  position: relative;
   margin-top: var(--spacer-25);
 }
 
@@ -23,7 +37,6 @@ $animation: 0.05s ease-in;
 
 .icon {
   font-size: 1em;
-  color: var(--color-disabled);
 }
 
 .display {
@@ -78,22 +91,22 @@ $animation: 0.05s ease-in;
   }
 
   &:active {
-    background-color: var(--color-active-bg);
-
-    .options {
-      background-color: var(--color-active-bg);
-    }
-
-    .node-type.icon {
-      color: var(--color-active);
-    }
+    @include selected();
   }
 }
 
+.is-selected {
+  @include selected();
+}
+
+.options-space {
+  display: inline-block;
+  width: 32px;
+}
+
 .options {
-  position: sticky;
-  right: 0;
-  background-color: var(--color-background);
+  position: absolute;
+  right: -1px;
   padding-left: var(--spacer-50);
   text-align: right;
 }
@@ -139,6 +152,8 @@ $animation: 0.05s ease-in;
 .visible.icon {
   padding: 0 var(--spacer-25);
   cursor: pointer;
+  background-color: var(--color-background);
+  color: var(--color-disabled);
 
   @include interactions.active-interaction() {
     &.active {
