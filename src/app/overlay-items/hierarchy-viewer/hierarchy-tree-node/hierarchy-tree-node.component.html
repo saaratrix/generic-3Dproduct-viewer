@@ -4,14 +4,14 @@
   [class.is-hoverable]="isHoverable"
   [class.is-selectable]="isSelectable"
   [class.is-selected]="isSelected"
-  style="margin-left: {{ marginLeft }}"
+  [style.margin-left]="marginLeft"
+  [attr.tabindex]="isSelectable ? 0 : undefined"
   (pointerenter)="setHoveredObject()"
   (pointerleave)="unsetHoveredObject()"
   (focus)="setHoveredObject()"
   (blur)="unsetHoveredObject()"
   (click)="selectObject()"
   (keyup.enter)="selectObject()"
-  [attr.tabindex]="isSelectable ? 0 : undefined"
 >
   <div
     *ngIf="canExpand"

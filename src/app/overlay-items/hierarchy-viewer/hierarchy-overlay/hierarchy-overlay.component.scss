@@ -7,8 +7,6 @@ $left: 40px;
 .hierarchy-container {
   position: absolute;
   top: 0;
-  //bottom: 0;
-  // From the .icon class, 2.5 * 1.25 is 3.125!
   left: $left;
   z-index: zindex.$above-canvas;
 }

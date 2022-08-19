@@ -101,13 +101,13 @@ $animation: 0.05s ease-in;
 
 .options-space {
   display: inline-block;
-  width: 32px;
+  width: 24px;
 }
 
 .options {
   position: absolute;
+  // There is a 1 pixel gap between the options and the underlying text.
   right: -1px;
-  padding-left: var(--spacer-50);
   text-align: right;
 }
 
