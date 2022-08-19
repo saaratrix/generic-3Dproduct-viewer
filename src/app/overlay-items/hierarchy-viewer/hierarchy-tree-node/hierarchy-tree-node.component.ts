@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import type { Object3D } from "three";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { isPolygonalObject3D } from "../../../3D/3rd-party/three/types/is-three-js-custom-type";
@@ -6,6 +6,9 @@ import { isSelectableObject3dUserData } from "../../../3D/models/selectable-obje
 import { SelectedOptionsType } from "../../../3D/models/selectable-object-3ds-options/selected-options-type";
 import type { PolygonalObject3D } from "../../../3D/3rd-party/three/types/polygonal-object-3D";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { stickyRightScrollElement, StickyScrollHandle } from "../../../utility/sticky-right-scroll-element";
+import { Subscription } from "rxjs";
+import { SelectableObject3DUserData } from "../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
 
 type NodeIcon = "&#xea01;" | "&#xea03;";
 
@@ -32,7 +35,7 @@ interface NodeChild {
     ]),
   ],
 })
-export class HierarchyTreeNodeComponent implements OnInit {
+export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
   @ViewChild("nodeElement", { static: true }) nodeElementRef!: ElementRef<HTMLElement>;
 
   @Input() node!: Object3D;
@@ -44,10 +47,15 @@ export class HierarchyTreeNodeComponent implements OnInit {
   isHoverable!: boolean;
   isSelectable!: boolean;
 
+  isSelected: boolean = false;
+
   children: NodeChild[] = [];
 
   canExpand: boolean = false;
   isExpanded: boolean = true;
+
+  private stickyScrollHandle: StickyScrollHandle | undefined;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -67,6 +75,29 @@ export class HierarchyTreeNodeComponent implements OnInit {
         icon: this.nodeToIcon(child),
       });
     }
+
+    this.subscription.add(
+      this.productConfiguratorService.object3DSelected.subscribe(object => {
+        this.isSelected = object === this.node;
+      }),
+    );
+    this.subscription.add(
+      this.productConfiguratorService.object3DDeselected.subscribe(() => {
+        this.isSelected = false;
+      }),
+    );
+
+    const stickyElement = this.nodeElementRef.nativeElement.querySelector<HTMLElement>(".options");
+    const scrollElement = this.nodeElementRef.nativeElement.closest<HTMLElement>(".nodes");
+
+    if (stickyElement && scrollElement) {
+      stickyRightScrollElement(stickyElement, scrollElement);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.stickyScrollHandle?.dispose();
   }
 
   private getName(): string {
@@ -85,7 +116,9 @@ export class HierarchyTreeNodeComponent implements OnInit {
       return "0";
     }
     const margin = parseFloat(match[1]);
-    return `${margin * this.depth}${match[2]}`;
+    // If no children add an extra margin, so it's all nicely aligned.
+    const extraMargin = this.node.children.length === 0 ? 0.5 : 0;
+    return `${margin * this.depth + extraMargin}${match[2]}`;
   }
 
   private isNodeHoverable(): boolean {
@@ -138,6 +171,8 @@ export class HierarchyTreeNodeComponent implements OnInit {
 
   toggleVisibility(event: Event): void {
     this.node.visible = !this.node.visible;
+    (this.node.userData as SelectableObject3DUserData).isPickingDisabled = !this.node.visible;
+
     event.stopPropagation();
     event.stopImmediatePropagation();
   }

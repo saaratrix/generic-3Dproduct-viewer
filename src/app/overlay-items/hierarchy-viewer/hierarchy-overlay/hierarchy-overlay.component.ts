@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import type { OverlayItem } from "../../../overlay/overlay-item";
 import { Subject } from "rxjs";
-import { animate, AnimationEvent, group, query, stagger, state, style, transition, trigger } from "@angular/animations";
+import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
 import { OverlayService } from "../../../overlay/overlay.service";
 
 const animationDuration = 150;

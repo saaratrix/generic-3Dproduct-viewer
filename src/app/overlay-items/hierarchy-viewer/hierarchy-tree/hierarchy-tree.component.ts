@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ProductConfiguratorService } from "../../../product-configurator.service";
 import { Subscription } from "rxjs";
 import type { ProductItem } from "../../../3D/models/product-item/product-item";
