@@ -108,6 +108,9 @@ $animation: 0.05s ease-in;
   position: absolute;
   // There is a 1 pixel gap between the options and the underlying text.
   right: -1px;
+  // Set height 100% so the align-center works correctly. Otherwise the options was taller than the other elements.
+  height: 100%;
+  background-color: var(--color-background);
   text-align: right;
 }
 
@@ -151,8 +154,8 @@ $animation: 0.05s ease-in;
 
 .visible.icon {
   padding: 0 var(--spacer-25);
+  height: 100%;
   cursor: pointer;
-  background-color: var(--color-background);
   color: var(--color-disabled);
 
   @include interactions.active-interaction() {
