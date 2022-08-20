@@ -8,7 +8,7 @@ import type { PolygonalObject3D } from "../../../3D/3rd-party/three/types/polygo
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { stickyRightScrollElement, StickyScrollHandle } from "../../../utility/sticky-right-scroll-element";
 import { Subscription } from "rxjs";
-import { SelectableObject3DUserData } from "../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
+import type { SelectableObject3DUserData } from "../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
 
 type NodeIcon = "&#xea01;" | "&#xea03;";
 

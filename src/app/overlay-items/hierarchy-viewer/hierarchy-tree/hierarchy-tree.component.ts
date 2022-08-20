@@ -10,6 +10,7 @@ import type { Object3D } from "three";
   styleUrls: ["./hierarchy-tree.component.scss"],
 })
 export class HierarchyTreeComponent implements OnInit, OnDestroy {
+  // There's only one root object, but we use an array to explicitly trigger creating new components instead of reuse the same.
   rootNodes: Object3D[] = [];
 
   private subscriptions: Subscription = new Subscription();

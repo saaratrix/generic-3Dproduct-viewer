@@ -1,4 +1,4 @@
-@use "../../styles/variables/zindex";
+@use "zindex";
 
 .toolbar-container {
   z-index: zindex.$above-canvas;;

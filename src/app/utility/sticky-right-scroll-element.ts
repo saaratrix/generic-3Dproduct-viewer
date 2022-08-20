@@ -5,7 +5,6 @@ export interface StickyScrollHandle {
 /**
  * Adds a method that will keep the element visible to the right when scrolling horizontally.
  */
-// This is only serves the application's specific need at the moment.
 export function stickyRightScrollElement(element: HTMLElement, scroll: HTMLElement): StickyScrollHandle {
   const resizeObserver = new ResizeObserver((entries) => {
     scrollWidth = scroll.scrollWidth;

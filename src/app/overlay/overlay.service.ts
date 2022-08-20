@@ -2,7 +2,7 @@ import { ComponentRef, Injectable, OnDestroy, Type, ViewContainerRef } from "@an
 import { Subject } from "rxjs";
 import type { OverlayItem } from "./overlay-item";
 
-export interface ToolAddedEvent {
+export interface OverlayAddedEvent {
   caller: unknown;
   component: ComponentRef<OverlayItem>;
 }
@@ -15,7 +15,7 @@ export class OverlayService implements OnDestroy {
 
   private overlays: ComponentRef<OverlayItem>[] = [];
 
-  overlayAdded: Subject<ToolAddedEvent> = new Subject<ToolAddedEvent>();
+  overlayAdded: Subject<OverlayAddedEvent> = new Subject<OverlayAddedEvent>();
   overlayRemoved: Subject<ComponentRef<OverlayItem>> = new Subject<ComponentRef<OverlayItem>>();
 
   constructor() {}
@@ -62,19 +62,19 @@ export class OverlayService implements OnDestroy {
     }
   }
 
-  private removeOverlay(tool: ComponentRef<OverlayItem>): void {
-    const index = this.overlays.indexOf(tool);
+  private removeOverlay(overlay: ComponentRef<OverlayItem>): void {
+    const index = this.overlays.indexOf(overlay);
     if (index === -1) {
       return;
     }
 
     this.overlays.splice(index, 1);
-    this.overlayRemoved.next(tool);
+    this.overlayRemoved.next(overlay);
   }
 
   removeAllOverlays(): void {
-    for (const tool of this.overlays) {
-      this.removeOverlay(tool);
+    for (const overlay of this.overlays) {
+      this.removeOverlay(overlay);
     }
 
     this.overlays = [];

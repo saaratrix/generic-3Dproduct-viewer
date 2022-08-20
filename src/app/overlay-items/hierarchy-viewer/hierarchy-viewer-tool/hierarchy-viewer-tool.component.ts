@@ -15,13 +15,13 @@ export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
   constructor(
-    private viewerToolsService: OverlayService,
+    private overlayService: OverlayService,
   ) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
-      this.viewerToolsService.overlayAdded.subscribe(event => {
-        if (!event.caller) {
+      this.overlayService.overlayAdded.subscribe(event => {
+        if (event.caller !== this) {
           return;
         }
 
@@ -29,7 +29,7 @@ export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
       }),
     );
     this.subscriptions.add(
-      this.viewerToolsService.overlayRemoved.subscribe(component => {
+      this.overlayService.overlayRemoved.subscribe(component => {
         if (component !== this.hierarchyComponentRef) {
           return;
         }
@@ -45,12 +45,12 @@ export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
 
   toggleHierarchyViewer(): void {
     if (!this.hierarchyComponentRef) {
-      this.viewerToolsService.addOverlay(this, HierarchyOverlayComponent);
+      this.overlayService.addOverlay(this, HierarchyOverlayComponent);
       return;
     }
 
     if (!this.hierarchyComponentRef.instance.isBeingRemoved()) {
-      this.viewerToolsService.tryRemoveOverlay(this.hierarchyComponentRef, false);
+      this.overlayService.tryRemoveOverlay(this.hierarchyComponentRef, false);
     } else {
       this.hierarchyComponentRef.instance.cancelRemoveItem();
     }
