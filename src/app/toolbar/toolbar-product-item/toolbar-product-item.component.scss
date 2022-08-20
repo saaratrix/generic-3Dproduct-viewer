@@ -4,7 +4,7 @@ $size: 64px;
 $small-size: 48px;
 
 .active {
-  border: 1px solid vars.$active-color;
+  border: 1px solid var(--color-active);
 }
 
 .product-item {
@@ -24,6 +24,6 @@ img {
   }
 
   &:hover:not(.active) {
-    border: 1px solid vars.$active-hover-color;
+    border: 1px solid var(--color-active-hover);
   }
 }

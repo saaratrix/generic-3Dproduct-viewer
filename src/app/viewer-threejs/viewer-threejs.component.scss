@@ -1,8 +1,9 @@
+@use "zindex";
 // The position relative & absolute is to make the element take 100% width & height.
 // The app-viewer-three component takes 17 height otherwise.
 :host {
   position:relative;
-  z-index: 1;
+  z-index: zindex.$canvas;
 }
 
 canvas {

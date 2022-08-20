@@ -1,0 +1,32 @@
+@use "zindex";
+@use "spacing";
+@use "interactions";
+
+$left: 40px;
+
+.hierarchy-container {
+  position: absolute;
+  top: 0;
+  left: $left;
+  z-index: zindex.$above-canvas;
+}
+
+.hierarchy-body {
+  display: inline-block;
+  padding: var(--spacer-50);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+
+  pointer-events: all;
+
+  overflow-y: auto;
+  max-height: 90vh;
+  max-width: 400px;
+}
+
+.close {
+  cursor: pointer;
+  display: inline-block;
+
+  @include interactions.hover-focus-active-default-interaction();
+}

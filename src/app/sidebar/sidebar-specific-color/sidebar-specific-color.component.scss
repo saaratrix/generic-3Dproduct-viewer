@@ -1,5 +1,5 @@
 @use "./src/styles/vars";
-@use "./src/styles/mixins";
+@use "mixins";
 
 .specific-color-values {
   padding: 0;
@@ -22,7 +22,7 @@
 }
 
 .active {
-  border: 1px solid vars.$active-color;
+  border: 1px solid var(--color-active);
 }
 
 @include mixins.remove-input-color-border();

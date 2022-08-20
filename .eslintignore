@@ -1,4 +1,5 @@
 .eslintrc.js
+*.html
 
 # build files
 node_modules

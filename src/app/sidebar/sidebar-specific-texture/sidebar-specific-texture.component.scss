@@ -1,5 +1,5 @@
 @use "./src/styles/vars";
-@use "./src/styles/mixins";
+@use "../../../styles/mixins/mixins";
 
 .specific-color-values {
   padding: 0;
@@ -23,7 +23,7 @@
 }
 
 .active {
-  border: 1px solid vars.$active-color;
+  border: 1px solid var(--color-active);
 }
 
 @include mixins.inline-spinner-size(vars.$inline-spinner-default-size * 2);

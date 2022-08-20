@@ -1,0 +1,51 @@
+<div
+  #nodeElement
+  class="node"
+  [class.is-hoverable]="isHoverable"
+  [class.is-selectable]="isSelectable"
+  [class.is-selected]="isSelected"
+  [style.margin-left]="marginLeft"
+  [attr.tabindex]="isSelectable ? 0 : undefined"
+  (pointerenter)="setHoveredObject()"
+  (pointerleave)="unsetHoveredObject()"
+  (focus)="setHoveredObject()"
+  (blur)="unsetHoveredObject()"
+  (click)="selectObject()"
+  (keyup.enter)="selectObject()"
+>
+  <div
+    *ngIf="canExpand"
+    class="toggle-expanded"
+    [class.is-expanded]="isExpanded"
+    (click)="isExpanded = !isExpanded"
+  >
+    <span class="arrow"></span>
+  </div>
+  <i class="node-type icon" [innerHTML]="nodeIcon"></i>
+  <div class="display">
+    <span class="display-name">{{ name }}</span>
+    <div *ngIf="canExpand" class="child-icons" [class.is-expanded]="isExpanded">
+      <i *ngFor="let child of children" class="icon" [innerHTML]="child.icon"></i>
+    </div>
+  </div>
+  <div class="options-space"></div>
+  <div class="options">
+    <div
+      class="visible icon"
+      [class.active]="node.visible"
+      tabIndex="0"
+      (click)="toggleVisibility($event)"
+      (keyup.enter)="toggleVisibility($event)"
+    >👁</div>
+  </div>
+</div>
+<div
+  *ngIf="children.length"
+  class="node-children"
+  [@expandedCollapsed]="isExpanded ? 'expanded' : 'collapsed'"
+>
+  <hierarchy-tree-node *ngFor="let child of children" [node]="child.node" [depth]="depth + 1"></hierarchy-tree-node>
+</div>
+
+
+

@@ -1,0 +1,173 @@
+@use 'spacing';
+@use "interactions";
+
+$animation: 0.05s ease-in;
+
+@mixin selected() {
+  background-color: var(--color-active-bg);
+
+  .options {
+    background-color: var(--color-active-bg);
+  }
+
+  .node-type.icon {
+    color: var(--color-active);
+  }
+}
+
+:host {
+  display: inline-flex;
+  flex-direction: column;
+  // overflow-x removes a 1px jump for the options if scrolled all the way to the right.
+  // overflow-y makes height: 0; work for the animation
+  overflow: hidden;
+}
+
+.node {
+  display: inline-flex;
+  gap: var(--spacer-50);
+  position: relative;
+  margin-top: var(--spacer-25);
+}
+
+.node-children {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: 1em;
+}
+
+.display {
+  display: inline-flex;
+  gap: var(--spacer-50);
+  align-items: center;
+  flex: 1 1 auto;
+}
+
+.child-icons {
+  display: inline-flex;
+  gap: var(--spacer-25);
+  flex-wrap: wrap;
+
+  opacity: 1;
+  transition: opacity $animation;
+
+  font-size: 0.85em;
+
+  .icon {
+    color: var(--color-alternative);
+  }
+
+  &.is-expanded {
+    opacity: 0;
+  }
+}
+
+.is-hoverable {
+  color: var(--color-text);
+
+  .node-type.icon {
+    color: var(--color-alternative);
+  }
+
+  &:hover, &:focus {
+    .node-type.icon {
+      color: var(--color-active-hover);
+    }
+  }
+}
+
+.is-selectable {
+  cursor: pointer;
+
+  &:hover, &:focus {
+    background-color: var(--color-active-bg-hover);
+
+    .options {
+      background-color: var(--color-active-bg-hover);
+    }
+  }
+
+  &:active {
+    @include selected();
+  }
+}
+
+.is-selected {
+  @include selected();
+}
+
+.options-space {
+  display: inline-block;
+  width: 24px;
+}
+
+.options {
+  position: absolute;
+  // There is a 1 pixel gap between the options and the underlying text.
+  right: -1px;
+  text-align: right;
+}
+
+.toggle-expanded {
+  display: inline-flex;
+  align-items: center;
+  // Set width and add padding to center the expander arrow.
+  width: 16px;
+  padding-left: 4px;
+  cursor: pointer;
+
+  &.is-expanded {
+    .arrow {
+      transform: rotateZ(90deg);
+    }
+  }
+
+  &:hover {
+    .arrow {
+      border-left-color: var(--color-active-hover);
+    }
+  }
+
+  &:active {
+    .arrow {
+      border-left-color: var(--color-active);
+    }
+  }
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 8px solid var(--color-text);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  margin-right: 9px;
+  transform: rotateZ(0);
+  transition: transform $animation;
+}
+
+.visible.icon {
+  padding: 0 var(--spacer-25);
+  cursor: pointer;
+  background-color: var(--color-background);
+  color: var(--color-disabled);
+
+  @include interactions.active-interaction() {
+    &.active {
+      color: var(--color-active);
+    }
+  };
+
+  &.active {
+    color: var(--color-text);
+  }
+}
+
+
+
+
+
+

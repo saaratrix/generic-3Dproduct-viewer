@@ -1,12 +1,21 @@
+@use "colors";
+@use "spacing";
 @import "styles/inline-loading-spinner";
+@import "styles/icons";
 
 * {
   box-sizing: border-box;
 }
 
+:root {
+  @include colors.color-variables();
+  @include spacing.spacing-variables();
+}
+
 /* You can add global styles to this file, and also import other style files */
 body {
   margin: 0;
+  color: var(--color-text);
 }
 
 p {

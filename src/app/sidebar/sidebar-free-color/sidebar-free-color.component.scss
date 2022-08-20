@@ -1,5 +1,5 @@
 @use "./src/styles/vars";
-@use "./src/styles/mixins";
+@use "mixins";
 
 input[type="color"] {
   width: vars.$input-color-size;

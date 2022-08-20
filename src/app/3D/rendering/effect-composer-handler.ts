@@ -74,12 +74,12 @@ export class EffectComposerHandler {
       height: dimensions,
       // Keeping the steps the same between the two textures so it pops less when you select.
       steps: [
-        { offset: 0, color: "#807d7d" },
-        { offset: 0.1, color: "#807d7d" },
+        { offset: 0, color: "#a7a5a5" },
+        { offset: 0.1, color: "#a7a5a5" },
         { offset: 0.4, color: "snow" },
         { offset: 0.6, color: "snow" },
-        { offset: 0.9, color: "#807d7d" },
-        { offset: 1, color: "#807d7d" },
+        { offset: 0.9, color: "#a7a5a5" },
+        { offset: 1, color: "#a7a5a5" },
       ],
       angle: Math.PI / 2,
     }) });

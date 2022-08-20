@@ -2,7 +2,7 @@ $container-padding: 15px;
 $container-margin: 5px;
 
 :host{
-  // Allow user to drag & rotate & zoom even while pointer is ontop of the instruction text.
+  // Allow user to drag & rotate & zoom even while pointer is on top of the instruction text.
   pointer-events: none;
 }
 

@@ -117,5 +117,5 @@ module.exports = {
     }],
     "space-infix-ops": "off",
     "@typescript-eslint/space-infix-ops": ["error", { int32Hint: true }],
-  },
+  }
 };

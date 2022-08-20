@@ -1,0 +1,29 @@
+$background: hsl(0, 0%, 22%);
+$border: hsl(0, 0%, 50%);
+$text: snow;
+
+$alternative: hsl(250, 100%, 75%);
+
+$disabled: hsl(229, 15%, 50%);
+
+$active: hsl(170, 100%, 75%);
+$active-hover: hsl(170, 100%, 65%);
+
+$active-background: hsl(0, 0%, 32%);
+$active-background-hover: hsl(0, 0%, 27%);
+
+@mixin color-variables {
+  --color-background: #{$background};
+  --color-border: #{$border};
+  --color-text: #{$text};
+
+  --color-alternative: #{$alternative};
+
+  --color-disabled: #{$disabled};
+  --color-active: #{$active};
+  --color-active-hover: #{$active-hover};
+
+  --color-active-bg: #{$active-background};
+  --color-active-bg-hover: #{$active-background-hover};
+
+}
