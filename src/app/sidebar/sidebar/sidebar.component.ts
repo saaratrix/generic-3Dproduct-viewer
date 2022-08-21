@@ -7,11 +7,12 @@ import type { Subscription } from 'rxjs';
 import { SelectedOptionsType } from '../../3D/models/selectable-object-3ds-options/selected-options-type';
 import type { SelectableObject3DUserData } from '../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
-import { SidebarFreeColorComponent } from '../sidebar-free-color/sidebar-free-color.component';
-import { SidebarSpecificTextureComponent } from '../sidebar-specific-texture/sidebar-specific-texture.component';
+import { MaterialEditingFreeColorComponent } from '../../sidebar-items/material-editing/material-editing-free-color/material-editing-free-color.component';
+import { MaterialEditingSpecificTextureComponent } from '../../sidebar-items/material-editing/material-editing-specific-texture/material-editing-specific-texture.component';
 import type { SidebarItem } from '../sidebar-item';
 import type { SelectedOptions } from '../../3D/models/selectable-object-3ds-options/selected-options';
-import { SidebarSpecificColorComponent } from '../sidebar-specific-color/sidebar-specific-color.component';
+import { MaterialEditingSpecificColorComponent } from '../../sidebar-items/material-editing/material-editing-specific-color/material-editing-specific-color.component';
+import { sidebarItemTypes } from '../sidebar-item-types';
 
 @Component({
   selector: 'app-sidebar',
@@ -87,32 +88,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   addSidebarComponent(options: SelectedOptions | undefined): void {
-    if (!options) {
+    const componentType = options?.type as Type<SidebarItem>;
+    if (!sidebarItemTypes.has(componentType)) {
       return;
-    }
-
-    let componentType: Type<SidebarItem>;
-    switch (options.type) {
-      case SelectedOptionsType.FreeColor:
-        componentType = SidebarFreeColorComponent;
-        break;
-      case SelectedOptionsType.SpecificColors:
-        componentType = SidebarSpecificColorComponent;
-        break;
-      case SelectedOptionsType.SpecificTextures:
-        componentType = SidebarSpecificTextureComponent;
-        break;
-      default:
-        return;
     }
 
     const createdComponent = this.viewContainerRef.createComponent(componentType);
     createdComponent.instance.object3D = this.activeObject3D!;
-    createdComponent.instance.item = options.value;
+    createdComponent.instance.item = options!.item;
 
     this.createdComponents.push(createdComponent);
     this.componentsElementRef.nativeElement.appendChild(createdComponent.location.nativeElement as HTMLElement);
-
   }
 
   public openClosedStart(event: AnimationEvent): void {

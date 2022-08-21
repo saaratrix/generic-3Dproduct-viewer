@@ -1,27 +1,27 @@
 import { NgZone, OnInit } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import type { Texture } from 'three';
-import type { SelectedSpecificTexture } from '../../3D/models/selectable-object-3ds-options/selected-specific-texture';
-import { MaterialAnimationType } from '../../3D/material-animators/material-animation-type';
-import { ProductConfiguratorService } from '../../product-configurator.service';
-import type { SelectableObject3DUserData } from '../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
-import { getMaterialsFromObject, getMaterialsFromObjects } from '../../3D/utility/material-utility';
-import type { SelectedSpecificTexturesValue } from '../../3D/models/selectable-object-3ds-options/selected-specific-textures-value';
-import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
-import type { SidebarItem } from '../sidebar-item';
+import type { SpecificTextureModel } from './specific-texture.model';
+import { MaterialAnimationType } from '../../../3D/material-animators/material-animation-type';
+import { ProductConfiguratorService } from '../../../product-configurator.service';
+import type { SelectableObject3DUserData } from '../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import { getMaterialsFromObject, getMaterialsFromObjects } from '../../../3D/utility/material-utility';
+import type { MaterialEditingSpecificTexturesModel } from './material-editing-specific-textures.model';
+import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
+import type { SidebarItem } from '../../../sidebar/sidebar-item';
 
 @Component({
-  selector: 'sidebar-specific-texture',
-  templateUrl: './sidebar-specific-texture.component.html',
-  styleUrls: ['./sidebar-specific-texture.component.scss'],
+  selector: 'material-editing-specific-texture',
+  templateUrl: './material-editing-specific-texture.component.html',
+  styleUrls: ['./material-editing-specific-texture.component.scss'],
 })
-export class SidebarSpecificTextureComponent implements OnInit, SidebarItem<SelectedSpecificTexturesValue> {
+export class MaterialEditingSpecificTextureComponent implements OnInit, SidebarItem<MaterialEditingSpecificTexturesModel> {
   @Input() object3D!: PolygonalObject3D;
-  item!: SelectedSpecificTexturesValue;
+  item!: MaterialEditingSpecificTexturesModel;
 
   currentValue: string = '';
   // Texture values are the texture urls.
-  values: SelectedSpecificTexture[] = [];
+  values: SpecificTextureModel[] = [];
 
   private animationType: MaterialAnimationType = MaterialAnimationType.None;
   public loadingValues: Record<string, boolean> = {};
