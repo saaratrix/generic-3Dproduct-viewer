@@ -1,10 +1,10 @@
-import type { Model3D } from "../app/3D/models/model-3D";
+import type { Model3D } from '../app/3D/models/model-3D';
 import {
   flowerPotModelLoadInfo, ikeaChearModelLoadInfo, ikeaTableModelLoadInfo,
   roseModelLoadInfo,
   wayfairChairModelLoadInfo, wayfairTableModelLoadInfo,
   wuffelsModelLoadInfo,
-} from "./models-load-info";
+} from './models-load-info';
 
 export const getFlowerPotModel: () => Model3D = () => {
   return { ...flowerPotModelLoadInfo };

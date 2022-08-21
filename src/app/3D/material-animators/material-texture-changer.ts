@@ -1,13 +1,13 @@
-import type { Material, Texture } from "three";
-import { CanvasTexture, TextureLoader } from "three";
-import type { ProductConfiguratorService } from "../../product-configurator.service";
-import type { MaterialTextureSwapEventData } from "../models/event-data/material-texture-swap-event-data";
-import { getOnProgressCallback } from "../get-on-progress-callback";
-import { MaterialAnimationType } from "./material-animation-type";
-import { addActiveEventItem, createAnimation } from "./create-animation";
-import { ActiveProductItemEventType } from "../models/product-item/active-product-item-event-type";
-import { clearEvents } from "../utility/product-item-event-utility";
-import { isPolygonalObject3D } from "../3rd-party/three/types/is-three-js-custom-type";
+import type { Material, Texture } from 'three';
+import { CanvasTexture, TextureLoader } from 'three';
+import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { MaterialTextureSwapEventData } from '../models/event-data/material-texture-swap-event-data';
+import { getOnProgressCallback } from '../get-on-progress-callback';
+import { MaterialAnimationType } from './material-animation-type';
+import { addActiveEventItem, createAnimation } from './create-animation';
+import { ActiveProductItemEventType } from '../models/product-item/active-product-item-event-type';
+import { clearEvents } from '../utility/product-item-event-utility';
+import { isPolygonalObject3D } from '../3rd-party/three/types/is-three-js-custom-type';
 
 const showDebugCanvas: boolean = false;
 
@@ -100,8 +100,8 @@ export class MaterialTextureChanger {
         return;
       }
 
-      let canvas: HTMLCanvasElement | undefined = document.createElement("canvas");
-      let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
+      let canvas: HTMLCanvasElement | undefined = document.createElement('canvas');
+      let context: CanvasRenderingContext2D | null = canvas.getContext('2d');
 
       const onFinish = (isCancelled: boolean, complete: boolean): void => {
         canvas!.width = 1;
@@ -241,17 +241,17 @@ export class MaterialTextureChanger {
     let debugCanvasContext: CanvasRenderingContext2D | undefined;
 
     if (showDebugCanvas) {
-      debugCanvasElement = document.getElementById("debugCanvas") as HTMLCanvasElement;
+      debugCanvasElement = document.getElementById('debugCanvas') as HTMLCanvasElement;
       if (!debugCanvasElement) {
-        debugCanvasElement = document.createElement("canvas");
-        debugCanvasElement.id = "debugCanvas";
+        debugCanvasElement = document.createElement('canvas');
+        debugCanvasElement.id = 'debugCanvas';
         document.body.appendChild(debugCanvasElement);
-        debugCanvasElement.classList.add("debug-canvas");
+        debugCanvasElement.classList.add('debug-canvas');
       }
 
       debugCanvasElement.width = canvas.width;
       debugCanvasElement.height = canvas.height;
-      debugCanvasContext = debugCanvasElement.getContext("2d") as CanvasRenderingContext2D;
+      debugCanvasContext = debugCanvasElement.getContext('2d') as CanvasRenderingContext2D;
       debugCanvasContext.drawImage(canvas, 0, 0);
     }
 

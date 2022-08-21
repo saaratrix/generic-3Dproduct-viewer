@@ -1,17 +1,17 @@
-import type { ElementRef, AfterViewInit, OnChanges, SimpleChanges } from "@angular/core";
-import { Component, HostListener, Input, ViewChild } from "@angular/core";
-import { ProductConfiguratorService } from "../../product-configurator.service";
-import type { ProductItem } from "../../3D/models/product-item/product-item";
-import { throttle } from "../../utility/throttle-decorator";
+import type { ElementRef, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, HostListener, Input, ViewChild } from '@angular/core';
+import { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductItem } from '../../3D/models/product-item/product-item';
+import { throttle } from '../../utility/throttle-decorator';
 
 @Component({
-  selector: "app-toolbar-subitem-container",
-  templateUrl: "./toolbar-subitem-container.component.html",
-  styleUrls: ["./toolbar-subitem-container.component.scss"],
+  selector: 'app-toolbar-subitem-container',
+  templateUrl: './toolbar-subitem-container.component.html',
+  styleUrls: ['./toolbar-subitem-container.component.scss'],
 })
 export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewInit {
-  @ViewChild("containerElement") containerRef!: ElementRef<HTMLElement>;
-  @ViewChild("subItemsElement") subItemsElement!: ElementRef<HTMLElement>;
+  @ViewChild('containerElement') containerRef!: ElementRef<HTMLElement>;
+  @ViewChild('subItemsElement') subItemsElement!: ElementRef<HTMLElement>;
 
   @Input() public productItem!: ProductItem;
 
@@ -35,7 +35,7 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
     this.calculatePosition();
   }
 
-  @HostListener("window:resize", [])
+  @HostListener('window:resize', [])
   @throttle(1000 / 60)
   public onResize(): void {
     this.calculatePosition();
@@ -57,7 +57,7 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
 
     // If the subItemContainerWidth is larger than the container then don't manually place it.
     if (subItemContainerWidth > containerWidth) {
-      subItemsElement.style.left = "";
+      subItemsElement.style.left = '';
       return;
     }
 
@@ -73,6 +73,6 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
       positionX -= rightSide - containerWidth;
     }
 
-    subItemsElement.style.left = positionX + "px";
+    subItemsElement.style.left = positionX + 'px';
   }
 }

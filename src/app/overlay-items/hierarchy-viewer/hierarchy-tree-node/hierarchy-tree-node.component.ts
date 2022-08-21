@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import type { Object3D } from "three";
-import { ProductConfiguratorService } from "../../../product-configurator.service";
-import { isPolygonalObject3D } from "../../../3D/3rd-party/three/types/is-three-js-custom-type";
-import { isSelectableObject3dUserData } from "../../../3D/models/selectable-object-3ds-options/is-selectable-object-3d-user-data";
-import { SelectedOptionsType } from "../../../3D/models/selectable-object-3ds-options/selected-options-type";
-import type { PolygonalObject3D } from "../../../3D/3rd-party/three/types/polygonal-object-3D";
-import { animate, state, style, transition, trigger } from "@angular/animations";
-import { stickyRightScrollElement, StickyScrollHandle } from "../../../utility/sticky-right-scroll-element";
-import { Subscription } from "rxjs";
-import type { SelectableObject3DUserData } from "../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import type { Object3D } from 'three';
+import { ProductConfiguratorService } from '../../../product-configurator.service';
+import { isPolygonalObject3D } from '../../../3D/3rd-party/three/types/is-three-js-custom-type';
+import { isSelectableObject3dUserData } from '../../../3D/models/selectable-object-3ds-options/is-selectable-object-3d-user-data';
+import { SelectedOptionsType } from '../../../3D/models/selectable-object-3ds-options/selected-options-type';
+import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { stickyRightScrollElement, StickyScrollHandle } from '../../../utility/sticky-right-scroll-element';
+import { Subscription } from 'rxjs';
+import type { SelectableObject3DUserData } from '../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
 
-type NodeIcon = "&#xea01;" | "&#xea03;";
+type NodeIcon = '&#xea01;' | '&#xea03;';
 
 interface NodeChild {
   node: Object3D;
@@ -18,32 +18,32 @@ interface NodeChild {
 }
 
 @Component({
-  selector: "hierarchy-tree-node",
-  templateUrl: "./hierarchy-tree-node.component.html",
-  styleUrls: ["./hierarchy-tree-node.component.scss"],
+  selector: 'hierarchy-tree-node',
+  templateUrl: './hierarchy-tree-node.component.html',
+  styleUrls: ['./hierarchy-tree-node.component.scss'],
   animations: [
-    trigger("expandedCollapsed", [
-      state("collapsed", style({
-        height: "0",
+    trigger('expandedCollapsed', [
+      state('collapsed', style({
+        height: '0',
       })),
-      state("expanded", style({
-        height: "*",
+      state('expanded', style({
+        height: '*',
       })),
-      transition("expanded <=> collapsed", [
-        animate("0.05s"),
+      transition('expanded <=> collapsed', [
+        animate('0.05s'),
       ]),
     ]),
   ],
 })
 export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
-  @ViewChild("nodeElement", { static: true }) nodeElementRef!: ElementRef<HTMLElement>;
+  @ViewChild('nodeElement', { static: true }) nodeElementRef!: ElementRef<HTMLElement>;
 
   @Input() node!: Object3D;
   @Input() depth!: number;
 
   name!: string;
-  nodeIcon: NodeIcon | "" = "";
-  marginLeft: string = "0";
+  nodeIcon: NodeIcon | '' = '';
+  marginLeft: string = '0';
   isHoverable!: boolean;
   isSelectable!: boolean;
 
@@ -87,8 +87,8 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
       }),
     );
 
-    const stickyElement = this.nodeElementRef.nativeElement.querySelector<HTMLElement>(".options");
-    const scrollElement = this.nodeElementRef.nativeElement.closest<HTMLElement>(".nodes");
+    const stickyElement = this.nodeElementRef.nativeElement.querySelector<HTMLElement>('.options');
+    const scrollElement = this.nodeElementRef.nativeElement.closest<HTMLElement>('.nodes');
 
     if (stickyElement && scrollElement) {
       stickyRightScrollElement(stickyElement, scrollElement);
@@ -106,14 +106,14 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
 
   private getMarginLeft(): string {
     if (this.depth === 0) {
-      return "0";
+      return '0';
     }
 
     const regex = /(\d+(?:\.\d+)?)(\s*[a-zA-Z]+)/i;
     const computedStyle = getComputedStyle(this.nodeElementRef.nativeElement);
-    const match = regex.exec(computedStyle.getPropertyValue("--margin-per-depth"));
+    const match = regex.exec(computedStyle.getPropertyValue('--margin-per-depth'));
     if (!match) {
-      return "0";
+      return '0';
     }
     const margin = parseFloat(match[1]);
     // If no children add an extra margin, so it's all nicely aligned.
@@ -163,10 +163,10 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
 
   nodeToIcon(node: Object3D): NodeIcon {
     if (isPolygonalObject3D(node)) {
-      return "&#xea03;";
+      return '&#xea03;';
     }
 
-    return "&#xea01;";
+    return '&#xea01;';
   }
 
   toggleVisibility(event: Event): void {

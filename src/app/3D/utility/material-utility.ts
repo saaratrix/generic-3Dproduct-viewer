@@ -1,5 +1,5 @@
-import type { Material } from "three";
-import type { PolygonalObject3D } from "../3rd-party/three/types/polygonal-object-3D";
+import type { Material } from 'three';
+import type { PolygonalObject3D } from '../3rd-party/three/types/polygonal-object-3D';
 
 export function getMaterialsFromObject(object: PolygonalObject3D): Material[] {
   if (Array.isArray(object.material)) {

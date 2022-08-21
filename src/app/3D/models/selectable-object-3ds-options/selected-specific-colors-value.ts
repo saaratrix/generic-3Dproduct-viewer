@@ -1,4 +1,4 @@
-import type { MaterialAnimationType } from "../../material-animators/material-animation-type";
+import type { MaterialAnimationType } from '../../material-animators/material-animation-type';
 
 export interface SelectedSpecificColorsValue {
   animationType: MaterialAnimationType;

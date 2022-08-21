@@ -1,9 +1,9 @@
-import type { SubProductItem } from "./sub-product-item";
-import type { Object3D } from "three";
-import type { Model3D } from "../model-3D";
-import type { SelectableObject3DsOption } from "../selectable-object-3ds-options/selectable-object-3Ds-option";
-import type { ActiveProductItemEvent } from "./active-product-item-event";
-import type { PolygonalObject3D } from "../../3rd-party/three/types/polygonal-object-3D";
+import type { SubProductItem } from './sub-product-item';
+import type { Object3D } from 'three';
+import type { Model3D } from '../model-3D';
+import type { SelectableObject3DsOption } from '../selectable-object-3ds-options/selectable-object-3Ds-option';
+import type { ActiveProductItemEvent } from './active-product-item-event';
+import type { PolygonalObject3D } from '../../3rd-party/three/types/polygonal-object-3D';
 
 export interface ProductItem {
   id: number;

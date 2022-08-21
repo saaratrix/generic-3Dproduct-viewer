@@ -7,7 +7,8 @@
     "build": "ng build",
     "build-prod": "ng build --configuration production --output-path build --base-href /generic-3Dproduct-viewer/build/",
     "test": "ng test",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "private": true,
   "dependencies": {

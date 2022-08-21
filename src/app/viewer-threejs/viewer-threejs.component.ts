@@ -1,15 +1,15 @@
-import type { ElementRef, OnInit } from "@angular/core";
-import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
-import { WebGLRenderer } from "three";
+import type { ElementRef, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { WebGLRenderer } from 'three';
 
 @Component({
-  selector: "app-viewer-threejs",
-  templateUrl: "./viewer-threejs.component.html",
-  styleUrls: ["./viewer-threejs.component.scss"],
+  selector: 'app-viewer-threejs',
+  templateUrl: './viewer-threejs.component.html',
+  styleUrls: ['./viewer-threejs.component.scss'],
 })
 export class ViewerThreejsComponent implements OnInit {
 
-  @ViewChild("canvas", { static: true }) canvasRef!: ElementRef;
+  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef;
 
   @Output()
   public sceneInit: EventEmitter<WebGLRenderer> = new EventEmitter<WebGLRenderer>();

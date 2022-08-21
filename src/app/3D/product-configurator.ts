@@ -1,20 +1,20 @@
-import type { Light } from "three";
-import { Color, DirectionalLight, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { ProductChanger } from "./product-changer";
-import { MaterialTextureChanger } from "./material-animators/material-texture-changer";
-import { Injectable } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { PointerEventHandler } from "./pointer-event-handler";
-import { SelectedProductHighlighter } from "./selected-product-highlighter";
-import { SelectedProductObjectIntersector } from "./selected-product-object-intersector";
-import { MaterialColorChanger } from "./material-animators/material-color-changer";
-import { throttle } from "../utility/throttle";
-import { EffectComposerHandler } from "./rendering/effect-composer-handler";
+import type { Light } from 'three';
+import { Color, DirectionalLight, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { ProductConfiguratorService } from '../product-configurator.service';
+import { ProductChanger } from './product-changer';
+import { MaterialTextureChanger } from './material-animators/material-texture-changer';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PointerEventHandler } from './pointer-event-handler';
+import { SelectedProductHighlighter } from './selected-product-highlighter';
+import { SelectedProductObjectIntersector } from './selected-product-object-intersector';
+import { MaterialColorChanger } from './material-animators/material-color-changer';
+import { throttle } from '../utility/throttle';
+import { EffectComposerHandler } from './rendering/effect-composer-handler';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ProductConfigurator {
   public scene: Scene;
@@ -123,7 +123,7 @@ export class ProductConfigurator {
    * Init events like window.resize
    */
   public initEvents(): void {
-    window.addEventListener("resize", throttle(() => {
+    window.addEventListener('resize', throttle(() => {
       const { width, height } = this.getRendererSize();
       this.renderer.setSize(width, height);
       this.effectsComposerHandler.setSize(width, height);
@@ -136,7 +136,7 @@ export class ProductConfigurator {
 
   public loadInitialItem(): void {
     const snapshot = this.activatedRoute.snapshot;
-    const name = snapshot.paramMap.has("name") ? snapshot.paramMap.get("name")!.toLowerCase() : "";
+    const name = snapshot.paramMap.has('name') ? snapshot.paramMap.get('name')!.toLowerCase() : '';
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
     this.productChanger.changeProduct(selectedItem).then();
   }

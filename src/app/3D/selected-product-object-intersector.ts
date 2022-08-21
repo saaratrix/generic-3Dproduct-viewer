@@ -1,12 +1,12 @@
-import type { ProductConfiguratorService } from "../product-configurator.service";
-import type { Intersection, PerspectiveCamera, Vector2 } from "three";
-import { Raycaster } from "three";
-import type { Subscription } from "rxjs";
-import type { SelectableObject3DUserData } from "./models/selectable-object-3ds-options/selectable-object-3D-user-data";
-import type { SelectableObject3DsOption } from "./models/selectable-object-3ds-options/selectable-object-3Ds-option";
-import type { ProductItem } from "./models/product-item/product-item";
-import type { PolygonalObject3D } from "./3rd-party/three/types/polygonal-object-3D";
-import { isPolygonalObject3D } from "./3rd-party/three/types/is-three-js-custom-type";
+import type { ProductConfiguratorService } from '../product-configurator.service';
+import type { Intersection, PerspectiveCamera, Vector2 } from 'three';
+import { Raycaster } from 'three';
+import type { Subscription } from 'rxjs';
+import type { SelectableObject3DUserData } from './models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import type { SelectableObject3DsOption } from './models/selectable-object-3ds-options/selectable-object-3Ds-option';
+import type { ProductItem } from './models/product-item/product-item';
+import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
+import { isPolygonalObject3D } from './3rd-party/three/types/is-three-js-custom-type';
 
 export class SelectedProductObjectIntersector {
   private raycaster: Raycaster = new Raycaster();

@@ -1,12 +1,12 @@
-import { Component, Input } from "@angular/core";
-import type { SubProductItem } from "../../3D/models/product-item/sub-product-item";
-import { ProductConfiguratorService } from "../../product-configurator.service";
-import type { ProductItem } from "../../3D/models/product-item/product-item";
+import { Component, Input } from '@angular/core';
+import type { SubProductItem } from '../../3D/models/product-item/sub-product-item';
+import { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductItem } from '../../3D/models/product-item/product-item';
 
 @Component({
-  selector: "app-toolbar-subitem",
-  templateUrl: "./toolbar-subitem.component.html",
-  styleUrls: ["./toolbar-subitem.component.scss"],
+  selector: 'app-toolbar-subitem',
+  templateUrl: './toolbar-subitem.component.html',
+  styleUrls: ['./toolbar-subitem.component.scss'],
 })
 export class ToolbarSubitemComponent {
 

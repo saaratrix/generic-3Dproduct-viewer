@@ -1,4 +1,4 @@
-import type { AnimationHandle } from "./animation-handle";
+import type { AnimationHandle } from './animation-handle';
 
 export interface IntervalAnimationOptions {
   /**

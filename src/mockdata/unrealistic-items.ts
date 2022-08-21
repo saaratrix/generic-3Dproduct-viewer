@@ -1,34 +1,34 @@
-import type { ProductItem } from "../app/3D/models/product-item/product-item";
-import { getFlowerPotModel, getRoseModel, getWuffelsModel } from "./models";
-import { Euler, Vector3 } from "three";
-import { SelectedOptionsType } from "../app/3D/models/selectable-object-3ds-options/selected-options-type";
-import { MaterialAnimationType } from "../app/3D/material-animators/material-animation-type";
-import type { SelectedSpecificTexturesValue } from "../app/3D/models/selectable-object-3ds-options/selected-specific-textures-value";
+import type { ProductItem } from '../app/3D/models/product-item/product-item';
+import { getFlowerPotModel, getRoseModel, getWuffelsModel } from './models';
+import { Euler, Vector3 } from 'three';
+import { SelectedOptionsType } from '../app/3D/models/selectable-object-3ds-options/selected-options-type';
+import { MaterialAnimationType } from '../app/3D/material-animators/material-animation-type';
+import type { SelectedSpecificTexturesValue } from '../app/3D/models/selectable-object-3ds-options/selected-specific-textures-value';
 
 export function createFlowerPot(id: number): ProductItem {
   return {
     id,
-    name: "flowerpot",
-    thumbnail: "assets/models/thumbnail_pot.png",
+    name: 'flowerpot',
+    thumbnail: 'assets/models/thumbnail_pot.png',
     models: [getFlowerPotModel()],
     hasFloor: false,
     useGammaSpace: false,
-    tooltip: "A very good looking flower pot.",
+    tooltip: 'A very good looking flower pot.',
     subItems: [],
     selectableObject3DsOptions: [
       {
-        includedObjects: ["Cylinder.002_Cylinder.006_M_flower"],
+        includedObjects: ['Cylinder.002_Cylinder.006_M_flower'],
         options: {
           type: SelectedOptionsType.FreeColor,
         },
       }, {
-        includedObjects: ["Cylinder.002_Cylinder.006_M_pot"],
+        includedObjects: ['Cylinder.002_Cylinder.006_M_pot'],
         options: {
           type: SelectedOptionsType.SpecificColors,
           value: {
             animationType: MaterialAnimationType.Linear,
             // ffc0cb = CSS Color 'pink'
-            colors: ["#ff7f00", "#badbad", "#ffc0cb"],
+            colors: ['#ff7f00', '#badbad', '#ffc0cb'],
           },
         },
       },
@@ -59,23 +59,23 @@ export function createRose(id: number): ProductItem {
     animationType: MaterialAnimationType.FromTopToBottom,
     textures: [
       {
-        url: "assets/models/rose.png",
-        thumbnail: "assets/models/thumbnail_rose.png",
+        url: 'assets/models/rose.png',
+        thumbnail: 'assets/models/thumbnail_rose.png',
       }, {
-        url: "assets/models/rose_pink.png",
-        thumbnail: "assets/models/rose_pink.png",
+        url: 'assets/models/rose_pink.png',
+        thumbnail: 'assets/models/rose_pink.png',
       },
     ],
   };
 
   return {
     id,
-    name: "roses",
-    thumbnail: "assets/models/thumbnail_rose.png",
+    name: 'roses',
+    thumbnail: 'assets/models/thumbnail_rose.png',
     models: [rose1, rose2, centerRose, rose4, rose5],
     hasFloor: false,
     useGammaSpace: false,
-    tooltip: "A special gift a long time ago.",
+    tooltip: 'A special gift a long time ago.',
     subItems: [],
     selectableObject3DsOptions: [{
       noRelatedObjects: true,
@@ -92,12 +92,12 @@ export function createRose(id: number): ProductItem {
 export function createWuffels(id: number): ProductItem {
   return {
     id,
-    name: "Wuffels",
-    thumbnail: "assets/models/thumbnail_wuffels.png",
+    name: 'Wuffels',
+    thumbnail: 'assets/models/thumbnail_wuffels.png',
     models: [getWuffelsModel()],
     hasFloor: true,
     useGammaSpace: false,
-    tooltip: "Wuffels! Wuff!",
+    tooltip: 'Wuffels! Wuff!',
     subItems: [],
     selectableObject3DsOptions: [],
 

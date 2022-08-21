@@ -1,28 +1,28 @@
-import type { OnDestroy, OnInit } from "@angular/core";
-import { ChangeDetectorRef, NgZone } from "@angular/core";
-import { Component } from "@angular/core";
-import type { AnimationEvent } from "@angular/animations";
-import { animate, state, style, transition, trigger } from "@angular/animations";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import type { Subscription } from "rxjs";
-import { SelectedOptionsType } from "../3D/models/selectable-object-3ds-options/selected-options-type";
-import type { SelectableObject3DUserData } from "../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
-import type { PolygonalObject3D } from "../3D/3rd-party/three/types/polygonal-object-3D";
+import type { OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
+import type { AnimationEvent } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ProductConfiguratorService } from '../product-configurator.service';
+import type { Subscription } from 'rxjs';
+import { SelectedOptionsType } from '../3D/models/selectable-object-3ds-options/selected-options-type';
+import type { SelectableObject3DUserData } from '../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import type { PolygonalObject3D } from '../3D/3rd-party/three/types/polygonal-object-3D';
 
 @Component({
-  selector: "app-sidebar",
-  templateUrl: "./sidebar.component.html",
-  styleUrls: ["./sidebar.component.scss"],
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
   animations: [
-    trigger("openClosed", [
-      state("open", style({
-        right: "0",
+    trigger('openClosed', [
+      state('open', style({
+        right: '0',
       })),
-      state("closed", style({
-        right: "var(--sidebar-closed-right)",
+      state('closed', style({
+        right: 'var(--sidebar-closed-right)',
       })),
-      transition("open <=> closed", [
-        animate("0.15s"),
+      transition('open <=> closed', [
+        animate('0.15s'),
       ]),
     ]),
   ],
@@ -69,7 +69,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   public openClosedStart(event: AnimationEvent): void {
-    if (event.fromState === "closed") {
+    if (event.fromState === 'closed') {
       // setTimeout to avoid ExpressionChanged error.
       setTimeout(() => {
         this.isContentVisible = true;
@@ -78,7 +78,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   public openClosedDone(event: AnimationEvent): void {
-    if (event.toState === "closed") {
+    if (event.toState === 'closed') {
       setTimeout(() => {
         this.isContentVisible = false;
       }, 1);

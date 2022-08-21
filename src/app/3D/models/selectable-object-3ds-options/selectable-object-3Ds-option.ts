@@ -1,4 +1,4 @@
-import type { SelectedOptions } from "./selected-options";
+import type { SelectedOptions } from './selected-options';
 
 export interface SelectableObject3DsOption {
   /**

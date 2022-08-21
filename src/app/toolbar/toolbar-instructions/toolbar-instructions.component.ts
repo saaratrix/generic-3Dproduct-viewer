@@ -1,19 +1,19 @@
-import type { ElementRef, OnInit } from "@angular/core";
-import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
-import { animate, query, style, transition, trigger } from "@angular/animations";
+import type { ElementRef, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { animate, query, style, transition, trigger } from '@angular/animations';
 
 const textDuration = 250;
 const widthDuration = 500;
 
 @Component({
-  selector: "app-toolbar-instructions",
-  templateUrl: "./toolbar-instructions.component.html",
-  styleUrls: ["./toolbar-instructions.component.scss"],
+  selector: 'app-toolbar-instructions',
+  templateUrl: './toolbar-instructions.component.html',
+  styleUrls: ['./toolbar-instructions.component.scss'],
   animations: [
-    trigger("close", [
-      transition("open => closed", [
-        query("p", animate(textDuration + "ms", style({ opacity: "0" }))),
-        query(":self", animate(widthDuration + "ms", style({ width: "0" }))),
+    trigger('close', [
+      transition('open => closed', [
+        query('p', animate(textDuration + 'ms', style({ opacity: '0' }))),
+        query(':self', animate(widthDuration + 'ms', style({ width: '0' }))),
       ]),
     ]),
   ],
@@ -22,7 +22,7 @@ export class ToolbarInstructionsComponent implements OnInit {
   public isOpen = true;
   public isTextVisible = true;
 
-  @ViewChild("instructionContainer") instructionContainerRef !: ElementRef;
+  @ViewChild('instructionContainer') instructionContainerRef !: ElementRef;
 
   @Output() public closed: EventEmitter<void>;
 
@@ -45,7 +45,7 @@ export class ToolbarInstructionsComponent implements OnInit {
   public closeInstructionsButton(): void {
     // Don't show the tutorial again!
     if (localStorage) {
-      localStorage.setItem("tutorial", "1");
+      localStorage.setItem('tutorial', '1');
     }
 
     this.closeInstructions();
@@ -57,7 +57,7 @@ export class ToolbarInstructionsComponent implements OnInit {
     const element = this.instructionContainerRef.nativeElement as HTMLElement;
     const height = element.offsetHeight;
     // Explicitly set the height so it doesn't shrink etc when the text disappears.
-    element.style.height = height + "px";
+    element.style.height = height + 'px';
 
     // This removes the element with *ngIf.
     setTimeout(() => {

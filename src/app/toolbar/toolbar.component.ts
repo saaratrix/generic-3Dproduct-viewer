@@ -1,13 +1,13 @@
-import type { OnDestroy, OnInit } from "@angular/core";
-import { Component } from "@angular/core";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import type { Subscription } from "rxjs";
-import type { ProductItem } from "../3D/models/product-item/product-item";
+import type { OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ProductConfiguratorService } from '../product-configurator.service';
+import type { Subscription } from 'rxjs';
+import type { ProductItem } from '../3D/models/product-item/product-item';
 
 @Component({
-  selector: "app-toolbar",
-  templateUrl: "./toolbar.component.html",
-  styleUrls: ["./toolbar.component.scss"],
+  selector: 'app-toolbar',
+  templateUrl: './toolbar.component.html',
+  styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
@@ -22,8 +22,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    const hasTutorialItem = localStorage?.getItem("tutorial");
-    if (hasTutorialItem && hasTutorialItem === "1") {
+    const hasTutorialItem = localStorage?.getItem('tutorial');
+    if (hasTutorialItem && hasTutorialItem === '1') {
       this.hasReadInstructions = true;
     }
 

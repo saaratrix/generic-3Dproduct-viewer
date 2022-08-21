@@ -1,21 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import type { OverlayItem } from "../../../overlay/overlay-item";
-import { Subject } from "rxjs";
-import { animate, AnimationEvent, state, style, transition, trigger } from "@angular/animations";
-import { OverlayService } from "../../../overlay/overlay.service";
+import { Component, OnInit } from '@angular/core';
+import type { OverlayItem } from '../../../overlay/overlay-item';
+import { Subject } from 'rxjs';
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { OverlayService } from '../../../overlay/overlay.service';
 
 const animationDuration = 150;
 
 @Component({
-  selector: "hierarchy-overlay",
-  templateUrl: "./hierarchy-overlay.component.html",
-  styleUrls: ["./hierarchy-overlay.component.scss"],
+  selector: 'hierarchy-overlay',
+  templateUrl: './hierarchy-overlay.component.html',
+  styleUrls: ['./hierarchy-overlay.component.scss'],
   animations: [
-    trigger("openClosed", [
-      state("open", style({ opacity: "1" })),
-      state("closed", style({ opacity: "0" })),
-      transition("open => closed", [animate(`${animationDuration}ms`)]),
-      transition("closed => open", [animate(`${animationDuration}ms`)]),
+    trigger('openClosed', [
+      state('open', style({ opacity: '1' })),
+      state('closed', style({ opacity: '0' })),
+      transition('open => closed', [animate(`${animationDuration}ms`)]),
+      transition('closed => open', [animate(`${animationDuration}ms`)]),
     ]),
   ],
 })
@@ -75,12 +75,12 @@ export class HierarchyOverlayComponent implements OnInit, OverlayItem {
   }
 
   public openClosedStart(event: AnimationEvent): void {
-    const cssClass = event.fromState === "closed" ? "opening" : "closing";
+    const cssClass = event.fromState === 'closed' ? 'opening' : 'closing';
     (event.element as HTMLElement).classList.add(cssClass);
   }
 
   public openClosedDone(event: AnimationEvent): void {
-    const cssClass = event.fromState === "closed" ? "opening" : "closing";
+    const cssClass = event.fromState === 'closed' ? 'opening' : 'closing';
     (event.element as HTMLElement).classList.remove(cssClass);
   }
 }

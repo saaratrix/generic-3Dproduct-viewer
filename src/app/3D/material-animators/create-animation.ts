@@ -1,8 +1,8 @@
-import type { ProductItem } from "../models/product-item/product-item";
-import type { OnAnimationProgressCallback } from "./on-animation-progress-callback";
-import type { CancelActiveEventCallback } from "../models/product-item/cancel-active-event-callback";
-import type { ActiveProductItemEventType } from "../models/product-item/active-product-item-event-type";
-import type { ActiveProductItemEvent } from "../models/product-item/active-product-item-event";
+import type { ProductItem } from '../models/product-item/product-item';
+import type { OnAnimationProgressCallback } from './on-animation-progress-callback';
+import type { CancelActiveEventCallback } from '../models/product-item/cancel-active-event-callback';
+import type { ActiveProductItemEventType } from '../models/product-item/active-product-item-event-type';
+import type { ActiveProductItemEvent } from '../models/product-item/active-product-item-event';
 
 // TODO: Try and refactor all this into a better system at some point (so never!) or maybe take a promise as input to continue the promise?
 export function addActiveEventItem(productItem: ProductItem, eventType: ActiveProductItemEventType): ActiveProductItemEvent {

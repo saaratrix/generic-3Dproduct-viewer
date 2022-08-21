@@ -1,9 +1,9 @@
-import type { ComponentFixture } from "@angular/core/testing";
-import { TestBed, waitForAsync } from "@angular/core/testing";
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ViewerThreejsComponent } from "./viewer-threejs.component";
+import { ViewerThreejsComponent } from './viewer-threejs.component';
 
-describe("ViewerThreejsComponent", () => {
+describe('ViewerThreejsComponent', () => {
   let component: ViewerThreejsComponent;
   let fixture: ComponentFixture<ViewerThreejsComponent>;
 
@@ -19,7 +19,7 @@ describe("ViewerThreejsComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

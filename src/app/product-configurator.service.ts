@@ -1,16 +1,16 @@
-import type { OnDestroy } from "@angular/core";
-import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
-import type { ProductItem } from "./3D/models/product-item/product-item";
-import { ProductConfigurationEvent } from "./product-configurator-events";
-import type { LoadingProgressEventData } from "./3D/models/event-data/loading-progress-event-data";
-import type { MaterialTextureSwapEventData } from "./3D/models/event-data/material-texture-swap-event-data";
-import type { Vector2 } from "three";
-import type { MaterialColorSwapEventData } from "./3D/models/event-data/material-color-swap-event-data";
-import type { PolygonalObject3D } from "./3D/3rd-party/three/types/polygonal-object-3D";
+import type { OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import type { ProductItem } from './3D/models/product-item/product-item';
+import { ProductConfigurationEvent } from './product-configurator-events';
+import type { LoadingProgressEventData } from './3D/models/event-data/loading-progress-event-data';
+import type { MaterialTextureSwapEventData } from './3D/models/event-data/material-texture-swap-event-data';
+import type { Vector2 } from 'three';
+import type { MaterialColorSwapEventData } from './3D/models/event-data/material-color-swap-event-data';
+import type { PolygonalObject3D } from './3D/3rd-party/three/types/polygonal-object-3D';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ProductConfiguratorService implements OnDestroy {
   /**

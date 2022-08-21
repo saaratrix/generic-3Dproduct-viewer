@@ -1,23 +1,23 @@
-import { NgZone, OnInit } from "@angular/core";
-import { Component, Input } from "@angular/core";
-import type { Texture } from "three";
-import type { SelectedSpecificTexture } from "../../3D/models/selectable-object-3ds-options/selected-specific-texture";
-import { MaterialAnimationType } from "../../3D/material-animators/material-animation-type";
-import { ProductConfiguratorService } from "../../product-configurator.service";
-import type { SelectableObject3DUserData } from "../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data";
-import { getMaterialsFromObject, getMaterialsFromObjects } from "../../3D/utility/material-utility";
-import type { SelectedSpecificTexturesValue } from "../../3D/models/selectable-object-3ds-options/selected-specific-textures-value";
-import type { PolygonalObject3D } from "../../3D/3rd-party/three/types/polygonal-object-3D";
+import { NgZone, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import type { Texture } from 'three';
+import type { SelectedSpecificTexture } from '../../3D/models/selectable-object-3ds-options/selected-specific-texture';
+import { MaterialAnimationType } from '../../3D/material-animators/material-animation-type';
+import { ProductConfiguratorService } from '../../product-configurator.service';
+import type { SelectableObject3DUserData } from '../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import { getMaterialsFromObject, getMaterialsFromObjects } from '../../3D/utility/material-utility';
+import type { SelectedSpecificTexturesValue } from '../../3D/models/selectable-object-3ds-options/selected-specific-textures-value';
+import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
 
 @Component({
-  selector: "sidebar-specific-texture",
-  templateUrl: "./sidebar-specific-texture.component.html",
-  styleUrls: ["./sidebar-specific-texture.component.scss"],
+  selector: 'sidebar-specific-texture',
+  templateUrl: './sidebar-specific-texture.component.html',
+  styleUrls: ['./sidebar-specific-texture.component.scss'],
 })
 export class SidebarSpecificTextureComponent implements OnInit {
   @Input() object3D!: PolygonalObject3D;
 
-  currentValue: string = "";
+  currentValue: string = '';
   // Texture values are the texture urls.
   values: SelectedSpecificTexture[] = [];
 
@@ -45,16 +45,16 @@ export class SidebarSpecificTextureComponent implements OnInit {
 
   private setCurrentTextureValue(): void {
     const materials = getMaterialsFromObject(this.object3D);
-    let imageSrc: string = "";
-    this.currentValue = "";
+    let imageSrc: string = '';
+    this.currentValue = '';
     if (this.values.length === 0) {
       return;
     }
 
     for (const material of materials) {
-      const texture = material["map"] as Texture;
+      const texture = material['map'] as Texture;
       if (texture) {
-        imageSrc = texture.image.src ?? "";
+        imageSrc = texture.image.src ?? '';
         break;
       }
     }
@@ -102,7 +102,7 @@ export class SidebarSpecificTextureComponent implements OnInit {
         onLoaded,
         // We know selectedProduct exists as we are using the sidebar!
         productItem: this.productConfiguratorService.selectedProduct!,
-        textureSlot: "map",
+        textureSlot: 'map',
         textureUrl: value,
       });
     });

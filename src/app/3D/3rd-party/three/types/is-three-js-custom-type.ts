@@ -1,6 +1,6 @@
-import type { Material, Object3D } from "three";
-import type { PolygonalObject3D } from "./polygonal-object-3D";
-import type { ColorMaterial } from "./color-material";
+import type { Material, Object3D } from 'three';
+import type { PolygonalObject3D } from './polygonal-object-3D';
+import type { ColorMaterial } from './color-material';
 
 export function isPolygonalObject3D(object: Object3D): object is PolygonalObject3D {
   return !!(object as PolygonalObject3D).geometry;

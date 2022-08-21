@@ -1,12 +1,12 @@
-import type { ProductConfiguratorService } from "../product-configurator.service";
-import type { Intersection } from "three";
-import { Vector2 } from "three";
-import { throttle } from "../utility/throttle";
-import type { SelectedProductObjectIntersector } from "./selected-product-object-intersector";
-import type { Subject } from "rxjs";
-import { isPolygonalObject3D } from "./3rd-party/three/types/is-three-js-custom-type";
-import type { PolygonalObject3D } from "./3rd-party/three/types/polygonal-object-3D";
-import { Subscription } from "rxjs";
+import type { ProductConfiguratorService } from '../product-configurator.service';
+import type { Intersection } from 'three';
+import { Vector2 } from 'three';
+import { throttle } from '../utility/throttle';
+import type { SelectedProductObjectIntersector } from './selected-product-object-intersector';
+import type { Subject } from 'rxjs';
+import { isPolygonalObject3D } from './3rd-party/three/types/is-three-js-custom-type';
+import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
+import { Subscription } from 'rxjs';
 
 interface PointerCoordinates {
   x: number;
@@ -48,17 +48,17 @@ export class PointerEventHandler {
   public initPointerEvents(element: HTMLElement): void {
     this.element = element;
 
-    element.addEventListener("pointerdown", this.onPointerDown);
-    element.addEventListener("pointerup", this.onPointerUp);
-    element.addEventListener("pointermove", this.onPointerMove);
-    element.addEventListener("pointerleave", this.onPointerLeave);
+    element.addEventListener('pointerdown', this.onPointerDown);
+    element.addEventListener('pointerup', this.onPointerUp);
+    element.addEventListener('pointermove', this.onPointerMove);
+    element.addEventListener('pointerleave', this.onPointerLeave);
   }
 
   public removePointerEvents(): void {
-    this.element.removeEventListener("pointerdown", this.onPointerDown);
-    this.element.addEventListener("pointerup", this.onPointerUp);
-    this.element.removeEventListener("pointermove", this.onPointerMove);
-    this.element.removeEventListener("pointerleave", this.onPointerLeave);
+    this.element.removeEventListener('pointerdown', this.onPointerDown);
+    this.element.addEventListener('pointerup', this.onPointerUp);
+    this.element.removeEventListener('pointermove', this.onPointerMove);
+    this.element.removeEventListener('pointerleave', this.onPointerLeave);
   }
 
   // Creating lambdas, so we don't have to do .bind() on the methods.
@@ -87,7 +87,7 @@ export class PointerEventHandler {
       return;
     }
 
-    this.trySetObjectAndEmitEvents(event, this.productConfiguratorService.object3DPointerEnter, "currentHoveredObject", this.tryDeselectCurrentHoveredObject);
+    this.trySetObjectAndEmitEvents(event, this.productConfiguratorService.object3DPointerEnter, 'currentHoveredObject', this.tryDeselectCurrentHoveredObject);
   }, 1000 / 60);
 
   private onPointerLeave = (): void => {
@@ -97,15 +97,15 @@ export class PointerEventHandler {
 
   private onClick(event: PointerEvent): void {
     // button = 0 for left-clicks on a mouse.
-    if (event.pointerType === "mouse" && event.button !== 0) {
+    if (event.pointerType === 'mouse' && event.button !== 0) {
       return;
     }
 
-    this.trySetObjectAndEmitEvents(event, this.productConfiguratorService.object3DSelected, "currentSelectedObject", this.tryDeselectCurrentObject);
+    this.trySetObjectAndEmitEvents(event, this.productConfiguratorService.object3DSelected, 'currentSelectedObject', this.tryDeselectCurrentObject);
   }
 
   // A method that both click & pointermove can use because they had the same functionality just different variables!
-  private trySetObjectAndEmitEvents(pointerEvent: PointerEvent, subject: Subject<PolygonalObject3D>, selectedKey: "currentSelectedObject" | "currentHoveredObject", deselectMethod: () => void): void {
+  private trySetObjectAndEmitEvents(pointerEvent: PointerEvent, subject: Subject<PolygonalObject3D>, selectedKey: 'currentSelectedObject' | 'currentHoveredObject', deselectMethod: () => void): void {
     const intersections = this.getIntersections(pointerEvent);
 
     if (intersections.length === 0) {

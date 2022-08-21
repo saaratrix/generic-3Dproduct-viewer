@@ -1,12 +1,12 @@
-import { Component, ComponentRef, OnDestroy, OnInit } from "@angular/core";
-import { OverlayService } from "../../../overlay/overlay.service";
-import { Subscription } from "rxjs";
-import { HierarchyOverlayComponent } from "../hierarchy-overlay/hierarchy-overlay.component";
+import { Component, ComponentRef, OnDestroy, OnInit } from '@angular/core';
+import { OverlayService } from '../../../overlay/overlay.service';
+import { Subscription } from 'rxjs';
+import { HierarchyOverlayComponent } from '../hierarchy-overlay/hierarchy-overlay.component';
 
 @Component({
-  selector: "hierarchy-viewer-tool",
-  templateUrl: "./hierarchy-viewer-tool.component.html",
-  styleUrls: ["./hierarchy-viewer-tool.component.scss"],
+  selector: 'hierarchy-viewer-tool',
+  templateUrl: './hierarchy-viewer-tool.component.html',
+  styleUrls: ['./hierarchy-viewer-tool.component.scss'],
 })
 export class HierarchyViewerToolComponent implements OnInit, OnDestroy {
 

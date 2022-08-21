@@ -30,7 +30,7 @@ module.exports = {
     "no-whitespace-before-property": ["error"],
     "object-curly-spacing": ["error", "always"],
     "object-property-newline": ["error",  { allowAllPropertiesOnSameLine: true }],
-    "quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
+    "quotes": ["error", "single", { avoidEscape: true, allowTemplateLiterals: true }],
     "space-before-blocks": ["error", "always"],
     "space-in-parens": ["error", "never"],
     // Typescript ESLint rules: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin/docs/rules

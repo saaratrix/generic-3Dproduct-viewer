@@ -1,19 +1,19 @@
-import { FullScreenQuad, Pass } from "three/examples/jsm/postprocessing/Pass";
-import type { Camera, Scene, WebGLRenderer } from "three";
-import { AdditiveBlending, Color, DoubleSide, MeshBasicMaterial, NoBlending, RepeatWrapping, RGBAFormat, ShaderMaterial, Texture, UniformsUtils, Vector2, WebGLRenderTarget } from "three";
-import type { WebGLRenderTargetOptions } from "three/src/renderers/WebGLRenderTarget";
-import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
-import { createSeperableBlurMaterial } from "./create-blur-material";
-import type { IUniform } from "three/src/renderers/shaders/UniformsLib";
-import type { ProductConfiguratorService } from "../../../../product-configurator.service";
-import type { SelectedProductHighlighter } from "../../../selected-product-highlighter";
-import { AnimatedTextureBlurOutlineOutputMode } from "./animated-texture-blur-outline-output-mode";
-import type { AnimatedTextureBlurOutlineOptions } from "./animated-texture-blur-outline-options";
-import type { ColorBlurOutlineTextures } from "./color-blur-outline-textures";
-import { isRenderTarget, isTexture } from "../../../3rd-party/three/types/is-threejs-type";
-import { createOutlineMaterial } from "./create-outline-material";
+import { FullScreenQuad, Pass } from 'three/examples/jsm/postprocessing/Pass';
+import type { Camera, Scene, WebGLRenderer } from 'three';
+import { AdditiveBlending, Color, DoubleSide, MeshBasicMaterial, NoBlending, RepeatWrapping, RGBAFormat, ShaderMaterial, Texture, UniformsUtils, Vector2, WebGLRenderTarget } from 'three';
+import type { WebGLRenderTargetOptions } from 'three/src/renderers/WebGLRenderTarget';
+import { CopyShader } from 'three/examples/jsm/shaders/CopyShader';
+import { createSeperableBlurMaterial } from './create-blur-material';
+import type { IUniform } from 'three/src/renderers/shaders/UniformsLib';
+import type { ProductConfiguratorService } from '../../../../product-configurator.service';
+import type { SelectedProductHighlighter } from '../../../selected-product-highlighter';
+import { AnimatedTextureBlurOutlineOutputMode } from './animated-texture-blur-outline-output-mode';
+import type { AnimatedTextureBlurOutlineOptions } from './animated-texture-blur-outline-options';
+import type { ColorBlurOutlineTextures } from './color-blur-outline-textures';
+import { isRenderTarget, isTexture } from '../../../3rd-party/three/types/is-threejs-type';
+import { createOutlineMaterial } from './create-outline-material';
 
-type TexturePropertyKey = "hoverTexture" | "selectedTexture";
+type TexturePropertyKey = 'hoverTexture' | 'selectedTexture';
 
 // The blur shader code is adapted from three.js' OutlinePass:
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
@@ -157,7 +157,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     this.setOptions(options);
 
     this.maskRenderTarget = new WebGLRenderTarget(resolution.x, resolution.y, renderTargetOptions);
-    this.maskRenderTarget.texture.name = "OutlinePass.mask";
+    this.maskRenderTarget.texture.name = 'OutlinePass.mask';
     this.maskRenderTarget.texture.generateMipmaps = false;
 
     this.fsQuad = new FullScreenQuad();
@@ -171,7 +171,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
     // copy material
     if (CopyShader === undefined) {
-      console.error("THREE.OutlinePass relies on CopyShader");
+      console.error('THREE.OutlinePass relies on CopyShader');
     }
 
     this.copyUniforms = UniformsUtils.clone(CopyShader.uniforms);
@@ -198,7 +198,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
     this.animateOutline = options.animateOutline ?? this.animateOutline;
 
-    if (typeof options.animationInterval !== "undefined") {
+    if (typeof options.animationInterval !== 'undefined') {
       // Convert from milliseconds to seconds.
       this.interval = options.animationInterval / 1000;
     }
@@ -233,20 +233,20 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
 
   setColors(colors: ColorBlurOutlineTextures): void {
     if (colors.hover) {
-      this.setTexture("hoverTexture", colors.hover);
+      this.setTexture('hoverTexture', colors.hover);
     }
     if (colors.selected) {
-      this.setTexture("selectedTexture", colors.selected);
+      this.setTexture('selectedTexture', colors.selected);
     }
   }
 
   /**
    * A way to just set needsUpdate = true.
    */
-  updateTexture(texture: "hover" | "selected"): void {
-    if (texture === "hover" && isTexture(this.hoverTexture)) {
+  updateTexture(texture: 'hover' | 'selected'): void {
+    if (texture === 'hover' && isTexture(this.hoverTexture)) {
       this.hoverTexture.needsUpdate = true;
-    } else if (texture === "selected" && isTexture(this.selectedTexture)) {
+    } else if (texture === 'selected' && isTexture(this.selectedTexture)) {
       this.selectedTexture.needsUpdate = true;
     }
   }
@@ -308,7 +308,7 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
       return [0, 0];
     }
 
-    if (image.nodeName.toLowerCase() === "canvas") {
+    if (image.nodeName.toLowerCase() === 'canvas') {
       return [image.width, image.height];
     }
 
@@ -325,11 +325,11 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     let resY = Math.round(resolution.y / this.downsampleResolution);
 
     this.blurHorizontalRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurHorizontalRenderTarget.texture.name = "OutlinePass.blur";
+    this.blurHorizontalRenderTarget.texture.name = 'OutlinePass.blur';
     this.blurHorizontalRenderTarget.texture.generateMipmaps = false;
 
     this.blurVerticalRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurVerticalRenderTarget.texture.name = "OutlinePass.blur2";
+    this.blurVerticalRenderTarget.texture.name = 'OutlinePass.blur2';
     this.blurVerticalRenderTarget.texture.generateMipmaps = false;
 
     this.blurMaterial = createSeperableBlurMaterial(this.edgeThickness);
@@ -340,11 +340,11 @@ export class AnimatedTextureBlurOutlinePass extends Pass {
     resY = Math.round(resY / 2);
 
     this.blurHorizontalHalfRenderTarget = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurHorizontalHalfRenderTarget.texture.name = "OutlinePass.blur.half";
+    this.blurHorizontalHalfRenderTarget.texture.name = 'OutlinePass.blur.half';
     this.blurHorizontalHalfRenderTarget.texture.generateMipmaps = false;
 
     this.blurVerticalHalfRenderTarget2 = new WebGLRenderTarget(resX, resY, renderTargetOptions);
-    this.blurVerticalHalfRenderTarget2.texture.name = "OutlinePass.blur.half2";
+    this.blurVerticalHalfRenderTarget2.texture.name = 'OutlinePass.blur.half2';
     this.blurVerticalHalfRenderTarget2.texture.generateMipmaps = false;
 
     this.blurHalfMaterial = createSeperableBlurMaterial(this.edgeGlow);
