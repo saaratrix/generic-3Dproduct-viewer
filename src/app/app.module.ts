@@ -13,13 +13,10 @@ import { ToolbarSubitemContainerComponent } from './toolbar/toolbar-subitem-cont
 import { RouterModule } from '@angular/router';
 import { ProductViewerComponent } from './product-viewer/product-viewer.component';
 import { productViewerPageMatcher } from './product-viewer/product-viewer-page-matcher';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { SidebarFreeColorComponent } from './sidebar/sidebar-free-color/sidebar-free-color.component';
-import { SidebarSpecificColorComponent } from './sidebar/sidebar-specific-color/sidebar-specific-color.component';
-import { SidebarSpecificTextureComponent } from './sidebar/sidebar-specific-texture/sidebar-specific-texture.component';
 import { ViewerActionsToolbarComponent } from './viewer-actions-toolbar/viewer-actions-toolbar.component';
 import { OverlayModule } from './overlay/overlay.module';
 import { HierarchyViewerModule } from './overlay-items/hierarchy-viewer/hierarchy-viewer.module';
+import { SidebarModule } from './sidebar/sidebar.module';
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
   { component: ProductViewerComponent, matcher: productViewerPageMatcher },
@@ -36,18 +33,15 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     ToolbarSubitemComponent,
     ToolbarSubitemContainerComponent,
     ProductViewerComponent,
-    SidebarComponent,
-    SidebarFreeColorComponent,
-    SidebarSpecificColorComponent,
-    SidebarSpecificTextureComponent,
     ViewerActionsToolbarComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     rootRouting,
-    OverlayModule,
     HierarchyViewerModule,
+    OverlayModule,
+    SidebarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

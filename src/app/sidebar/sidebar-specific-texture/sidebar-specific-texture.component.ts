@@ -8,14 +8,16 @@ import type { SelectableObject3DUserData } from '../../3D/models/selectable-obje
 import { getMaterialsFromObject, getMaterialsFromObjects } from '../../3D/utility/material-utility';
 import type { SelectedSpecificTexturesValue } from '../../3D/models/selectable-object-3ds-options/selected-specific-textures-value';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
+import type { SidebarItem } from '../sidebar-item';
 
 @Component({
   selector: 'sidebar-specific-texture',
   templateUrl: './sidebar-specific-texture.component.html',
   styleUrls: ['./sidebar-specific-texture.component.scss'],
 })
-export class SidebarSpecificTextureComponent implements OnInit {
+export class SidebarSpecificTextureComponent implements OnInit, SidebarItem<SelectedSpecificTexturesValue> {
   @Input() object3D!: PolygonalObject3D;
+  item!: SelectedSpecificTexturesValue;
 
   currentValue: string = '';
   // Texture values are the texture urls.
@@ -30,17 +32,14 @@ export class SidebarSpecificTextureComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const userdata = this.object3D.userData as SelectableObject3DUserData;
-    const values = userdata.selectableObjectsOption.value as SelectedSpecificTexturesValue;
-
-    if (values.textures) {
-      this.values = values.textures;
+    if (this.item.textures) {
+      this.values = this.item.textures;
     } else {
       this.values = [];
     }
 
     this.setCurrentTextureValue();
-    this.animationType = values.animationType;
+    this.animationType = this.item.animationType;
   }
 
   private setCurrentTextureValue(): void {
@@ -107,5 +106,5 @@ export class SidebarSpecificTextureComponent implements OnInit {
       });
     });
   }
-
 }
+

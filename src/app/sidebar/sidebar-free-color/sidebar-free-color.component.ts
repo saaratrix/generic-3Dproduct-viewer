@@ -7,23 +7,25 @@ import { ProductConfiguratorService } from '../../product-configurator.service';
 import { clearEvents } from '../../3D/utility/product-item-event-utility';
 import { ActiveProductItemEventType } from '../../3D/models/product-item/active-product-item-event-type';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
+import type { HexColor } from '../../shared/models/hex-color';
+import type { SidebarItem } from '../sidebar-item';
 
 @Component({
   selector: 'sidebar-free-color',
   templateUrl: './sidebar-free-color.component.html',
   styleUrls: ['./sidebar-free-color.component.scss'],
 })
-export class SidebarFreeColorComponent implements OnInit {
-  @Input() object!: PolygonalObject3D;
+export class SidebarFreeColorComponent implements OnInit, SidebarItem {
+  @Input() object3D!: PolygonalObject3D;
 
-  initialColor: string = '';
+  initialColor: HexColor | '' = '';
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
   ) { }
 
   ngOnInit(): void {
-    const materials = getMaterialsFromObject(this.object);
+    const materials = getMaterialsFromObject(this.object3D);
     for (const material of materials) {
       const color = material['color'] as Color;
       if (color) {
@@ -35,11 +37,10 @@ export class SidebarFreeColorComponent implements OnInit {
 
   @throttle(100)
   public colorChanged(event: Event): void {
-    // Example: #ffffff
-    const hexColor = (<HTMLInputElement> event.target).value;
+    const hexColor = (<HTMLInputElement> event.target).value as HexColor;
     clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
-    setMaterialParameters(this.object, {
+    setMaterialParameters(this.object3D, {
       color: new Color(hexColor),
     });
   }

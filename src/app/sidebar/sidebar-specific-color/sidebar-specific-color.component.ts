@@ -9,20 +9,23 @@ import { ProductConfiguratorService } from '../../product-configurator.service';
 import { clearEvents } from '../../3D/utility/product-item-event-utility';
 import { ActiveProductItemEventType } from '../../3D/models/product-item/active-product-item-event-type';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
+import type { SidebarItem } from '../sidebar-item';
+import type { HexColor } from '../../shared/models/hex-color';
 
 @Component({
   selector: 'sidebar-specific-color',
   templateUrl: './sidebar-specific-color.component.html',
   styleUrls: ['./sidebar-specific-color.component.scss'],
 })
-export class SidebarSpecificColorComponent implements OnInit {
-  @Input() object!: PolygonalObject3D;
+export class SidebarSpecificColorComponent implements OnInit, SidebarItem<SelectedSpecificColorsValue> {
+  @Input() object3D!: PolygonalObject3D;
+  @Input() item!: SelectedSpecificColorsValue;
 
   currentValue: string = '';
   // The color or texture values.
   // Color values are in hex form #badbad
   // Texture values are the texture urls.
-  values: string[] = [];
+  values: HexColor[] = [];
 
   private animationType: MaterialAnimationType = MaterialAnimationType.None;
 
@@ -32,21 +35,14 @@ export class SidebarSpecificColorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const userdata = this.object.userData as SelectableObject3DUserData;
-    const values = userdata.selectableObjectsOption.value as SelectedSpecificColorsValue;
-
-    if (values.colors) {
-      this.values = values.colors;
-    } else {
-      this.values = [];
-    }
+    this.values = this.item.colors ? this.item.colors : [];
 
     this.setCurrentColorValue();
-    this.animationType = values.animationType;
+    this.animationType = this.item.animationType;
   }
 
   private setCurrentColorValue(): void {
-    const materials = getMaterialsFromObject(this.object);
+    const materials = getMaterialsFromObject(this.object3D);
     this.currentValue = '';
     for (const material of materials) {
       const color = material['color'] as Color;
@@ -59,7 +55,6 @@ export class SidebarSpecificColorComponent implements OnInit {
 
   /**
    * Color value in hexadecimal form.
-   * @param value
    */
   public changeCurrentColor(value: string): void {
     if (value === this.currentValue) {
@@ -67,8 +62,8 @@ export class SidebarSpecificColorComponent implements OnInit {
     }
     clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
-    const userData = this.object.userData as SelectableObject3DUserData;
-    const objects = [this.object];
+    const userData = this.object3D.userData as SelectableObject3DUserData;
+    const objects = [this.object3D];
     if (userData.related) {
       objects.push(...userData.related);
     }
@@ -76,7 +71,7 @@ export class SidebarSpecificColorComponent implements OnInit {
     const materials = getMaterialsFromObjects(objects);
 
     this.currentValue = value;
-    // Run this outside angular or it'll do angular things calls before & after each animation frame.
+    // Run this outside angular, or it'll do angular things calls before & after each animation frame.
     this.ngZone.runOutsideAngular(() => {
       this.productConfiguratorService.materialColorSwap.next({
         animationType: this.animationType,
