@@ -1,10 +1,10 @@
-import type { IntervalAnimationOptions } from "../animations/interval-animation";
-import { intervalAnimation } from "../animations/interval-animation";
-import type { AnimationHandle } from "../animations/animation-handle";
-import { RGBAFormat, ShaderMaterial, Texture, Vector2, WebGLRenderTarget } from "three";
-import type { WebGLRenderer } from "three";
-import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass";
-import type { AnimatedTextureBlurOutlinePass } from "../animated-texture-blur-outline-pass";
+import type { IntervalAnimationOptions } from '../animations/interval-animation';
+import { intervalAnimation } from '../animations/interval-animation';
+import type { AnimationHandle } from '../animations/animation-handle';
+import { RGBAFormat, ShaderMaterial, Texture, Vector2, WebGLRenderTarget } from 'three';
+import type { WebGLRenderer } from 'three';
+import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
+import type { AnimatedTextureBlurOutlinePass } from '../animated-texture-blur-outline-pass';
 
 // This file was just for fun playing around with different outline effects and with meta balls :)
 
@@ -32,16 +32,16 @@ export function getMetaballsSystem(renderer: WebGLRenderer, outlinePass: Animate
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  const context = canvas.getContext("2d")!;
-  context.globalCompositeOperation = "lighter";
+  const context = canvas.getContext('2d')!;
+  context.globalCompositeOperation = 'lighter';
 
   const renderTarget = new WebGLRenderTarget(width, height, {
     format: RGBAFormat,
   });
-  renderTarget.texture.name = "metaballs";
+  renderTarget.texture.name = 'metaballs';
   renderTarget.texture.generateMipmaps = false;
 
   const metaballsTexture = new Texture(canvas);
@@ -174,11 +174,11 @@ function createBallCanvas(radius: number): HTMLCanvasElement {
   const centerX = width * 0.5;
   const centerY = height * 0.5;
 
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = width;
-  canvas.style.backgroundColor = "black";
-  const context = canvas.getContext("2d")!;
+  canvas.style.backgroundColor = 'black';
+  const context = canvas.getContext('2d')!;
 
   const outsideLength = (width / 2) - radius;
   const easing = (t: number): number => t * t;

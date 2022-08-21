@@ -1,7 +1,7 @@
-import type { OnDestroy, OnInit } from "@angular/core";
-import { Component } from "@angular/core";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import type { Subscription } from "rxjs";
+import type { OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ProductConfiguratorService } from '../product-configurator.service';
+import type { Subscription } from 'rxjs';
 
 interface LoadingData {
   loaded: number;
@@ -9,9 +9,9 @@ interface LoadingData {
 }
 
 @Component({
-  selector: "app-loading-spinner",
-  templateUrl: "./loading-spinner.component.html",
-  styleUrls: ["./loading-spinner.component.scss"],
+  selector: 'app-loading-spinner',
+  templateUrl: './loading-spinner.component.html',
+  styleUrls: ['./loading-spinner.component.scss'],
 })
 export class LoadingSpinnerComponent implements OnInit, OnDestroy {
   /**
@@ -23,7 +23,7 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
    */
   private loadings: LoadingData[] = [];
   // Default to 0%
-  public progressText: string = "0%";
+  public progressText: string = '0%';
 
   private progressSubscription: Subscription | undefined;
 

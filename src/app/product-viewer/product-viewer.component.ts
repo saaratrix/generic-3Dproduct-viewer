@@ -1,18 +1,18 @@
-import { ElementRef, NgZone } from "@angular/core";
-import { Component, ViewChild } from "@angular/core";
-import { ProductConfiguratorService } from "../product-configurator.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import type * as THREE from "three";
-import { ProductConfigurator } from "../3D/product-configurator";
-import { loadMockData } from "../../mockdata/load-mock-data";
+import { ElementRef, NgZone } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { ProductConfiguratorService } from '../product-configurator.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import type * as THREE from 'three';
+import { ProductConfigurator } from '../3D/product-configurator';
+import { loadMockData } from '../../mockdata/load-mock-data';
 
 @Component({
-  selector: "app-product-viewer",
-  templateUrl: "./product-viewer.component.html",
-  styleUrls: ["./product-viewer.component.scss"],
+  selector: 'app-product-viewer',
+  templateUrl: './product-viewer.component.html',
+  styleUrls: ['./product-viewer.component.scss'],
 })
 export class ProductViewerComponent {
-  @ViewChild("canvasContainer", { static: true }) containerElement!: ElementRef<HTMLDivElement>;
+  @ViewChild('canvasContainer', { static: true }) containerElement!: ElementRef<HTMLDivElement>;
 
   public loadingsStarted: number = 0;
   public loadingsFinished: number = 0;

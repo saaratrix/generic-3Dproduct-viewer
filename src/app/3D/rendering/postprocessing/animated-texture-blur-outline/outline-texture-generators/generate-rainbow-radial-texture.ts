@@ -1,5 +1,5 @@
-import type { GradientStop } from "./gradient-options";
-import { generateRadialGradientTexture } from "./generate-radial-gradient-texture";
+import type { GradientStop } from './gradient-options';
+import { generateRadialGradientTexture } from './generate-radial-gradient-texture';
 
 /**
  * Generate a radial rainbow texture with an offset as the starting position.
@@ -9,16 +9,16 @@ export function generateRainbowRadialTexture(offset: number): HTMLCanvasElement 
   offset = (offset % 1);
 
   const colors = [
-    { start: (0.0 + offset) % 1, end: 0.1 + offset, color: "rgb(255, 0, 0, 1)" },
-    { start: (0.1 + offset) % 1, end: 0.2 + offset, color: "rgb(255, 154, 0, 1)" },
-    { start: (0.2 + offset) % 1, end: 0.3 + offset, color: "rgb(208, 222, 33, 1)" },
-    { start: (0.3 + offset) % 1, end: 0.4 + offset, color: "rgb(79, 220, 74, 1)" },
-    { start: (0.4 + offset) % 1, end: 0.5 + offset, color: "rgb(63, 218, 216, 1)" },
-    { start: (0.5 + offset) % 1, end: 0.6 + offset, color: "rgb(47, 201, 226, 1)" },
-    { start: (0.6 + offset) % 1, end: 0.7 + offset, color: "rgb(28, 127, 238, 1)" },
-    { start: (0.7 + offset) % 1, end: 0.8 + offset, color: "rgb(95, 21, 242, 1)" },
-    { start: (0.8 + offset) % 1, end: 0.9 + offset, color: "rgb(186, 12, 248, 1)" },
-    { start: (0.9 + offset) % 1, end: 1.0 + offset, color: "rgb(251, 7, 217, 1)" },
+    { start: (0.0 + offset) % 1, end: 0.1 + offset, color: 'rgb(255, 0, 0, 1)' },
+    { start: (0.1 + offset) % 1, end: 0.2 + offset, color: 'rgb(255, 154, 0, 1)' },
+    { start: (0.2 + offset) % 1, end: 0.3 + offset, color: 'rgb(208, 222, 33, 1)' },
+    { start: (0.3 + offset) % 1, end: 0.4 + offset, color: 'rgb(79, 220, 74, 1)' },
+    { start: (0.4 + offset) % 1, end: 0.5 + offset, color: 'rgb(63, 218, 216, 1)' },
+    { start: (0.5 + offset) % 1, end: 0.6 + offset, color: 'rgb(47, 201, 226, 1)' },
+    { start: (0.6 + offset) % 1, end: 0.7 + offset, color: 'rgb(28, 127, 238, 1)' },
+    { start: (0.7 + offset) % 1, end: 0.8 + offset, color: 'rgb(95, 21, 242, 1)' },
+    { start: (0.8 + offset) % 1, end: 0.9 + offset, color: 'rgb(186, 12, 248, 1)' },
+    { start: (0.9 + offset) % 1, end: 1.0 + offset, color: 'rgb(251, 7, 217, 1)' },
   ];
 
   colors.sort((a, z) => {

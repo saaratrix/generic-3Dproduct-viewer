@@ -1,13 +1,13 @@
-import type { ProductConfiguratorService } from "../../product-configurator.service";
-import { MaterialAnimationType } from "./material-animation-type";
-import type { MaterialColorSwapEventData } from "../models/event-data/material-color-swap-event-data";
-import type { Material } from "three";
-import { Color } from "three";
-import type { ColorMaterial } from "../3rd-party/three/types/color-material";
-import { isColorMaterial } from "../3rd-party/three/types/is-three-js-custom-type";
-import { createAnimation } from "./create-animation";
-import { ActiveProductItemEventType } from "../models/product-item/active-product-item-event-type";
-import { isPolygonalObject3D } from "../3rd-party/three/types/is-three-js-custom-type";
+import type { ProductConfiguratorService } from '../../product-configurator.service';
+import { MaterialAnimationType } from './material-animation-type';
+import type { MaterialColorSwapEventData } from '../models/event-data/material-color-swap-event-data';
+import type { Material } from 'three';
+import { Color } from 'three';
+import type { ColorMaterial } from '../3rd-party/three/types/color-material';
+import { isColorMaterial } from '../3rd-party/three/types/is-three-js-custom-type';
+import { createAnimation } from './create-animation';
+import { ActiveProductItemEventType } from '../models/product-item/active-product-item-event-type';
+import { isPolygonalObject3D } from '../3rd-party/three/types/is-three-js-custom-type';
 
 interface AnimatableColorItem {
   startColor: Color;

@@ -1,11 +1,11 @@
-import type { MaterialInfo } from "../models/material-info";
-import type { ProductModelFiletypeLoader } from "./product-model-filetype-loader";
-import { Group, Object3D, WebGLRenderTarget } from "three";
-import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { getOnProgressCallback } from "../get-on-progress-callback";
-import type { EnvironmentMapLoader } from "./environment-map-loader";
-import type { ProductModelLoader } from "./product-model-loader";
-import type { ProductConfiguratorService } from "../../product-configurator.service";
+import type { MaterialInfo } from '../models/material-info';
+import type { ProductModelFiletypeLoader } from './product-model-filetype-loader';
+import { Group, Object3D, WebGLRenderTarget } from 'three';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { getOnProgressCallback } from '../get-on-progress-callback';
+import type { EnvironmentMapLoader } from './environment-map-loader';
+import type { ProductModelLoader } from './product-model-loader';
+import type { ProductConfiguratorService } from '../../product-configurator.service';
 
 export class ProductModelGltfLoader implements ProductModelFiletypeLoader {
   constructor(
@@ -17,7 +17,7 @@ export class ProductModelGltfLoader implements ProductModelFiletypeLoader {
   load(file: string, materialInfo: MaterialInfo): Promise<Object3D> {
     return new Promise((resolve) => {
       const loader = new GLTFLoader();
-      const environmentMapUrl: string = "assets/models/pbr/Soft_4TubeBank_2BlackFlags.exr";
+      const environmentMapUrl: string = 'assets/models/pbr/Soft_4TubeBank_2BlackFlags.exr';
       const environmentPromise = this.environmentLoader.loadEnvironment(environmentMapUrl);
 
       loader.load(file, async (gltfObject: GLTF) => {

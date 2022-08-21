@@ -1,12 +1,12 @@
-import type { ProductConfigurator } from "./product-configurator";
-import type { ProductItem } from "./models/product-item/product-item";
-import { ProductModelLoader } from "./loaders/product-model-loader";
-import type { ProductConfiguratorService } from "../product-configurator.service";
-import { Box3, Object3D, Vector3 } from "three";
-import { EnvironmentMapLoader } from "./loaders/environment-map-loader";
-import type { Model3D } from "./models/model-3D";
-import type { ModelLoadedEventData } from "./models/event-data/model-loaded-event-data";
-import type { SubProductItem } from "./models/product-item/sub-product-item";
+import type { ProductConfigurator } from './product-configurator';
+import type { ProductItem } from './models/product-item/product-item';
+import { ProductModelLoader } from './loaders/product-model-loader';
+import type { ProductConfiguratorService } from '../product-configurator.service';
+import { Box3, Object3D, Vector3 } from 'three';
+import { EnvironmentMapLoader } from './loaders/environment-map-loader';
+import type { Model3D } from './models/model-3D';
+import type { ModelLoadedEventData } from './models/event-data/model-loaded-event-data';
+import type { SubProductItem } from './models/product-item/sub-product-item';
 
 export class ProductChanger {
   private readonly productConfiguratorService: ProductConfiguratorService;
@@ -76,7 +76,7 @@ export class ProductChanger {
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
 
-    const urlParts = ["model", product.name];
+    const urlParts = ['model', product.name];
     if (product.selectedSubItem) {
       const selectedSubItem = product.selectedSubItem as SubProductItem;
       urlParts.push(selectedSubItem.id.toString());

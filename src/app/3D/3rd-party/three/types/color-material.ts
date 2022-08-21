@@ -1,4 +1,4 @@
-import type { Color, Material } from "three";
+import type { Color, Material } from 'three';
 
 /**
  * A three.js material that has the color property!

@@ -1,6 +1,6 @@
-import { ComponentRef, Injectable, OnDestroy, Type, ViewContainerRef } from "@angular/core";
-import { Subject } from "rxjs";
-import type { OverlayItem } from "./overlay-item";
+import { ComponentRef, Injectable, OnDestroy, Type, ViewContainerRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import type { OverlayItem } from './overlay-item';
 
 export interface OverlayAddedEvent {
   caller: unknown;
@@ -8,7 +8,7 @@ export interface OverlayAddedEvent {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class OverlayService implements OnDestroy {
   private viewContainerRef: ViewContainerRef | undefined;

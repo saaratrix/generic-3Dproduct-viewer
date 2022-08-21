@@ -1,8 +1,8 @@
-import type { ProductConfiguratorService } from "../product-configurator.service";
-import type { Subscription } from "rxjs";
-import type { WebGLRenderer } from "three";
-import type { SelectableObject3DUserData } from "./models/selectable-object-3ds-options/selectable-object-3D-user-data";
-import type { PolygonalObject3D } from "./3rd-party/three/types/polygonal-object-3D";
+import type { ProductConfiguratorService } from '../product-configurator.service';
+import type { Subscription } from 'rxjs';
+import type { WebGLRenderer } from 'three';
+import type { SelectableObject3DUserData } from './models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
 
 export class SelectedProductHighlighter {
   private hoveredObject: PolygonalObject3D | undefined;

@@ -1,13 +1,13 @@
-import type { Material, MeshStandardMaterial, Object3D, WebGLRenderTarget } from "three";
-import { DoubleSide } from "three";
-import type { EnvironmentMapLoader } from "./environment-map-loader";
-import type { ProductConfiguratorService } from "../../product-configurator.service";
-import type { Model3D } from "../models/model-3D";
-import type { ModelLoadedEventData } from "../models/event-data/model-loaded-event-data";
-import { isPolygonalObject3D } from "../3rd-party/three/types/is-three-js-custom-type";
-import { ProductModelFiletypeLoader } from "./product-model-filetype-loader";
-import { ProductModelGltfLoader } from "./product-model-gltf-loader";
-import { ProductModelObjLoader } from "./product-model-obj-loader";
+import type { Material, MeshStandardMaterial, Object3D, WebGLRenderTarget } from 'three';
+import { DoubleSide } from 'three';
+import type { EnvironmentMapLoader } from './environment-map-loader';
+import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { Model3D } from '../models/model-3D';
+import type { ModelLoadedEventData } from '../models/event-data/model-loaded-event-data';
+import { isPolygonalObject3D } from '../3rd-party/three/types/is-three-js-custom-type';
+import { ProductModelFiletypeLoader } from './product-model-filetype-loader';
+import { ProductModelGltfLoader } from './product-model-gltf-loader';
+import { ProductModelObjLoader } from './product-model-obj-loader';
 
 export class ProductModelLoader {
   constructor(
@@ -34,13 +34,13 @@ export class ProductModelLoader {
   }
 
   private getModelLoader(model: Model3D): ProductModelFiletypeLoader | undefined {
-    const fileParts: string[] = model.filename.split(".");
+    const fileParts: string[] = model.filename.split('.');
     const fileExtension = fileParts[fileParts.length - 1].toLowerCase();
 
     switch (fileExtension) {
-      case "obj":
+      case 'obj':
         return new ProductModelObjLoader(this, this.productConfiguratorService);
-      case "gltf":
+      case 'gltf':
         return new ProductModelGltfLoader(this, this.productConfiguratorService, this.environmentLoader);
       default:
         return undefined;

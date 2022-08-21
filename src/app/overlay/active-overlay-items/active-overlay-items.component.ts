@@ -1,14 +1,14 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
-import { OverlayService } from "../overlay.service";
-import { Subscription } from "rxjs";
+import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { OverlayService } from '../overlay.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: "active-overlay-items",
-  templateUrl: "./active-overlay-items.component.html",
-  styleUrls: ["./active-overlay-items.component.scss"],
+  selector: 'active-overlay-items',
+  templateUrl: './active-overlay-items.component.html',
+  styleUrls: ['./active-overlay-items.component.scss'],
 })
 export class ActiveOverlayItemsComponent implements OnInit {
-  @ViewChild("activeOverlayItems", { static: false }) overlayItemsElementRef!: ElementRef<HTMLElement>;
+  @ViewChild('activeOverlayItems', { static: false }) overlayItemsElementRef!: ElementRef<HTMLElement>;
 
   private subscriptions: Subscription = new Subscription();
 

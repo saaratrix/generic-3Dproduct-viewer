@@ -1,16 +1,16 @@
-import { throttle } from "./throttle-decorator";
+import { throttle } from './throttle-decorator';
 
-describe("throttle decorator tests", () => {
-  describe("one instance tests", () => {
+describe('throttle decorator tests', () => {
+  describe('one instance tests', () => {
 
-    it("should call method instantly", () => {
+    it('should call method instantly', () => {
       const obj = new TestObject();
       expect(obj.called).toBe(0);
       obj.nuu();
       expect(obj.called).toBe(1);
     });
 
-    it ("Should only call method once due to throttle", () => {
+    it ('Should only call method once due to throttle', () => {
       const obj = new TestObject();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -22,7 +22,7 @@ describe("throttle decorator tests", () => {
       expect(obj.called).toBe(1);
     });
 
-    it ("Should only call method once instantly and then later", (done) => {
+    it ('Should only call method once instantly and then later', (done) => {
       const obj = new TestObject();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -35,7 +35,7 @@ describe("throttle decorator tests", () => {
       }, 3);
     });
 
-    it ("Should call instantly and consecutively 5 times later", (done) => {
+    it ('Should call instantly and consecutively 5 times later', (done) => {
       const obj = new TestObject();
       let events = 0;
 
@@ -71,8 +71,8 @@ describe("throttle decorator tests", () => {
     });
   });
 
-  describe("three instance tests", () => {
-    it("should call method instantly", () => {
+  describe('three instance tests', () => {
+    it('should call method instantly', () => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -81,7 +81,7 @@ describe("throttle decorator tests", () => {
       }
     });
 
-    it ("Should only call method once due to throttle", () => {
+    it ('Should only call method once due to throttle', () => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -95,7 +95,7 @@ describe("throttle decorator tests", () => {
       }
     });
 
-    it ("Should only call method once instantly and then later", (done) => {
+    it ('Should only call method once instantly and then later', (done) => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -112,7 +112,7 @@ describe("throttle decorator tests", () => {
       }, 3);
     });
 
-    it ("Should call instantly and consecutively 5 times later", (done) => {
+    it ('Should call instantly and consecutively 5 times later', (done) => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
       let events = 0;
 
@@ -155,7 +155,7 @@ describe("throttle decorator tests", () => {
     });
   });
 
-  describe("Tests with mocked setTimeout", () => {
+  describe('Tests with mocked setTimeout', () => {
     beforeEach(function () {
       jasmine.clock().install();
     });
@@ -164,7 +164,7 @@ describe("throttle decorator tests", () => {
       jasmine.clock().uninstall();
     });
 
-    it ("Should call instantly and consecutively many times later", () => {
+    it ('Should call instantly and consecutively many times later', () => {
       const objects = [new TestObject(), new TestObject(), new TestObject()];
 
       const tests = 1000;
@@ -200,7 +200,7 @@ describe("throttle decorator tests", () => {
     });
   });
 
-  describe("Testing potential recursion limit", () => {
+  describe('Testing potential recursion limit', () => {
     beforeEach(function () {
       jasmine.clock().install();
     });
@@ -209,7 +209,7 @@ describe("throttle decorator tests", () => {
       jasmine.clock().uninstall();
     });
 
-    it ("Should handle many consecutive method calls", () => {
+    it ('Should handle many consecutive method calls', () => {
       const obj = new TestObject();
       const tests = 1000000;
 

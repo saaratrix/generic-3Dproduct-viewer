@@ -1,4 +1,4 @@
-import type { BufferGeometry, Material, Object3D } from "three";
+import type { BufferGeometry, Material, Object3D } from 'three';
 
 /**
  * An Object3D type that has a geomtry property and a material property.

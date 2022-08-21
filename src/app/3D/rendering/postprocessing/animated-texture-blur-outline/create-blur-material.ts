@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector2 } from "three";
+import { ShaderMaterial, Vector2 } from 'three';
 
 // Source: https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/OutlinePass.js
 // getSeperableBlurMaterial()

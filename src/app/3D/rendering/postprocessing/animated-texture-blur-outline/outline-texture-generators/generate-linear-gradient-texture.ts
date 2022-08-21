@@ -1,7 +1,7 @@
-import type { LinearGradientOptions } from "./gradient-options";
+import type { LinearGradientOptions } from './gradient-options';
 
 export function generateLinearGradientTexture(options: LinearGradientOptions): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
 
   const width = options.width;
   const height = options.height;
@@ -9,7 +9,7 @@ export function generateLinearGradientTexture(options: LinearGradientOptions): H
   canvas.width = width;
   canvas.height = height;
 
-  const context = canvas.getContext("2d")!;
+  const context = canvas.getContext('2d')!;
 
   // Idea for rotation math: https://www.reddit.com/r/gamedev/comments/n2xs41/calculate_degrees_of_linear_gradient_in_canvas/gwnjh3a/
   // Which is based on this: https://patrickbrosset.medium.com/do-you-really-understand-css-linear-gradients-631d9a895caf

@@ -1,6 +1,6 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { ActiveOverlayItemsComponent } from "./active-overlay-items/active-overlay-items.component";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActiveOverlayItemsComponent } from './active-overlay-items/active-overlay-items.component';
 
 
 @NgModule({

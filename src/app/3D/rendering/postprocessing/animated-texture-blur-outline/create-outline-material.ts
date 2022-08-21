@@ -1,6 +1,6 @@
-import { AnimatedTextureBlurOutlineOutputMode } from "./animated-texture-blur-outline-output-mode";
-import { ShaderMaterial } from "three";
-import type { Texture } from "three";
+import { AnimatedTextureBlurOutlineOutputMode } from './animated-texture-blur-outline-output-mode';
+import { ShaderMaterial } from 'three';
+import type { Texture } from 'three';
 
 export interface CreateOutlineMaterialParameters {
   outputMode: AnimatedTextureBlurOutlineOutputMode;

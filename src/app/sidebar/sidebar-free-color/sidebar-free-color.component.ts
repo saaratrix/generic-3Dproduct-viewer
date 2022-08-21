@@ -1,22 +1,22 @@
-import type { OnInit } from "@angular/core";
-import { Component, Input } from "@angular/core";
-import { Color } from "three";
-import { throttle } from "../../utility/throttle-decorator";
-import { getMaterialsFromObject, setMaterialParameters } from "../../3D/utility/material-utility";
-import { ProductConfiguratorService } from "../../product-configurator.service";
-import { clearEvents } from "../../3D/utility/product-item-event-utility";
-import { ActiveProductItemEventType } from "../../3D/models/product-item/active-product-item-event-type";
-import type { PolygonalObject3D } from "../../3D/3rd-party/three/types/polygonal-object-3D";
+import type { OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Color } from 'three';
+import { throttle } from '../../utility/throttle-decorator';
+import { getMaterialsFromObject, setMaterialParameters } from '../../3D/utility/material-utility';
+import { ProductConfiguratorService } from '../../product-configurator.service';
+import { clearEvents } from '../../3D/utility/product-item-event-utility';
+import { ActiveProductItemEventType } from '../../3D/models/product-item/active-product-item-event-type';
+import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
 
 @Component({
-  selector: "sidebar-free-color",
-  templateUrl: "./sidebar-free-color.component.html",
-  styleUrls: ["./sidebar-free-color.component.scss"],
+  selector: 'sidebar-free-color',
+  templateUrl: './sidebar-free-color.component.html',
+  styleUrls: ['./sidebar-free-color.component.scss'],
 })
 export class SidebarFreeColorComponent implements OnInit {
   @Input() object!: PolygonalObject3D;
 
-  initialColor: string = "";
+  initialColor: string = '';
 
   constructor(
     private productConfiguratorService: ProductConfiguratorService,
@@ -25,7 +25,7 @@ export class SidebarFreeColorComponent implements OnInit {
   ngOnInit(): void {
     const materials = getMaterialsFromObject(this.object);
     for (const material of materials) {
-      const color = material["color"] as Color;
+      const color = material['color'] as Color;
       if (color) {
         this.initialColor = `#${color.getHexString()}`;
         break;

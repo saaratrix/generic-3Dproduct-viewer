@@ -1,6 +1,6 @@
-import type { ProductItem } from "../product-item/product-item";
-import type { MaterialAnimationType } from "../../material-animators/material-animation-type";
-import type { Material } from "three";
+import type { ProductItem } from '../product-item/product-item';
+import type { MaterialAnimationType } from '../../material-animators/material-animation-type';
+import type { Material } from 'three';
 
 export interface MaterialTextureSwapEventData {
   // If we should show the global loading spinner while loading the texture.
@@ -10,6 +10,6 @@ export interface MaterialTextureSwapEventData {
   materials?: Material[];
   onLoaded?: () => void;
   productItem: ProductItem;
-  textureSlot: "map";
+  textureSlot: 'map';
   textureUrl: string;
 }

@@ -23,13 +23,13 @@ export function stickyRightScrollElement(element: HTMLElement, scroll: HTMLEleme
     element.style.transform = translate;
   };
 
-  scroll.addEventListener("scroll", onScroll, {
+  scroll.addEventListener('scroll', onScroll, {
     passive: true,
   });
 
   return {
     dispose: (): void => {
-      scroll.removeEventListener("scroll", onScroll);
+      scroll.removeEventListener('scroll', onScroll);
       resizeObserver.unobserve(scroll);
       resizeObserver.disconnect();
     },

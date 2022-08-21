@@ -1,10 +1,10 @@
-import { debounce } from "./debounce-decorator";
+import { debounce } from './debounce-decorator';
 
-describe("debounce decorator tests", () => {
+describe('debounce decorator tests', () => {
   const delay = 5;
 
-  describe("single instance tests", () => {
-    it("should not call until after timeout", (done) => {
+  describe('single instance tests', () => {
+    it('should not call until after timeout', (done) => {
       const obj = new TestDebounce();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -15,7 +15,7 @@ describe("debounce decorator tests", () => {
       }, delay + 1);
     });
 
-    it("should not call method until after timeout multiple times.", (done) => {
+    it('should not call method until after timeout multiple times.', (done) => {
       const obj = new TestDebounce();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -31,7 +31,7 @@ describe("debounce decorator tests", () => {
       }, delay + 1);
     });
 
-    it("should keep extending the debounce", (done) => {
+    it('should keep extending the debounce', (done) => {
       const obj = new TestDebounce();
       expect(obj.called).toBe(0);
       obj.nuu();
@@ -60,7 +60,7 @@ describe("debounce decorator tests", () => {
       }, 2);
     });
 
-    it("should call multiple times", (done) => {
+    it('should call multiple times', (done) => {
       const obj = new TestDebounce();
       const next = delay + 1;
       const expected: number[] = [0, 1, 1, 1, 1, 2];
@@ -87,8 +87,8 @@ describe("debounce decorator tests", () => {
     });
   });
 
-  describe("multiple instances tests", () => {
-    it("should not call until after timeout", (done) => {
+  describe('multiple instances tests', () => {
+    it('should not call until after timeout', (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -103,7 +103,7 @@ describe("debounce decorator tests", () => {
       }, delay + 1);
     });
 
-    it("should not call method until after timeout multiple times.", (done) => {
+    it('should not call method until after timeout multiple times.', (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -123,7 +123,7 @@ describe("debounce decorator tests", () => {
       }, delay + 1);
     });
 
-    it("should keep extending the debounce", (done) => {
+    it('should keep extending the debounce', (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       for (const obj of objects) {
         expect(obj.called).toBe(0);
@@ -164,7 +164,7 @@ describe("debounce decorator tests", () => {
       }, 2);
     });
 
-    it("should call multiple times", (done) => {
+    it('should call multiple times', (done) => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       const next = delay + 1;
       const expected: number[] = [0, 1, 1, 1, 1, 2];
@@ -195,7 +195,7 @@ describe("debounce decorator tests", () => {
     });
   });
 
-  describe("multiple instances using mocked setTimeout", () => {
+  describe('multiple instances using mocked setTimeout', () => {
     beforeEach(function () {
       jasmine.clock().install();
     });
@@ -204,7 +204,7 @@ describe("debounce decorator tests", () => {
       jasmine.clock().uninstall();
     });
 
-    it ("should debounce multiple times.", () => {
+    it ('should debounce multiple times.', () => {
       const objects = [new TestDebounce(), new TestDebounce(), new TestDebounce()];
       const next = delay + 1;
       const tests = 1000;
@@ -233,7 +233,7 @@ describe("debounce decorator tests", () => {
     });
   });
 
-  describe("call stack overflow tests", () => {
+  describe('call stack overflow tests', () => {
     beforeEach(function () {
       jasmine.clock().install();
     });
@@ -242,7 +242,7 @@ describe("debounce decorator tests", () => {
       jasmine.clock().uninstall();
     });
 
-    it ("tests 1 000 000 methods", () => {
+    it ('tests 1 000 000 methods', () => {
       const obj = new TestDebounce();
       const tests = 1000000;
 

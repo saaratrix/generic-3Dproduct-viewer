@@ -1,15 +1,15 @@
-import type { ProductConfiguratorService } from "../../product-configurator.service";
-import type { Subscription } from "rxjs";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import type { Camera, Scene, WebGLRenderer } from "three";
-import { Vector2 } from "three";
-import { AnimatedTextureBlurOutlinePass } from "./postprocessing/animated-texture-blur-outline/animated-texture-blur-outline-pass";
-import type { ProductItem } from "../models/product-item/product-item";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
-import type { SelectedProductHighlighter } from "../selected-product-highlighter";
-import { generateLinearGradientTexture } from "./postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-linear-gradient-texture";
+import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { Subscription } from 'rxjs';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import type { Camera, Scene, WebGLRenderer } from 'three';
+import { Vector2 } from 'three';
+import { AnimatedTextureBlurOutlinePass } from './postprocessing/animated-texture-blur-outline/animated-texture-blur-outline-pass';
+import type { ProductItem } from '../models/product-item/product-item';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader';
+import type { SelectedProductHighlighter } from '../selected-product-highlighter';
+import { generateLinearGradientTexture } from './postprocessing/animated-texture-blur-outline/outline-texture-generators/generate-linear-gradient-texture';
 
 /**
  * Combines the effects used for post processing.
@@ -74,12 +74,12 @@ export class EffectComposerHandler {
       height: dimensions,
       // Keeping the steps the same between the two textures so it pops less when you select.
       steps: [
-        { offset: 0, color: "#a7a5a5" },
-        { offset: 0.1, color: "#a7a5a5" },
-        { offset: 0.4, color: "snow" },
-        { offset: 0.6, color: "snow" },
-        { offset: 0.9, color: "#a7a5a5" },
-        { offset: 1, color: "#a7a5a5" },
+        { offset: 0, color: '#a7a5a5' },
+        { offset: 0.1, color: '#a7a5a5' },
+        { offset: 0.4, color: 'snow' },
+        { offset: 0.6, color: 'snow' },
+        { offset: 0.9, color: '#a7a5a5' },
+        { offset: 1, color: '#a7a5a5' },
       ],
       angle: Math.PI / 2,
     }) });
@@ -87,12 +87,12 @@ export class EffectComposerHandler {
       width: dimensions,
       height: dimensions,
       steps: [
-        { offset: 0, color: "hsl(283,29%,40%)" },
-        { offset: 0.1, color: "hsl(283,29%,40%)" },
-        { offset: 0.4, color: "hsl(283,29%,65%)" },
-        { offset: 0.6, color: "hsl(283,29%,65%)" },
-        { offset: 0.9, color: "hsl(283,29%,40%)" },
-        { offset: 1, color: "hsl(283,29%,40%)" },
+        { offset: 0, color: 'hsl(283,29%,40%)' },
+        { offset: 0.1, color: 'hsl(283,29%,40%)' },
+        { offset: 0.4, color: 'hsl(283,29%,65%)' },
+        { offset: 0.6, color: 'hsl(283,29%,65%)' },
+        { offset: 0.9, color: 'hsl(283,29%,40%)' },
+        { offset: 1, color: 'hsl(283,29%,40%)' },
       ],
       angle: Math.PI / 2,
     }) });
