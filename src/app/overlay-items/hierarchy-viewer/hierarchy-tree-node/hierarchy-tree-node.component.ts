@@ -130,7 +130,7 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (!isSelectableObject3dUserData(this.node.userData) || this.node.userData.selectableObjectsOption.type === SelectedOptionsType.None) {
+    if (!isSelectableObject3dUserData(this.node.userData) || !this.node.userData.selectableObjectsOption.type) {
       return false;
     }
 

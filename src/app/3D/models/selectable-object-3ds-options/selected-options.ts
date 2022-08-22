@@ -1,8 +1,7 @@
-import type { SelectedOptionsType } from './selected-options-type';
-import type { SelectedSpecificColorsValue } from './selected-specific-colors-value';
-import type { SelectedSpecificTexturesValue } from './selected-specific-textures-value';
+import type { Type } from '@angular/core';
+import type { SidebarItem } from '../../../sidebar/sidebar-item';
 
-export interface SelectedOptions {
-  type: SelectedOptionsType;
-  value?: SelectedSpecificColorsValue | SelectedSpecificTexturesValue;
+export interface SelectedOptions<Item = unknown> {
+  type: Type<SidebarItem>;
+  item?: Item;
 }

@@ -28,6 +28,7 @@ export class ActiveOverlayItemsComponent implements OnInit {
 
     this.subscriptions.add(
       this.overlayService.overlayRemoved.subscribe(overlay => {
+        overlay.destroy();
         this.overlayItemsElementRef.nativeElement.removeChild(overlay.location.nativeElement);
       }),
     );

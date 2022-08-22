@@ -1,9 +1,11 @@
 import type { ProductItem } from '../app/3D/models/product-item/product-item';
 import { getFlowerPotModel, getRoseModel, getWuffelsModel } from './models';
 import { Euler, Vector3 } from 'three';
-import { SelectedOptionsType } from '../app/3D/models/selectable-object-3ds-options/selected-options-type';
 import { MaterialAnimationType } from '../app/3D/material-animators/material-animation-type';
-import type { SelectedSpecificTexturesValue } from '../app/3D/models/selectable-object-3ds-options/selected-specific-textures-value';
+import type { MaterialEditingSpecificTexturesModel } from '../app/sidebar-items/material-editing/material-editing-specific-texture/material-editing-specific-textures.model';
+import { MaterialEditingSpecificTextureComponent } from '../app/sidebar-items/material-editing/material-editing-specific-texture/material-editing-specific-texture.component';
+import { MaterialEditingFreeColorComponent } from '../app/sidebar-items/material-editing/material-editing-free-color/material-editing-free-color.component';
+import { MaterialEditingSpecificColorComponent } from '../app/sidebar-items/material-editing/material-editing-specific-color/material-editing-specific-color.component';
 
 export function createFlowerPot(id: number): ProductItem {
   return {
@@ -19,13 +21,13 @@ export function createFlowerPot(id: number): ProductItem {
       {
         includedObjects: ['Cylinder.002_Cylinder.006_M_flower'],
         options: {
-          type: SelectedOptionsType.FreeColor,
+          type: MaterialEditingFreeColorComponent,
         },
       }, {
         includedObjects: ['Cylinder.002_Cylinder.006_M_pot'],
         options: {
-          type: SelectedOptionsType.SpecificColors,
-          value: {
+          type: MaterialEditingSpecificColorComponent,
+          item: {
             animationType: MaterialAnimationType.Linear,
             // ffc0cb = CSS Color 'pink'
             colors: ['#ff7f00', '#badbad', '#ffc0cb'],
@@ -55,7 +57,7 @@ export function createRose(id: number): ProductItem {
   rose5.position = new Vector3(0, 0, -1);
   rose5.rotation = new Euler(-0.2, 0, 0);
 
-  const selectedOptionsValue: SelectedSpecificTexturesValue = {
+  const selectedOptionsValue: MaterialEditingSpecificTexturesModel = {
     animationType: MaterialAnimationType.FromTopToBottom,
     textures: [
       {
@@ -80,8 +82,8 @@ export function createRose(id: number): ProductItem {
     selectableObject3DsOptions: [{
       noRelatedObjects: true,
       options: {
-        type: SelectedOptionsType.SpecificTextures,
-        value: selectedOptionsValue,
+        type: MaterialEditingSpecificTextureComponent,
+        item: selectedOptionsValue,
       },
     }],
 
