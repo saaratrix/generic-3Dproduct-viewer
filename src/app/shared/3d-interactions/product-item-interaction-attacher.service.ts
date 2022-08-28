@@ -28,7 +28,7 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
 
   attachInteractionActions(product: ProductItem): void {
     if (!product.interactions || !product.object3D) {
-      product.selectableObject3DIntersections = [];
+      product.interactableObjects = [];
       return;
     }
 
@@ -43,7 +43,7 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
       objects.forEach(o => intersectableObjects.add(o));
     }
 
-    product.selectableObject3DIntersections = Array.from(intersectableObjects.values());
+    product.interactableObjects = Array.from(intersectableObjects.values());
   }
 
   getObjects(interaction: InteractionGroup, rootObject: Object3D): PolygonalObject3D[] {
@@ -54,11 +54,11 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
       }
 
       const objectName = o.name.toLocaleUpperCase();
-      if (interaction.excluded && interaction.excluded.some(name => name.toLocaleUpperCase() === objectName)) {
+      if (!!interaction.excluded?.length && interaction.excluded.some(name => name.toLocaleUpperCase() === objectName)) {
         return;
       }
 
-      if (interaction.included && !interaction.included.some(name => name.toLocaleUpperCase() === objectName)) {
+      if (!!interaction.included?.length && !interaction.included.some(name => name.toLocaleUpperCase() === objectName)) {
         return;
       }
 

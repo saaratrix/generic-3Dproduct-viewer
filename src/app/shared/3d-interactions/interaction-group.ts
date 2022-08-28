@@ -12,10 +12,6 @@ export interface InteractionGroup {
    * Optional, If set the object3D will always be excluded.
    */
   excluded?: string[];
-  /**
-   * If true then the meshes will be treated as one object for outlining
-   */
-  groupTogether?: boolean;
 
   /**
    * A list of data attached to the interaction object

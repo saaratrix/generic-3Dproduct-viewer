@@ -14,7 +14,7 @@ interface NodeTree {
 
 describe('ProductItemInteractionAttacherService', () => {
   let service: ProductItemInteractionAttacherService;
-  const mockProductConfiguratorService: ProductConfiguratorService = {
+  const mockProductConfiguratorService: ProductConfiguratorService = <any> {
     productLoadingFinished: new Subject<ProductLoadingFinishedEvent>(),
   };
 
@@ -29,40 +29,82 @@ describe('ProductItemInteractionAttacherService', () => {
 
   describe('getObjects()', () => {
     it('should return all polygonal objects because no includes or excludes', () => {
-      const input = generateTree({
+      const input = getDefaultTestTree();
+      const expectedObjectsNames = ['A_A', 'A_C', 'B_A', 'B_B'];
+
+      const objects = service.getObjects({}, input);
+      expect(objects.length).toBe(expectedObjectsNames.length);
+      for (const expectedObject of expectedObjectsNames) {
+        expect(objects.some(o => o.name === expectedObject)).toBeTrue();
+      }
+    });
+
+    it('should return all polygonal objects because no objects in included, excluded', () => {
+      const input = getDefaultTestTree();
+      const expectedObjectsNames = ['A_A', 'A_C', 'B_A', 'B_B'];
+
+      const objects = service.getObjects({ included: [], excluded: [] }, input);
+      expect(objects.length).toBe(expectedObjectsNames.length);
+      for (const expectedObject of expectedObjectsNames) {
+        expect(objects.some(o => o.name === expectedObject)).toBeTrue();
+      }
+    });
+
+    it('should return only included objects', () => {
+      const input = getDefaultTestTree();
+      const expectedObjectsNames = ['A_A', 'B_B'];
+
+      const objects = service.getObjects({ included: ['a_a', 'B_B', 'not_a_node'] }, input);
+      expect(objects.length).toBe(expectedObjectsNames.length);
+      for (const expectedObject of expectedObjectsNames) {
+        expect(objects.some(o => o.name === expectedObject)).toBeTrue();
+      }
+    });
+
+    it('should not return excluded objects', () => {
+      const input = getDefaultTestTree();
+      const expectedObjectsNames = ['A_C', 'B_A'];
+
+      const objects = service.getObjects({ excluded: ['a_a', 'B_B', 'not_a_node'] }, input);
+      expect(objects.length).toBe(expectedObjectsNames.length);
+      for (const expectedObject of expectedObjectsNames) {
+        expect(objects.some(o => o.name === expectedObject)).toBeTrue();
+      }
+    });
+
+    it('no includes will have no objects returned', () => {
+      const input = getDefaultTestTree();
+      const expectedObjectsNames = [];
+
+      const objects = service.getObjects({ excluded: ['a_a', 'B_B', 'not_a_node'], included: [''] }, input);
+      expect(objects.length).toBe(expectedObjectsNames.length);
+    });
+
+    function getDefaultTestTree(): Object3D {
+      const bTreeChildren: NodeTree[] = [
+        { name: 'B_A', isPolygonalObject: true },
+        { name: 'B_B', isPolygonalObject: true },
+        { name: 'B_C', isPolygonalObject: false },
+      ];
+
+      return generateTree({
         name: 'A',
         isPolygonalObject: false,
         children: [
           { name: 'A_A', isPolygonalObject: true },
-          { name: 'A_B', isPolygonalObject: false },
+          { name: 'A_B', isPolygonalObject: false, children: bTreeChildren },
           { name: 'A_C', isPolygonalObject: true },
         ],
-      }, undefined);
+      });
+    }
 
-      const objects = service.getObjects({}, input);
-      expect(objects.length).toBe(2);
-      expect(objects[0].name).toBe('A_A');
-      expect(objects[1].name).toBe('A_C');
-    });
-
-    it('should return only included objects', () => {
-      fail();
-    });
-
-    it('should not return excluded objects', () => {
-      fail();
-    });
-
-    function generateTree(node: NodeTree, parent: Object3D | undefined): Object3D {
+    function generateTree(node: NodeTree): Object3D {
       const object = node.isPolygonalObject ? new Mesh() : new Object3D();
       object.name = node.name;
 
-      if (parent) {
-        object.parent = parent;
-      }
-
       for (const child of node.children ?? []) {
-        generateTree(child, object);
+        const childObject = generateTree(child);
+        object.add(childObject);
       }
 
       return object;

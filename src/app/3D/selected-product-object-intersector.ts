@@ -20,8 +20,8 @@ export class SelectedProductObjectIntersector {
   ) {
     this.subscriptions.push(
       this.productConfiguratorService.selectedProductChanged.subscribe(productItem => {
-        if (productItem.selectableObject3DIntersections) {
-          this.intersectableObjects = productItem.selectableObject3DIntersections as PolygonalObject3D[];
+        if (productItem.interactableObjects) {
+          this.intersectableObjects = productItem.interactableObjects as PolygonalObject3D[];
           return;
         }
 
@@ -34,7 +34,7 @@ export class SelectedProductObjectIntersector {
         //   this.parseSelectableObjectsOption(productItem, option);
         // }
 
-        productItem.selectableObject3DIntersections = this.intersectableObjects;
+        productItem.interactableObjects = this.intersectableObjects;
       }),
     );
   }

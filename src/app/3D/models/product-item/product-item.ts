@@ -27,11 +27,14 @@ export interface ProductItem {
   interactions?: InteractionGroup[];
 
   // Variables generated at runtime:
+  /**
+   * Any active events like a material's colour is changing.
+   */
   activeEvents: ActiveProductItemEvent[];
   /**
    * The root object3D
    */
   object3D?: Object3D;
-  // The cached intersections from parsing selectableObjectsOptions, so we only have to do it once.
-  selectableObject3DIntersections?: PolygonalObject3D[];
+  // The cached interactable from parsing selectableObjectsOptions, so we only have to do it once.
+  interactableObjects?: PolygonalObject3D[];
 }
