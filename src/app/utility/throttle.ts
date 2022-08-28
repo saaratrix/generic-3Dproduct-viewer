@@ -2,7 +2,6 @@
  * Throttles a method so it's only called once every interval.
  * @param callback Must be a lambda or a bound method for now so that "this" is correct.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function throttle(callback: (...args: any[]) => void, interval: number): (...args: unknown[]) => void {
   let isThrottling: boolean;
   let wasCalled: boolean = false;

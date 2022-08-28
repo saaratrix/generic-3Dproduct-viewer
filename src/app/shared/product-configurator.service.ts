@@ -1,13 +1,14 @@
 import type { OnDestroy } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import type { ProductItem } from './3D/models/product-item/product-item';
-import { ProductConfigurationEvent } from './product-configurator-events';
-import type { LoadingProgressEventData } from './3D/models/event-data/loading-progress-event-data';
-import type { MaterialTextureSwapEventData } from './3D/models/event-data/material-texture-swap-event-data';
+import type { ProductItem } from '../3D/models/product-item/product-item';
+import { ProductConfigurationEvent } from './events/product-configurator-events';
+import type { LoadingProgressEventData } from '../3D/models/event-data/loading-progress-event-data';
+import type { MaterialTextureSwapEventData } from '../3D/models/event-data/material-texture-swap-event-data';
 import type { Vector2 } from 'three';
-import type { MaterialColorSwapEventData } from './3D/models/event-data/material-color-swap-event-data';
-import type { PolygonalObject3D } from './3D/3rd-party/three/types/polygonal-object-3D';
+import type { MaterialColorSwapEventData } from '../3D/models/event-data/material-color-swap-event-data';
+import type { PolygonalObject3D } from '../3D/3rd-party/three/types/polygonal-object-3D';
+import type { ProductLoadingFinishedEvent } from './events/product-loading-finished-event';
 
 @Injectable({
   providedIn: 'root',
@@ -28,23 +29,25 @@ export class ProductConfiguratorService implements OnDestroy {
 
   private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
   // The subjects
-  public canvasResized: Subject<Vector2>;
+  public readonly canvasResized: Subject<Vector2>;
 
-  public loadingStarted: Subject<void>;
-  public loadingProgress: Subject<LoadingProgressEventData>;
-  public loadingFinished: Subject<void>;
+  public readonly loadingStarted: Subject<void>;
+  public readonly loadingProgress: Subject<LoadingProgressEventData>;
+  public readonly loadingFinished: Subject<void>;
 
-  public materialColorSwap: Subject<MaterialColorSwapEventData>;
-  public materialTextureSwap: Subject<MaterialTextureSwapEventData>;
+  public readonly materialColorSwap: Subject<MaterialColorSwapEventData>;
+  public readonly materialTextureSwap: Subject<MaterialTextureSwapEventData>;
 
-  public object3DSelected: Subject<PolygonalObject3D>;
-  public object3DDeselected: Subject<PolygonalObject3D>;
-  public object3DPointerEnter: Subject<PolygonalObject3D>;
-  public object3DPointerLeave: Subject<PolygonalObject3D>;
+  public readonly object3DSelected: Subject<PolygonalObject3D>;
+  public readonly object3DDeselected: Subject<PolygonalObject3D>;
+  public readonly object3DPointerEnter: Subject<PolygonalObject3D>;
+  public readonly object3DPointerLeave: Subject<PolygonalObject3D>;
 
-  public selectedProductChanged: Subject<ProductItem>;
+  readonly productLoadingFinished: Subject<ProductLoadingFinishedEvent>;
 
-  public toolbarChangeProduct: Subject<ProductItem>;
+  public readonly selectedProductChanged: Subject<ProductItem>;
+
+  public readonly toolbarChangeProduct: Subject<ProductItem>;
 
   constructor() {
     this.canvasResized = this.createSubject<Vector2>(ProductConfigurationEvent.CanvasResized);
@@ -60,6 +63,8 @@ export class ProductConfiguratorService implements OnDestroy {
     this.object3DDeselected = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DDeselected);
     this.object3DPointerEnter = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DPointerEnter);
     this.object3DPointerLeave = this.createSubject<PolygonalObject3D>(ProductConfigurationEvent.Object3DPointerLeave);
+
+    this.productLoadingFinished = this.createSubject<ProductLoadingFinishedEvent>(ProductConfigurationEvent.ProductLoadingFinished);
 
     this.selectedProductChanged = this.createSubject<ProductItem>(ProductConfigurationEvent.SelectedProductChanged);
 

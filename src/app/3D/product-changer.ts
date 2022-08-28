@@ -1,7 +1,7 @@
 import type { ProductConfigurator } from './product-configurator';
 import type { ProductItem } from './models/product-item/product-item';
 import { ProductModelLoader } from './loaders/product-model-loader';
-import type { ProductConfiguratorService } from '../product-configurator.service';
+import type { ProductConfiguratorService } from '../shared/product-configurator.service';
 import { Box3, Object3D, Vector3 } from 'three';
 import { EnvironmentMapLoader } from './loaders/environment-map-loader';
 import type { Model3D } from './models/model-3D';
@@ -65,6 +65,11 @@ export class ProductChanger {
 
       this.productConfiguratorService.loadingFinished.next();
       product.object3D = obj;
+
+      this.productConfiguratorService.productLoadingFinished.next({
+        product,
+        isSelectedProduct: this.productConfiguratorService.selectedProduct === product,
+      });
     }
 
     // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!

@@ -1,16 +1,16 @@
 import { NgZone, OnInit } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { Color } from 'three';
-import type { SelectableObject3DUserData } from '../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
 import type { MaterialEditingSpecificColorsModel } from './material-editing-specific-colors.model';
 import { getMaterialsFromObject, getMaterialsFromObjects } from '../../../3D/utility/material-utility';
 import { MaterialAnimationType } from '../../../3D/material-animators/material-animation-type';
-import { ProductConfiguratorService } from '../../../product-configurator.service';
+import { ProductConfiguratorService } from '../../../shared/product-configurator.service';
 import { clearEvents } from '../../../3D/utility/product-item-event-utility';
 import { ActiveProductItemEventType } from '../../../3D/models/product-item/active-product-item-event-type';
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
 import type { HexColor } from '../../../shared/models/hex-color';
+import { InteractionUserdata } from '../../../3D/interaction/interaction-userdata';
 
 @Component({
   selector: 'material-editing-specific-color',
@@ -62,11 +62,12 @@ export class MaterialEditingSpecificColorComponent implements OnInit, SidebarIte
     }
     clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
-    const userData = this.object3D.userData as SelectableObject3DUserData;
+    const userData = this.object3D.userData as InteractionUserdata;
     const objects = [this.object3D];
-    if (userData.related) {
-      objects.push(...userData.related);
-    }
+    // TODO: Related meshes
+    // if (userData.related) {
+    //   objects.push(...userData.related);
+    // }
 
     const materials = getMaterialsFromObjects(objects);
 

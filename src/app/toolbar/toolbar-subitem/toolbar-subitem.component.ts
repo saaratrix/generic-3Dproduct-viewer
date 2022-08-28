@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import type { SubProductItem } from '../../3D/models/product-item/sub-product-item';
-import { ProductConfiguratorService } from '../../product-configurator.service';
+import { ProductConfiguratorService } from '../../shared/product-configurator.service';
 import type { ProductItem } from '../../3D/models/product-item/product-item';
 
 @Component({

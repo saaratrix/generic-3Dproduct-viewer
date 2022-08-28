@@ -5,7 +5,7 @@ import type { WebGLRenderTargetOptions } from 'three/src/renderers/WebGLRenderTa
 import { CopyShader } from 'three/examples/jsm/shaders/CopyShader';
 import { createSeperableBlurMaterial } from './create-blur-material';
 import type { IUniform } from 'three/src/renderers/shaders/UniformsLib';
-import type { ProductConfiguratorService } from '../../../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../../../shared/product-configurator.service';
 import type { SelectedProductHighlighter } from '../../../selected-product-highlighter';
 import { AnimatedTextureBlurOutlineOutputMode } from './animated-texture-blur-outline-output-mode';
 import type { AnimatedTextureBlurOutlineOptions } from './animated-texture-blur-outline-options';

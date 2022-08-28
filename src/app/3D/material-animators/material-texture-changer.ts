@@ -1,6 +1,6 @@
 import type { Material, Texture } from 'three';
 import { CanvasTexture, TextureLoader } from 'three';
-import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../shared/product-configurator.service';
 import type { MaterialTextureSwapEventData } from '../models/event-data/material-texture-swap-event-data';
 import { getOnProgressCallback } from '../get-on-progress-callback';
 import { MaterialAnimationType } from './material-animation-type';

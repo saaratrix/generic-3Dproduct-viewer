@@ -5,7 +5,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { getOnProgressCallback } from '../get-on-progress-callback';
 import type { EnvironmentMapLoader } from './environment-map-loader';
 import type { ProductModelLoader } from './product-model-loader';
-import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../shared/product-configurator.service';
 
 export class ProductModelGltfLoader implements ProductModelFiletypeLoader {
   constructor(

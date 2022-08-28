@@ -6,8 +6,25 @@ import type { MaterialEditingSpecificTexturesModel } from '../app/sidebar-items/
 import { MaterialEditingSpecificTextureComponent } from '../app/sidebar-items/material-editing/material-editing-specific-texture/material-editing-specific-texture.component';
 import { MaterialEditingFreeColorComponent } from '../app/sidebar-items/material-editing/material-editing-free-color/material-editing-free-color.component';
 import { MaterialEditingSpecificColorComponent } from '../app/sidebar-items/material-editing/material-editing-specific-color/material-editing-specific-color.component';
+import type { MaterialEditingAction } from '../app/sidebar-items/material-editing/material-editing-action';
+import type { MaterialEditingSpecificColorsModel } from '../app/sidebar-items/material-editing/material-editing-specific-color/material-editing-specific-colors.model';
 
 export function createFlowerPot(id: number): ProductItem {
+  const freeColorAction: MaterialEditingAction = {
+    type: 'material-editing',
+    sidebarComponent: MaterialEditingFreeColorComponent,
+  };
+
+  const specificColorAction: MaterialEditingAction<MaterialEditingSpecificColorsModel> = {
+    type: 'material-editing',
+    sidebarComponent: MaterialEditingSpecificColorComponent,
+    item: {
+      animationType: MaterialAnimationType.Linear,
+      // ffc0cb = CSS Color 'pink'
+      colors: ['#ff7f00', '#badbad', '#ffc0cb'],
+    },
+  };
+
   return {
     id,
     name: 'flowerpot',
@@ -17,22 +34,13 @@ export function createFlowerPot(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: 'A very good looking flower pot.',
     subItems: [],
-    selectableObject3DsOptions: [
+    interactions: [
       {
-        includedObjects: ['Cylinder.002_Cylinder.006_M_flower'],
-        options: {
-          type: MaterialEditingFreeColorComponent,
-        },
+        included: ['Cylinder.002_Cylinder.006_M_flower'],
+        actions: [freeColorAction],
       }, {
-        includedObjects: ['Cylinder.002_Cylinder.006_M_pot'],
-        options: {
-          type: MaterialEditingSpecificColorComponent,
-          item: {
-            animationType: MaterialAnimationType.Linear,
-            // ffc0cb = CSS Color 'pink'
-            colors: ['#ff7f00', '#badbad', '#ffc0cb'],
-          },
-        },
+        included: ['Cylinder.002_Cylinder.006_M_pot'],
+        actions: [specificColorAction],
       },
     ],
 
@@ -70,6 +78,12 @@ export function createRose(id: number): ProductItem {
     ],
   };
 
+  const action: MaterialEditingAction<MaterialEditingSpecificTexturesModel> = {
+    type: 'material-editing',
+    sidebarComponent: MaterialEditingSpecificTextureComponent,
+    item: selectedOptionsValue,
+  };
+
   return {
     id,
     name: 'roses',
@@ -79,14 +93,9 @@ export function createRose(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: 'A special gift a long time ago.',
     subItems: [],
-    selectableObject3DsOptions: [{
-      noRelatedObjects: true,
-      options: {
-        type: MaterialEditingSpecificTextureComponent,
-        item: selectedOptionsValue,
-      },
+    interactions: [{
+      actions: [action],
     }],
-
     activeEvents: [],
   };
 }
@@ -101,7 +110,7 @@ export function createWuffels(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: 'Wuffels! Wuff!',
     subItems: [],
-    selectableObject3DsOptions: [],
+    interactions: [],
 
     activeEvents: [],
   };

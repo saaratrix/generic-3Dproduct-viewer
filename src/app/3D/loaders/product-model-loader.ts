@@ -1,7 +1,7 @@
 import type { Material, MeshStandardMaterial, Object3D, WebGLRenderTarget } from 'three';
 import { DoubleSide } from 'three';
 import type { EnvironmentMapLoader } from './environment-map-loader';
-import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../shared/product-configurator.service';
 import type { Model3D } from '../models/model-3D';
 import type { ModelLoadedEventData } from '../models/event-data/model-loaded-event-data';
 import { isPolygonalObject3D } from '../3rd-party/three/types/is-three-js-custom-type';
