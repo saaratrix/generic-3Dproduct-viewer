@@ -6,6 +6,8 @@ import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal
 import type { InteractionGroup } from './interaction-group';
 import type { Object3D } from 'three';
 import { isPolygonalObject3D } from '../../3D/3rd-party/three/types/is-three-js-custom-type';
+import type { InteractionAction } from '../../3D/interaction/interaction-action';
+import { addActionsToObjects } from '../../3D/interaction/add-actions-to-objects';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +41,7 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
       }
 
       const objects = this.getObjects(interaction, product.object3D);
-      this.setupInteraction(objects, interaction);
+      this.setupInteraction(objects, interaction.actions);
       objects.forEach(o => intersectableObjects.add(o));
     }
 
@@ -68,7 +70,7 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
     return objects;
   }
 
-  setupInteraction(objects: PolygonalObject3D[], interaction: InteractionGroup): void {
-
+  setupInteraction(objects: PolygonalObject3D[], actions: InteractionAction[]): void {
+    addActionsToObjects(objects, actions);
   }
 }

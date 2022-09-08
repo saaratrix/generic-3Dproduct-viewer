@@ -15,5 +15,5 @@ export interface InteractionAction {
   groupObjectsTogether?: boolean;
 
   // Dynamically generated.
-  objects?: PolygonalObject3D[];
+  objects?: Set<PolygonalObject3D>;
 }

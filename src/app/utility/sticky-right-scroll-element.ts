@@ -1,3 +1,5 @@
+import { throttle } from './throttle';
+
 export interface StickyScrollHandle {
   dispose: () => void;
 }
@@ -17,11 +19,11 @@ export function stickyRightScrollElement(element: HTMLElement, scroll: HTMLEleme
   let scrollWidth = scroll.scrollWidth;
   let scrollElementWidth = scroll.offsetWidth;
 
-  const onScroll = (): void => {
+  const onScroll = throttle((): void => {
     const right = (scrollElementWidth + scroll.scrollLeft) - scrollWidth;
     const translate = `translateX(${right}px)`;
     element.style.transform = translate;
-  };
+  }, 1000 / 30);
 
   scroll.addEventListener('scroll', onScroll, {
     passive: true,

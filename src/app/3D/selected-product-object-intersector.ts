@@ -20,21 +20,12 @@ export class SelectedProductObjectIntersector {
   ) {
     this.subscriptions.push(
       this.productConfiguratorService.selectedProductChanged.subscribe(productItem => {
-        if (productItem.interactableObjects) {
-          this.intersectableObjects = productItem.interactableObjects as PolygonalObject3D[];
+        if (!productItem.interactableObjects) {
+          this.intersectableObjects = [];
           return;
         }
 
-        this.intersectableObjects = [];
-        if (!productItem.object3D || !Array.isArray(productItem.interactions)) {
-          return;
-        }
-
-        // for (const option of productItem.interactions) {
-        //   this.parseSelectableObjectsOption(productItem, option);
-        // }
-
-        productItem.interactableObjects = this.intersectableObjects;
+        this.intersectableObjects = productItem.interactableObjects as PolygonalObject3D[];
       }),
     );
   }
@@ -48,46 +39,7 @@ export class SelectedProductObjectIntersector {
     this.raycaster.far = this.camera.far;
     this.raycaster.setFromCamera(pointerPosition, this.camera);
 
-    const intersectableObjects = this.intersectableObjects.filter(i => !i.userData.isPickable);
+    const intersectableObjects = this.intersectableObjects.filter(i => !!(i.userData as InteractionUserdata).isPickable);
     return this.raycaster.intersectObjects(intersectableObjects, false);
   }
-
-  // private parseSelectableObjectsOption(productItem: ProductItem, option: InteractionGroup): void {
-  //   const intersectableObjects: PolygonalObject3D[] = [];
-  //
-  //   productItem.object3D!.traverse(object => {
-  //     if (!isPolygonalObject3D(object)) {
-  //       return;
-  //     }
-  //
-  //     // Check if the object is excluded
-  //     if (Array.isArray(option.excluded) && option.excluded.includes(object.name)) {
-  //       return;
-  //     }
-  //
-  //     // Check if the object is included.
-  //     if (Array.isArray(option.included) && !option.include.includes(object.name)) {
-  //       return;
-  //     }
-  //     const userData = object.userData as InteractionUserdata;
-  //     userData.selectableObjectsOption = { ...option.actions };
-  //     intersectableObjects.push(object);
-  //   });
-  //
-  //   // Iterate over all objects to set the related objects.
-  //   // If two different SelectableObjectsOption targets the same object the last one would win.
-  //   if (!option.noRelatedObjects) {
-  //     for (const object of intersectableObjects) {
-  //       const userData = object.userData as InteractionUserdata;
-  //       userData.related = intersectableObjects.filter(o => o !== object);
-  //     }
-  //   }
-  //
-  //   // Finally add the intersectableObjects found but skip potential duplicates
-  //   for (const object of intersectableObjects) {
-  //     if (this.intersectableObjects.indexOf(object) === -1) {
-  //       this.intersectableObjects.push(object);
-  //     }
-  //   }
-  // }
 }
