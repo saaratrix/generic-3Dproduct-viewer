@@ -129,7 +129,7 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (!isInteractionUserData(this.node.userData) || this.node.userData.interactionActions.length > 0) {
+    if (!isInteractionUserData(this.node.userData) || this.node.userData.interactionActions.length === 0) {
       return false;
     }
 
