@@ -17,37 +17,37 @@ export class ProductConfiguratorService implements OnDestroy {
   /**
    * The product items that you can choose between.
    */
-  public items: ProductItem[] = [];
+  items: ProductItem[] = [];
   /**
    * The HTML element associated with an item id.
    */
-  public itemElements: Record<string, HTMLElement> = {};
+  itemElements: Record<string, HTMLElement> = {};
   /**
    * The currently selected product.
    */
-  public selectedProduct: ProductItem | null = null;
+  selectedProduct: ProductItem | null = null;
 
   private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
-  // The subjects
-  public readonly canvasResized: Subject<Vector2>;
 
-  public readonly loadingStarted: Subject<void>;
-  public readonly loadingProgress: Subject<LoadingProgressEventData>;
-  public readonly loadingFinished: Subject<void>;
+  readonly canvasResized: Subject<Vector2>;
 
-  public readonly materialColorSwap: Subject<MaterialColorSwapEventData>;
-  public readonly materialTextureSwap: Subject<MaterialTextureSwapEventData>;
+  readonly loadingStarted: Subject<void>;
+  readonly loadingProgress: Subject<LoadingProgressEventData>;
+  readonly loadingFinished: Subject<void>;
 
-  public readonly object3DSelected: Subject<PolygonalObject3D>;
-  public readonly object3DDeselected: Subject<PolygonalObject3D>;
-  public readonly object3DPointerEnter: Subject<PolygonalObject3D>;
-  public readonly object3DPointerLeave: Subject<PolygonalObject3D>;
+  readonly materialColorSwap: Subject<MaterialColorSwapEventData>;
+  readonly materialTextureSwap: Subject<MaterialTextureSwapEventData>;
+
+  readonly object3DSelected: Subject<PolygonalObject3D>;
+  readonly object3DDeselected: Subject<PolygonalObject3D>;
+  readonly object3DPointerEnter: Subject<PolygonalObject3D>;
+  readonly object3DPointerLeave: Subject<PolygonalObject3D>;
 
   readonly productLoadingFinished: Subject<ProductLoadingFinishedEvent>;
 
-  public readonly selectedProductChanged: Subject<ProductItem>;
+  readonly selectedProductChanged: Subject<ProductItem>;
 
-  public readonly toolbarChangeProduct: Subject<ProductItem>;
+  readonly toolbarChangeProduct: Subject<ProductItem>;
 
   constructor() {
     this.canvasResized = this.createSubject<Vector2>(ProductConfigurationEvent.CanvasResized);

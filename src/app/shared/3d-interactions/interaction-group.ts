@@ -1,8 +1,8 @@
+import type { InteractionAction } from '../../3D/interaction/interaction-action';
+
 /**
  * List of object3Ds that can be interacted with and the actions that happens when interacted with.
  */
-import type { InteractionAction } from '../../3D/interaction/interaction-action';
-
 export interface InteractionGroup {
   /**
    * Optional, if set the object3D's name must be included in this array.

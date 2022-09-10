@@ -80,7 +80,7 @@ export class MaterialEditingSpecificTextureComponent implements OnInit, SidebarI
     this.currentValue = value;
     this.loadingValues[value] = true;
 
-    const objects = [this.object3D, ...getRelatedObjects(this.object3D)];
+    const objects = [this.object3D, ...getRelatedObjects(this.object3D, 'material-editing-texture')];
 
     const materials = getMaterialsFromObjects(objects);
     const onLoaded = (): void => {

@@ -11,6 +11,7 @@ import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygo
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
 import type { HexColor } from '../../../shared/models/hex-color';
 import { InteractionUserdata } from '../../../3D/interaction/interaction-userdata';
+import { getRelatedObjects } from '../../../3D/interaction/get-related-objects';
 
 @Component({
   selector: 'material-editing-specific-color',
@@ -62,13 +63,7 @@ export class MaterialEditingSpecificColorComponent implements OnInit, SidebarIte
     }
     clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
-    const userData = this.object3D.userData as InteractionUserdata;
-    const objects = [this.object3D];
-    // TODO: Related meshes
-    // if (userData.related) {
-    //   objects.push(...userData.related);
-    // }
-
+    const objects = [this.object3D, ...getRelatedObjects(this.object3D, 'material-editing-specific')];
     const materials = getMaterialsFromObjects(objects);
 
     this.currentValue = value;

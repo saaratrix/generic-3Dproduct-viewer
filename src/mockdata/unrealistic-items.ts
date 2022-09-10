@@ -11,12 +11,12 @@ import type { MaterialEditingSpecificColorsModel } from '../app/sidebar-items/ma
 
 export function createFlowerPot(id: number): ProductItem {
   const freeColorAction: MaterialEditingAction = {
-    type: 'material-editing',
+    type: 'material-editing-free',
     sidebarComponent: MaterialEditingFreeColorComponent,
   };
 
   const specificColorAction: MaterialEditingAction<MaterialEditingSpecificColorsModel> = {
-    type: 'material-editing',
+    type: 'material-editing-specific',
     sidebarComponent: MaterialEditingSpecificColorComponent,
     item: {
       animationType: MaterialAnimationType.Linear,
@@ -79,7 +79,7 @@ export function createRose(id: number): ProductItem {
   };
 
   const action: MaterialEditingAction<MaterialEditingSpecificTexturesModel> = {
-    type: 'material-editing',
+    type: 'material-editing-texture',
     sidebarComponent: MaterialEditingSpecificTextureComponent,
     item: selectedOptionsValue,
   };

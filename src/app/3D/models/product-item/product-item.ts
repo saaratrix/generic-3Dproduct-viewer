@@ -22,7 +22,7 @@ export interface ProductItem {
   subItems: SubProductItem[];
   selectedSubItem?: SubProductItem | number | null;
   /**
-   * Any objects or meshes that are interactable and have any
+   * Any objects or meshes that are interactable and their actions.
    */
   interactions?: InteractionGroup[];
 
@@ -35,6 +35,8 @@ export interface ProductItem {
    * The root object3D
    */
   object3D?: Object3D;
-  // The cached interactable from parsing selectableObjectsOptions, so we only have to do it once.
+  /**
+   * The cached interactable from parsing selectableObjectsOptions, so we only have to do it once.
+   */
   interactableObjects?: PolygonalObject3D[];
 }

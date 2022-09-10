@@ -2,10 +2,7 @@ import type { ProductConfiguratorService } from '../shared/product-configurator.
 import type { Intersection, PerspectiveCamera, Vector2 } from 'three';
 import { Raycaster } from 'three';
 import type { Subscription } from 'rxjs';
-import type { InteractionGroup } from '../shared/3d-interactions/interaction-group';
-import type { ProductItem } from './models/product-item/product-item';
 import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
-import { isPolygonalObject3D } from './3rd-party/three/types/is-three-js-custom-type';
 import type { InteractionUserdata } from './interaction/interaction-userdata';
 
 export class SelectedProductObjectIntersector {

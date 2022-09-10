@@ -4,7 +4,8 @@ import { ProductItemInteractionAttacherService } from './product-item-interactio
 /**
  * This adds the service to the dependency injection so the constructor is run.
  */
-function initializeProductItemInteractionAttacher(service: ProductItemInteractionAttacherService): () => void {
+function initializeProductItemInteractionAttacher(): () => void {
+  // This is empty because angular DI takes care of the rest.
   return (): void => { };
 }
 

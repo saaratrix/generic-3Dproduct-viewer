@@ -7,7 +7,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { stickyRightScrollElement, StickyScrollHandle } from '../../../utility/sticky-right-scroll-element';
 import { Subscription } from 'rxjs';
 import { isInteractionUserData } from '../../../3D/interaction/is-interaction-user-data';
-import { InteractionUserdata } from '../../../3D/interaction/interaction-userdata';
+import { isPickableFromVisibiity, toggleRecursiveIsPickable } from '../../../3D/interaction/is-pickable-helpers';
 
 type NodeIcon = '&#xea01;' | '&#xea03;';
 
@@ -170,7 +170,8 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
 
   toggleVisibility(event: Event): void {
     this.node.visible = !this.node.visible;
-    (this.node.userData as InteractionUserdata).isPickable = this.node.visible;
+    const isPickable = isPickableFromVisibiity(this.node);
+    toggleRecursiveIsPickable(this.node, isPickable);
 
     event.stopPropagation();
     event.stopImmediatePropagation();
