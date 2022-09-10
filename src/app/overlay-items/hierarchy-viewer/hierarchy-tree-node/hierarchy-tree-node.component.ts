@@ -1,14 +1,13 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import type { Object3D } from 'three';
-import { ProductConfiguratorService } from '../../../product-configurator.service';
+import { ProductConfiguratorService } from '../../../shared/product-configurator.service';
 import { isPolygonalObject3D } from '../../../3D/3rd-party/three/types/is-three-js-custom-type';
-import { isSelectableObject3dUserData } from '../../../3D/models/selectable-object-3ds-options/is-selectable-object-3d-user-data';
-import { SelectedOptionsType } from '../../../3D/models/selectable-object-3ds-options/selected-options-type';
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { stickyRightScrollElement, StickyScrollHandle } from '../../../utility/sticky-right-scroll-element';
 import { Subscription } from 'rxjs';
-import type { SelectableObject3DUserData } from '../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import { isInteractionUserData } from '../../../3D/interaction/is-interaction-user-data';
+import { isPickableFromVisibiity, toggleRecursiveIsPickable } from '../../../3D/interaction/is-pickable-helpers';
 
 type NodeIcon = '&#xea01;' | '&#xea03;';
 
@@ -130,7 +129,7 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (!isSelectableObject3dUserData(this.node.userData) || !this.node.userData.selectableObjectsOption.type) {
+    if (!isInteractionUserData(this.node.userData) || this.node.userData.interactionActions.length === 0) {
       return false;
     }
 
@@ -171,7 +170,8 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
 
   toggleVisibility(event: Event): void {
     this.node.visible = !this.node.visible;
-    (this.node.userData as SelectableObject3DUserData).isPickingDisabled = !this.node.visible;
+    const isPickable = isPickableFromVisibiity(this.node);
+    toggleRecursiveIsPickable(this.node, isPickable);
 
     event.stopPropagation();
     event.stopImmediatePropagation();

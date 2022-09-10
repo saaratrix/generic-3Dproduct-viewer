@@ -1,4 +1,4 @@
-import type { ProductConfiguratorService } from '../app/product-configurator.service';
+import type { ProductConfiguratorService } from '../app/shared/product-configurator.service';
 import { createFlowerPot, createRose, createWuffels } from './unrealistic-items';
 import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from './realistic-items';
 

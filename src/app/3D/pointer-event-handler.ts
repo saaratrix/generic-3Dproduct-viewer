@@ -1,4 +1,4 @@
-import type { ProductConfiguratorService } from '../product-configurator.service';
+import type { ProductConfiguratorService } from '../shared/product-configurator.service';
 import type { Intersection } from 'three';
 import { Vector2 } from 'three';
 import { throttle } from '../utility/throttle';

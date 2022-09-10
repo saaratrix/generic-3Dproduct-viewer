@@ -3,12 +3,13 @@ import { Component, Input } from '@angular/core';
 import { Color } from 'three';
 import { throttle } from '../../../utility/throttle-decorator';
 import { getMaterialsFromObject, setMaterialParameters } from '../../../3D/utility/material-utility';
-import { ProductConfiguratorService } from '../../../product-configurator.service';
+import { ProductConfiguratorService } from '../../../shared/product-configurator.service';
 import { clearEvents } from '../../../3D/utility/product-item-event-utility';
 import { ActiveProductItemEventType } from '../../../3D/models/product-item/active-product-item-event-type';
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { HexColor } from '../../../shared/models/hex-color';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
+import { getRelatedObjects } from '../../../3D/interaction/get-related-objects';
 
 @Component({
   selector: 'material-editing-free-color',
@@ -40,8 +41,12 @@ export class MaterialEditingFreeColorComponent implements OnInit, SidebarItem {
     const hexColor = (<HTMLInputElement> event.target).value as HexColor;
     clearEvents(this.productConfiguratorService.selectedProduct!, [ActiveProductItemEventType.ColorChange], true);
 
-    setMaterialParameters(this.object3D, {
-      color: new Color(hexColor),
-    });
+    const objects = [this.object3D, ...getRelatedObjects(this.object3D, 'material-editing-free')];
+
+    for (const object of objects) {
+      setMaterialParameters(object, {
+        color: new Color(hexColor),
+      });
+    }
   }
 }

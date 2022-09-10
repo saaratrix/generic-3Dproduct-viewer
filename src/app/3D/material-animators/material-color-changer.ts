@@ -1,4 +1,4 @@
-import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../shared/product-configurator.service';
 import { MaterialAnimationType } from './material-animation-type';
 import type { MaterialColorSwapEventData } from '../models/event-data/material-color-swap-event-data';
 import type { Material } from 'three';

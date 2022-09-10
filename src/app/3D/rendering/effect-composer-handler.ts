@@ -1,4 +1,4 @@
-import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../shared/product-configurator.service';
 import type { Subscription } from 'rxjs';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';

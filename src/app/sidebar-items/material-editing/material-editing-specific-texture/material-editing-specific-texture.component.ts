@@ -3,12 +3,12 @@ import { Component, Input } from '@angular/core';
 import type { Texture } from 'three';
 import type { SpecificTextureModel } from './specific-texture.model';
 import { MaterialAnimationType } from '../../../3D/material-animators/material-animation-type';
-import { ProductConfiguratorService } from '../../../product-configurator.service';
-import type { SelectableObject3DUserData } from '../../../3D/models/selectable-object-3ds-options/selectable-object-3D-user-data';
+import { ProductConfiguratorService } from '../../../shared/product-configurator.service';
 import { getMaterialsFromObject, getMaterialsFromObjects } from '../../../3D/utility/material-utility';
 import type { MaterialEditingSpecificTexturesModel } from './material-editing-specific-textures.model';
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
+import { getRelatedObjects } from '../../../3D/interaction/get-related-objects';
 
 @Component({
   selector: 'material-editing-specific-texture',
@@ -80,11 +80,7 @@ export class MaterialEditingSpecificTextureComponent implements OnInit, SidebarI
     this.currentValue = value;
     this.loadingValues[value] = true;
 
-    const userData = this.object3D.userData as SelectableObject3DUserData;
-    const objects = [this.object3D];
-    if (userData.related) {
-      objects.push(...userData.related);
-    }
+    const objects = [this.object3D, ...getRelatedObjects(this.object3D, 'material-editing-texture')];
 
     const materials = getMaterialsFromObjects(objects);
     const onLoaded = (): void => {

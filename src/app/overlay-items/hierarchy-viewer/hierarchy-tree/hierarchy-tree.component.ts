@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ProductConfiguratorService } from '../../../product-configurator.service';
+import { ProductConfiguratorService } from '../../../shared/product-configurator.service';
 import { Subscription } from 'rxjs';
 import type { ProductItem } from '../../../3D/models/product-item/product-item';
 import type { Object3D } from 'three';

@@ -1,4 +1,4 @@
-import type { ProductConfigurationEvent } from '../../../product-configurator-events';
+import type { ProductConfigurationEvent } from '../../../shared/events/product-configurator-events';
 import type { MaterialTextureSwapEventData } from '../event-data/material-texture-swap-event-data';
 
 export interface SubProductItem {

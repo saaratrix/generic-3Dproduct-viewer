@@ -17,6 +17,7 @@ import { ViewerActionsToolbarComponent } from './viewer-actions-toolbar/viewer-a
 import { OverlayModule } from './overlay/overlay.module';
 import { HierarchyViewerModule } from './overlay-items/hierarchy-viewer/hierarchy-viewer.module';
 import { SidebarModule } from './sidebar/sidebar.module';
+import { productItemInteractionAttacherAppInitializer } from './shared/3d-interactions/initialize-product-item-interaction-attacher';
 
 const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
   { component: ProductViewerComponent, matcher: productViewerPageMatcher },
@@ -43,7 +44,9 @@ const rootRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot([
     OverlayModule,
     SidebarModule,
   ],
-  providers: [],
+  providers: [
+    productItemInteractionAttacherAppInitializer,
+  ],
   bootstrap: [AppComponent],
   exports: [],
 })

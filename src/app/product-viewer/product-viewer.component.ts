@@ -1,6 +1,6 @@
 import { ElementRef, NgZone } from '@angular/core';
 import { Component, ViewChild } from '@angular/core';
-import { ProductConfiguratorService } from '../product-configurator.service';
+import { ProductConfiguratorService } from '../shared/product-configurator.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import type * as THREE from 'three';
 import { ProductConfigurator } from '../3D/product-configurator';

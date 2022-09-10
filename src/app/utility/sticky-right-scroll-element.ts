@@ -1,3 +1,5 @@
+import { throttle } from './throttle';
+
 export interface StickyScrollHandle {
   dispose: () => void;
 }

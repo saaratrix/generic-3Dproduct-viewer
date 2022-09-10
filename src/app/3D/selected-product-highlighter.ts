@@ -1,8 +1,8 @@
-import type { ProductConfiguratorService } from '../product-configurator.service';
+import type { ProductConfiguratorService } from '../shared/product-configurator.service';
 import type { Subscription } from 'rxjs';
 import type { WebGLRenderer } from 'three';
-import type { SelectableObject3DUserData } from './models/selectable-object-3ds-options/selectable-object-3D-user-data';
 import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
+import { getRelatedObjects } from './interaction/get-related-objects';
 
 export class SelectedProductHighlighter {
   private hoveredObject: PolygonalObject3D | undefined;
@@ -76,8 +76,8 @@ export class SelectedProductHighlighter {
       return true;
     }
 
-    const allA = [a, ...((a.userData as SelectableObject3DUserData)?.related ?? [])];
-    const allB = [b, ...((b.userData as SelectableObject3DUserData)?.related ?? [])];
+    const allA = [a, ...getRelatedObjects(a)];
+    const allB = [b, ...getRelatedObjects(b)];
 
     return allA.some(a => allB.some(b => b === a));
   }
@@ -85,12 +85,8 @@ export class SelectedProductHighlighter {
   private enableLayer(object: PolygonalObject3D, channel: number): void {
     object.layers.enable(channel);
 
-    const userData = object.userData as SelectableObject3DUserData;
-    if (!Array.isArray(userData?.related)) {
-      return;
-    }
-
-    for (const sibling of userData.related) {
+    const related = getRelatedObjects(object);
+    for (const sibling of related) {
       sibling.layers.enable(channel);
     }
   }
@@ -98,12 +94,8 @@ export class SelectedProductHighlighter {
   private disableLayer(object: PolygonalObject3D, channel: number): void {
     object.layers.disable(channel);
 
-    const userData = object.userData as SelectableObject3DUserData;
-    if (!Array.isArray(userData?.related)) {
-      return;
-    }
-
-    for (const sibling of userData.related) {
+    const related = getRelatedObjects(object);
+    for (const sibling of related) {
       sibling.layers.disable(channel);
     }
   }

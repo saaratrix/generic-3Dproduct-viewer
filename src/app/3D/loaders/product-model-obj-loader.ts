@@ -1,6 +1,6 @@
 import type { ProductModelFiletypeLoader } from './product-model-filetype-loader';
 import type { ProductModelLoader } from './product-model-loader';
-import type { ProductConfiguratorService } from '../../product-configurator.service';
+import type { ProductConfiguratorService } from '../../shared/product-configurator.service';
 import { Group, Material, MeshPhongMaterial, Object3D, TextureLoader } from 'three';
 import type { MaterialInfo } from '../models/material-info';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';

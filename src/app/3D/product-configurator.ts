@@ -1,7 +1,7 @@
 import type { Light } from 'three';
 import { Color, DirectionalLight, PerspectiveCamera, Scene, Vector2, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { ProductConfiguratorService } from '../product-configurator.service';
+import { ProductConfiguratorService } from '../shared/product-configurator.service';
 import { ProductChanger } from './product-changer';
 import { MaterialTextureChanger } from './material-animators/material-texture-changer';
 import { Injectable } from '@angular/core';
@@ -136,7 +136,7 @@ export class ProductConfigurator {
 
   public loadInitialItem(): void {
     const snapshot = this.activatedRoute.snapshot;
-    const name = snapshot.paramMap.has('name') ? snapshot.paramMap.get('name')!.toLowerCase() : '';
+    const name = snapshot.paramMap.get('name')?.toLowerCase() ?? '';
     const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
     this.productChanger.changeProduct(selectedItem).then();
   }

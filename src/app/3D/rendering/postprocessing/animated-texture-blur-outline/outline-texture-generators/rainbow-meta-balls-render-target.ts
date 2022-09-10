@@ -67,7 +67,7 @@ export function getMetaballsSystem(renderer: WebGLRenderer, outlinePass: Animate
         shaderMaterial.uniforms.hueOffset.value = hueOffset;
         drawPixels(width, height, balls, context);
         metaballsTexture.needsUpdate = true;
-        drawColours(fsQuad, renderer, renderTarget);
+        drawColors(fsQuad, renderer, renderTarget);
       }
 
       if (onUpdate) {
@@ -253,7 +253,7 @@ function drawPixels(width: number, height: number, balls: Ball[], context: Canva
   }
 }
 
-function drawColours(fsQuad: FullScreenQuad, renderer: WebGLRenderer, renderTarget: WebGLRenderTarget): void {
+function drawColors(fsQuad: FullScreenQuad, renderer: WebGLRenderer, renderTarget: WebGLRenderTarget): void {
   const oldRenderTarget = renderer.getRenderTarget();
   renderer.setRenderTarget(renderTarget);
   renderer.clear();
