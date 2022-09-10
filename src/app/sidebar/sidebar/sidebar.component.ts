@@ -6,9 +6,10 @@ import { ProductConfiguratorService } from '../../shared/product-configurator.se
 import type { Subscription } from 'rxjs';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../sidebar-item';
-import type { SidebarPickingAction } from '../sidebar-picking-action';
 import { sidebarItemTypes } from '../sidebar-item-types';
 import type { InteractionUserdata } from '../../3D/interaction/interaction-userdata';
+import type { InteractionAction } from '../../3D/interaction/interaction-action';
+import { isSidebarPickingAction } from '../sidebar-picking-action';
 
 @Component({
   selector: 'app-sidebar',
@@ -64,7 +65,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           const userData = object.userData as InteractionUserdata;
           this.activeObject3D = object;
           for (const action of userData.interactionActions) {
-            this.addSidebarComponent(action as SidebarPickingAction);
+            this.addSidebarComponent(action);
           }
         });
       }),
@@ -85,15 +86,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.createdComponents.splice(0, this.createdComponents.length);
   }
 
-  addSidebarComponent(options: SidebarPickingAction | undefined): void {
-    const componentType = options?.sidebarComponent as Type<SidebarItem>;
-    if (!sidebarItemTypes.has(componentType)) {
+  addSidebarComponent(action: InteractionAction): void {
+    if (!isSidebarPickingAction(action)) {
       return;
     }
 
-    const createdComponent = this.viewContainerRef.createComponent(componentType);
+    if (!sidebarItemTypes.has(action.sidebarComponent)) {
+      return;
+    }
+
+    const createdComponent = this.viewContainerRef.createComponent(action.sidebarComponent);
     createdComponent.instance.object3D = this.activeObject3D!;
-    createdComponent.instance.item = options!.item;
+    createdComponent.instance.item = action.item;
 
     this.createdComponents.push(createdComponent);
     this.componentsElementRef.nativeElement.appendChild(createdComponent.location.nativeElement as HTMLElement);
