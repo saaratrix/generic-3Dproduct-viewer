@@ -8,7 +8,7 @@ import { getMaterialsFromObject, getMaterialsFromObjects } from '../../../3D/uti
 import type { MaterialEditingSpecificTexturesModel } from './material-editing-specific-textures.model';
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
-import { getRelatedObjects } from '../../../3D/interaction/get-related-objects';
+import { getRelatedObjects } from '../../../3D/picking/get-related-objects';
 
 @Component({
   selector: 'material-editing-specific-texture',

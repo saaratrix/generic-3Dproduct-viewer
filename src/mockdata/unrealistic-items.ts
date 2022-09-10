@@ -34,7 +34,7 @@ export function createFlowerPot(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: 'A very good looking flower pot.',
     subItems: [],
-    interactions: [
+    pickingSetupItems: [
       {
         included: ['Cylinder.002_Cylinder.006_M_flower'],
         actions: [freeColorAction],
@@ -93,7 +93,7 @@ export function createRose(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: 'A special gift a long time ago.',
     subItems: [],
-    interactions: [{
+    pickingSetupItems: [{
       actions: [action],
     }],
     activeEvents: [],
@@ -110,7 +110,7 @@ export function createWuffels(id: number): ProductItem {
     useGammaSpace: false,
     tooltip: 'Wuffels! Wuff!',
     subItems: [],
-    interactions: [],
+    pickingSetupItems: [],
 
     activeEvents: [],
   };

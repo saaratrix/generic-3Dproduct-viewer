@@ -6,8 +6,8 @@ import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygo
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { stickyRightScrollElement, StickyScrollHandle } from '../../../utility/sticky-right-scroll-element';
 import { Subscription } from 'rxjs';
-import { isInteractionUserData } from '../../../3D/interaction/is-interaction-user-data';
-import { isPickableFromVisibiity, toggleRecursiveIsPickable } from '../../../3D/interaction/is-pickable-helpers';
+import { isPickingUserData } from '../../../3D/picking/is-picking-user-data';
+import { isPickableFromVisibiity, toggleRecursiveIsPickable } from '../../../3D/picking/is-pickable-helpers';
 
 type NodeIcon = '&#xea01;' | '&#xea03;';
 
@@ -129,7 +129,7 @@ export class HierarchyTreeNodeComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (!isInteractionUserData(this.node.userData) || this.node.userData.interactionActions.length === 0) {
+    if (!isPickingUserData(this.node.userData) || this.node.userData.pickingActions.length === 0) {
       return false;
     }
 

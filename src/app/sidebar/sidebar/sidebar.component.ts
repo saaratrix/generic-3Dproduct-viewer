@@ -7,8 +7,8 @@ import type { Subscription } from 'rxjs';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../sidebar-item';
 import { sidebarItemTypes } from '../sidebar-item-types';
-import type { InteractionUserdata } from '../../3D/interaction/interaction-userdata';
-import type { InteractionAction } from '../../3D/interaction/interaction-action';
+import type { PickingUserdata } from '../../3D/picking/picking-userdata';
+import type { PickingAction } from '../../3D/picking/picking-action';
 import { isSidebarPickingAction } from '../sidebar-picking-action';
 
 @Component({
@@ -62,9 +62,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.zone.run(() => {
           this.clearComponents();
           this.isOpened = true;
-          const userData = object.userData as InteractionUserdata;
+          const userData = object.userData as PickingUserdata;
           this.activeObject3D = object;
-          for (const action of userData.interactionActions) {
+          for (const action of userData.pickingActions) {
             this.addSidebarComponent(action);
           }
         });
@@ -86,7 +86,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.createdComponents.splice(0, this.createdComponents.length);
   }
 
-  addSidebarComponent(action: InteractionAction): void {
+  addSidebarComponent(action: PickingAction): void {
     if (!isSidebarPickingAction(action)) {
       return;
     }

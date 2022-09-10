@@ -1,5 +1,5 @@
 import type { Object3D } from 'three';
-import { isInteractionUserData } from './is-interaction-user-data';
+import { isPickingUserData } from './is-picking-user-data';
 
 export function isPickableFromVisibiity(object: Object3D | null): boolean {
   while (object) {
@@ -16,7 +16,7 @@ export function isPickableFromVisibiity(object: Object3D | null): boolean {
 export function toggleRecursiveIsPickable(object: Object3D, isPickable: boolean): void {
   // Traverses itself too.
   object.traverse((o) => {
-    if (isInteractionUserData(o.userData)) {
+    if (isPickingUserData(o.userData)) {
       o.userData.isPickable = isPickable;
     }
   });
