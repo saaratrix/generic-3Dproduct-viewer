@@ -1,8 +1,8 @@
 import type { PolygonalObject3D } from '../3rd-party/three/types/polygonal-object-3D';
-import type { InteractionAction } from './interaction-action';
-import type { InteractionUserdata } from './interaction-userdata';
+import type { PickingAction } from './picking-action';
+import type { PickingUserdata } from './picking-userdata';
 
-export function addActionsToObjects(objects: PolygonalObject3D[], actions: InteractionAction[]): void {
+export function addActionsToObjects(objects: PolygonalObject3D[], actions: PickingAction[]): void {
   for (const action of actions!) {
     if (!action.objects) {
       action.objects = new Set<PolygonalObject3D>();
@@ -11,11 +11,11 @@ export function addActionsToObjects(objects: PolygonalObject3D[], actions: Inter
   }
 
   for (const object of objects) {
-    const combinedActions = new Set((object.userData as InteractionUserdata).interactionActions ?? []);
+    const combinedActions = new Set((object.userData as PickingUserdata).pickingActions ?? []);
     actions.forEach(a => combinedActions.add(a));
 
-    const userData: InteractionUserdata = {
-      interactionActions: Array.from(combinedActions),
+    const userData: PickingUserdata = {
+      pickingActions: Array.from(combinedActions),
       isPickable: true,
     };
 

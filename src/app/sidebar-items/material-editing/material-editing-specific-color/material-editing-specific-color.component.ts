@@ -10,8 +10,8 @@ import { ActiveProductItemEventType } from '../../../3D/models/product-item/acti
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
 import type { HexColor } from '../../../shared/models/hex-color';
-import { InteractionUserdata } from '../../../3D/interaction/interaction-userdata';
-import { getRelatedObjects } from '../../../3D/interaction/get-related-objects';
+import { PickingUserdata } from '../../../3D/picking/picking-userdata';
+import { getRelatedObjects } from '../../../3D/picking/get-related-objects';
 
 @Component({
   selector: 'material-editing-specific-color',

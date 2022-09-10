@@ -3,16 +3,16 @@ import { ProductConfiguratorService } from '../product-configurator.service';
 import type { Subscription } from 'rxjs';
 import type { ProductItem } from '../../3D/models/product-item/product-item';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
-import type { InteractionGroup } from './interaction-group';
+import type { PickingSetupItem } from './picking-setup-item';
 import type { Object3D } from 'three';
 import { isPolygonalObject3D } from '../../3D/3rd-party/three/types/is-three-js-custom-type';
-import type { InteractionAction } from '../../3D/interaction/interaction-action';
-import { addActionsToObjects } from '../../3D/interaction/add-actions-to-objects';
+import type { PickingAction } from '../../3D/picking/picking-action';
+import { addActionsToObjects } from '../../3D/picking/add-actions-to-objects';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductItemInteractionAttacherService implements OnDestroy {
+export class ProductItemPickingAttacherService implements OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
@@ -20,7 +20,7 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
     productConfiguratorService: ProductConfiguratorService,
   ) {
     this.subscriptions.push(
-      productConfiguratorService.productLoadingFinished.subscribe(event => this.attachInteractionActions(event.product)),
+      productConfiguratorService.productLoadingFinished.subscribe(event => this.attachPickingActions(event.product)),
     );
   }
 
@@ -28,27 +28,27 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  attachInteractionActions(product: ProductItem): void {
-    if (!product.interactions || !product.object3D) {
-      product.interactableObjects = [];
+  attachPickingActions(product: ProductItem): void {
+    if (!product.pickingSetupItems || !product.object3D) {
+      product.pickableObjects = [];
       return;
     }
 
     const intersectableObjects: Set<PolygonalObject3D> = new Set<PolygonalObject3D>();
-    for (const interaction of product.interactions) {
-      if (!interaction.actions?.length) {
+    for (const pickingSetupItem of product.pickingSetupItems) {
+      if (!pickingSetupItem.actions?.length) {
         continue;
       }
 
-      const objects = this.getObjects(interaction, product.object3D);
-      this.setupInteraction(objects, interaction.actions);
+      const objects = this.getObjects(pickingSetupItem, product.object3D);
+      this.setupPickingActions(objects, pickingSetupItem.actions);
       objects.forEach(o => intersectableObjects.add(o));
     }
 
-    product.interactableObjects = Array.from(intersectableObjects.values());
+    product.pickableObjects = Array.from(intersectableObjects.values());
   }
 
-  getObjects(interaction: InteractionGroup, rootObject: Object3D): PolygonalObject3D[] {
+  getObjects(pickingSetupItem: PickingSetupItem, rootObject: Object3D): PolygonalObject3D[] {
     const objects: PolygonalObject3D[] = [];
     rootObject.traverse(o => {
       if (!isPolygonalObject3D(o)) {
@@ -56,11 +56,11 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
       }
 
       const objectName = o.name.toLocaleUpperCase();
-      if (!!interaction.excluded?.length && interaction.excluded.some(name => name.toLocaleUpperCase() === objectName)) {
+      if (!!pickingSetupItem.excluded?.length && pickingSetupItem.excluded.some(name => name.toLocaleUpperCase() === objectName)) {
         return;
       }
 
-      if (!!interaction.included?.length && !interaction.included.some(name => name.toLocaleUpperCase() === objectName)) {
+      if (!!pickingSetupItem.included?.length && !pickingSetupItem.included.some(name => name.toLocaleUpperCase() === objectName)) {
         return;
       }
 
@@ -70,7 +70,7 @@ export class ProductItemInteractionAttacherService implements OnDestroy {
     return objects;
   }
 
-  setupInteraction(objects: PolygonalObject3D[], actions: InteractionAction[]): void {
+  setupPickingActions(objects: PolygonalObject3D[], actions: PickingAction[]): void {
     addActionsToObjects(objects, actions);
   }
 }

@@ -1,7 +1,7 @@
 import type { SubProductItem } from './sub-product-item';
 import type { Object3D } from 'three';
 import type { Model3D } from '../model-3D';
-import type { InteractionGroup } from '../../../shared/3d-interactions/interaction-group';
+import type { PickingSetupItem } from '../../../shared/3d-picking/picking-setup-item';
 import type { ActiveProductItemEvent } from './active-product-item-event';
 import type { PolygonalObject3D } from '../../3rd-party/three/types/polygonal-object-3D';
 
@@ -22,9 +22,9 @@ export interface ProductItem {
   subItems: SubProductItem[];
   selectedSubItem?: SubProductItem | number | null;
   /**
-   * Any objects or meshes that are interactable and their actions.
+   * Any objects or meshes that are pickable and their corresponding actions.
    */
-  interactions?: InteractionGroup[];
+  pickingSetupItems?: PickingSetupItem[];
 
   // Variables generated at runtime:
   /**
@@ -36,7 +36,7 @@ export interface ProductItem {
    */
   object3D?: Object3D;
   /**
-   * The cached interactable from parsing selectableObjectsOptions, so we only have to do it once.
+   * The cached initialized pickable objects.
    */
-  interactableObjects?: PolygonalObject3D[];
+  pickableObjects?: PolygonalObject3D[];
 }

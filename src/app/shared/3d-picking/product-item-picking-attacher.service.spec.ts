@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { ProductItemInteractionAttacherService } from './product-item-interaction-attacher.service';
+import { ProductItemPickingAttacherService } from './product-item-picking-attacher.service';
 import { Mesh, Object3D } from 'three';
 import { ProductConfiguratorService } from '../product-configurator.service';
 import { Subject } from 'rxjs';
 import type { ProductLoadingFinishedEvent } from '../events/product-loading-finished-event';
-import type { InteractionAction } from '../../3D/interaction/interaction-action';
+import type { PickingAction } from '../../3D/picking/picking-action';
 import type { PolygonalObject3D } from '../../3D/3rd-party/three/types/polygonal-object-3D';
-import type { InteractionUserdata } from '../../3D/interaction/interaction-userdata';
+import type { PickingUserdata } from '../../3D/picking/picking-userdata';
 
 interface NodeTree {
   name: string;
@@ -14,8 +14,8 @@ interface NodeTree {
   children?: NodeTree[];
 }
 
-describe('ProductItemInteractionAttacherService', () => {
-  let service: ProductItemInteractionAttacherService;
+describe('ProductItemPickingAttacherService Tests', () => {
+  let service: ProductItemPickingAttacherService;
   const mockProductConfiguratorService: ProductConfiguratorService = <any> {
     productLoadingFinished: new Subject<ProductLoadingFinishedEvent>(),
   };
@@ -26,7 +26,7 @@ describe('ProductItemInteractionAttacherService', () => {
         { provide: ProductConfiguratorService, useValue: mockProductConfiguratorService },
       ],
     });
-    service = TestBed.inject(ProductItemInteractionAttacherService);
+    service = TestBed.inject(ProductItemPickingAttacherService);
   });
 
   describe('getObjects()', () => {
@@ -113,14 +113,14 @@ describe('ProductItemInteractionAttacherService', () => {
     }
   });
 
-  describe('setupInteraction()', () => {
+  describe('setupPickingActions()', () => {
     it('should work with empty data.', () => {
-      service.setupInteraction([], []);
+      service.setupPickingActions([], []);
       expect(true).withContext('Did not throw!').toBeTrue();
     });
 
     it('Should set objects on actions.', () => {
-      const actions: InteractionAction[] = [<any> {
+      const actions: PickingAction[] = [<any> {
         objects: undefined,
       }, <any> {
         objects: undefined,
@@ -131,7 +131,7 @@ describe('ProductItemInteractionAttacherService', () => {
         <any> { name: 'B', userData: {} },
       ];
 
-      service.setupInteraction(objects, actions);
+      service.setupPickingActions(objects, actions);
 
       for (const action of actions) {
         expect(action.objects).not.toBeUndefined();
@@ -141,7 +141,7 @@ describe('ProductItemInteractionAttacherService', () => {
     });
 
     it('Should set objects on actions without duplicates.', () => {
-      const actions: InteractionAction[] = [<any> {
+      const actions: PickingAction[] = [<any> {
         objects: undefined,
       }, <any> {
         objects: new Set(),
@@ -149,12 +149,12 @@ describe('ProductItemInteractionAttacherService', () => {
 
       const objects: PolygonalObject3D[] = [
         <any> { name: 'A', userData: {} },
-        <any> { name: 'B', userData: { interactionActions: [actions[0]], isPickable: true } },
+        <any> { name: 'B', userData: { pickingActions: [actions[0]], isPickable: true } },
       ];
 
       actions[1].objects!.add(objects[1]);
 
-      service.setupInteraction(objects, actions);
+      service.setupPickingActions(objects, actions);
 
       // Tests first action
       let action = actions[0];
@@ -170,7 +170,7 @@ describe('ProductItemInteractionAttacherService', () => {
     });
 
     it(`Should set actions on object's userdata.`, () => {
-      const actions: InteractionAction[] = [<any> {
+      const actions: PickingAction[] = [<any> {
         objects: undefined,
       }, <any> {
         objects: undefined,
@@ -181,12 +181,12 @@ describe('ProductItemInteractionAttacherService', () => {
         <any> { name: 'B', userData: {} },
       ];
 
-      service.setupInteraction(objects, actions);
+      service.setupPickingActions(objects, actions);
 
       for (const object of objects) {
-        const userData = object.userData as InteractionUserdata;
-        expect(userData.interactionActions).not.toBeUndefined();
-        expect(userData.interactionActions.length).toBe(actions.length);
+        const userData = object.userData as PickingUserdata;
+        expect(userData.pickingActions).not.toBeUndefined();
+        expect(userData.pickingActions.length).toBe(actions.length);
         for (const action of actions.values()) {
           action.objects!.has(object);
         }
@@ -194,14 +194,14 @@ describe('ProductItemInteractionAttacherService', () => {
     });
 
     it(`Should set actions on object's userdata without duplicates`, () => {
-      const actions: InteractionAction[] = [<any> {
+      const actions: PickingAction[] = [<any> {
         objects: undefined,
       }, <any> {
         objects: undefined,
       }];
 
-      const userDataForA: InteractionUserdata = {
-        interactionActions: [actions[0]],
+      const userDataForA: PickingUserdata = {
+        pickingActions: [actions[0]],
         isPickable: true,
       };
       const objects: PolygonalObject3D[] = [
@@ -211,12 +211,12 @@ describe('ProductItemInteractionAttacherService', () => {
       ];
       actions[0].objects = new Set([objects[0]]);
 
-      service.setupInteraction(objects, actions);
+      service.setupPickingActions(objects, actions);
 
       for (const object of objects) {
-        const userData = object.userData as InteractionUserdata;
-        expect(userData.interactionActions).not.toBeUndefined();
-        expect(userData.interactionActions.length).toBe(actions.length);
+        const userData = object.userData as PickingUserdata;
+        expect(userData.pickingActions).not.toBeUndefined();
+        expect(userData.pickingActions.length).toBe(actions.length);
         for (const action of actions.values()) {
           action.objects!.has(object);
         }
@@ -224,15 +224,15 @@ describe('ProductItemInteractionAttacherService', () => {
     });
 
     it(`Should combine actions on object's userdata.`, () => {
-      const extraAction: InteractionAction = <any> { objects: new Set() };
-      const actions: InteractionAction[] = [<any> {
+      const extraAction: PickingAction = <any> { objects: new Set() };
+      const actions: PickingAction[] = [<any> {
         objects: undefined,
       }, <any> {
         objects: undefined,
       }];
 
-      const userDataForA: InteractionUserdata = {
-        interactionActions: [extraAction],
+      const userDataForA: PickingUserdata = {
+        pickingActions: [extraAction],
         isPickable: true,
       };
       const objects: PolygonalObject3D[] = [
@@ -242,21 +242,21 @@ describe('ProductItemInteractionAttacherService', () => {
       ];
       extraAction.objects!.add(objects[0]);
 
-      service.setupInteraction(objects, actions);
+      service.setupPickingActions(objects, actions);
 
       let object = objects[0];
-      let userData = object.userData as InteractionUserdata;
-      expect(userData.interactionActions).not.toBeUndefined();
-      expect(userData.interactionActions.length).toBe(actions.length + 1);
-      userData.interactionActions.includes(extraAction);
+      let userData = object.userData as PickingUserdata;
+      expect(userData.pickingActions).not.toBeUndefined();
+      expect(userData.pickingActions.length).toBe(actions.length + 1);
+      userData.pickingActions.includes(extraAction);
       for (const action of actions.values()) {
         action.objects!.has(object);
       }
 
       object = objects[1];
-      userData = object.userData as InteractionUserdata;
-      expect(userData.interactionActions).not.toBeUndefined();
-      expect(userData.interactionActions.length).toBe(actions.length);
+      userData = object.userData as PickingUserdata;
+      expect(userData.pickingActions).not.toBeUndefined();
+      expect(userData.pickingActions.length).toBe(actions.length);
       for (const action of actions.values()) {
         action.objects!.has(object);
       }

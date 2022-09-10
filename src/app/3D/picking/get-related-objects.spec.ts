@@ -3,7 +3,7 @@ import type { PolygonalObject3D } from '../3rd-party/three/types/polygonal-objec
 
 describe('get-related-obects()', () => {
   describe('without type', () => {
-    it('Should get no objects if not interactable.', () => {
+    it('Should get no objects if not pickable.', () => {
       const result = getRelatedObjects(<any> {
         userData: {},
       });
@@ -13,7 +13,7 @@ describe('get-related-obects()', () => {
     it('Should get no objects if not grouping objects together.', () => {
       const input = <any> {
         userData: {
-          interactionActions: [{
+          pickingActions: [{
             groupObjectsTogether: false,
             objects: new Set<PolygonalObject3D>([<any> {}, <any> {}]),
           }],
@@ -28,7 +28,7 @@ describe('get-related-obects()', () => {
       const expectedName = 'grouped';
       const input = <any> {
         userData: {
-          interactionActions: [
+          pickingActions: [
             {
               groupObjectsTogether: false,
               objects: new Set<PolygonalObject3D>([<any> { name: 'not-grouped' }, <any> { name: 'not-grouped' }]),
@@ -51,13 +51,13 @@ describe('get-related-obects()', () => {
     it('Should not return input object (itself).', () => {
       const input = <any> {
         userData: {
-          interactionActions: [{
+          pickingActions: [{
             groupObjectsTogether: true,
             objects: new Set<PolygonalObject3D>([<any> {}]),
           }],
         },
       };
-      input.userData.interactionActions[0].objects.add(input);
+      input.userData.pickingActions[0].objects.add(input);
       const result = getRelatedObjects(input);
       expect(result.length).toBe(1);
       expect(result.includes(input)).toBeFalse();
@@ -71,7 +71,7 @@ describe('get-related-obects()', () => {
 
       const input = <any> {
         userData: {
-          interactionActions: [
+          pickingActions: [
             {
               groupObjectsTogether: false,
               type: 'A',

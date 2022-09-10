@@ -9,7 +9,7 @@ import { ActiveProductItemEventType } from '../../../3D/models/product-item/acti
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { HexColor } from '../../../shared/models/hex-color';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
-import { getRelatedObjects } from '../../../3D/interaction/get-related-objects';
+import { getRelatedObjects } from '../../../3D/picking/get-related-objects';
 
 @Component({
   selector: 'material-editing-free-color',

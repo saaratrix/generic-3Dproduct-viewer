@@ -3,7 +3,7 @@ import type { Intersection, PerspectiveCamera, Vector2 } from 'three';
 import { Raycaster } from 'three';
 import type { Subscription } from 'rxjs';
 import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
-import type { InteractionUserdata } from './interaction/interaction-userdata';
+import type { PickingUserdata } from './picking/picking-userdata';
 
 export class SelectedProductObjectIntersector {
   private raycaster: Raycaster = new Raycaster();
@@ -17,12 +17,12 @@ export class SelectedProductObjectIntersector {
   ) {
     this.subscriptions.push(
       this.productConfiguratorService.selectedProductChanged.subscribe(productItem => {
-        if (!productItem.interactableObjects) {
+        if (!productItem.pickableObjects) {
           this.intersectableObjects = [];
           return;
         }
 
-        this.intersectableObjects = productItem.interactableObjects as PolygonalObject3D[];
+        this.intersectableObjects = productItem.pickableObjects as PolygonalObject3D[];
       }),
     );
   }
@@ -36,7 +36,7 @@ export class SelectedProductObjectIntersector {
     this.raycaster.far = this.camera.far;
     this.raycaster.setFromCamera(pointerPosition, this.camera);
 
-    const intersectableObjects = this.intersectableObjects.filter(i => !!(i.userData as InteractionUserdata).isPickable);
+    const intersectableObjects = this.intersectableObjects.filter(i => !!(i.userData as PickingUserdata).isPickable);
     return this.raycaster.intersectObjects(intersectableObjects, false);
   }
 }

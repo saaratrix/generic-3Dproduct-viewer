@@ -2,7 +2,7 @@ import type { ProductConfiguratorService } from '../shared/product-configurator.
 import type { Subscription } from 'rxjs';
 import type { WebGLRenderer } from 'three';
 import type { PolygonalObject3D } from './3rd-party/three/types/polygonal-object-3D';
-import { getRelatedObjects } from './interaction/get-related-objects';
+import { getRelatedObjects } from './picking/get-related-objects';
 
 export class SelectedProductHighlighter {
   private hoveredObject: PolygonalObject3D | undefined;
