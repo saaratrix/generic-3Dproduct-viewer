@@ -85,6 +85,10 @@ export class ProductConfiguratorService implements OnDestroy {
     }
   }
 
+  public setProductItemHTMLElement(item: ProductItem, element: HTMLElement): void {
+    this.itemElements[item.id] = element;
+  }
+
   public dispatch<T = unknown>(eventType: ProductConfigurationEvent, data?: T): void {
     if (!this.subjects[eventType]) {
       return;
@@ -93,12 +97,12 @@ export class ProductConfiguratorService implements OnDestroy {
     this.subjects[eventType].next(data);
   }
 
-  public getSelectedProductElement(product: ProductItem): HTMLElement | undefined {
+  public getSelectedProductHTMLElement(product: ProductItem): HTMLElement | undefined {
     if (!product) {
       return undefined;
     }
 
-    return this.itemElements[product.name];
+    return this.itemElements[product.id];
   }
 
   private createSubject<T>(eventType: ProductConfigurationEvent): Subject<T> {

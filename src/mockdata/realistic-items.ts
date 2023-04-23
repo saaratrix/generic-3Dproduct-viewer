@@ -3,10 +3,9 @@ import { getIkeaChearModel, getIkeaTableModel, getWayfairChairModel, getWayfairT
 import { ProductConfigurationEvent } from '../app/shared/events/product-configurator-events';
 import { MaterialAnimationType } from '../app/3D/material-animators/material-animation-type';
 
-export function createWayfairTable(id: number): ProductItem {
+export function createWayfairTable(): ProductItem {
   return {
-    id,
-    name: 'table1',
+    id: 'table1',
     thumbnail: 'assets/models/pbr/thumbnail_wayfair_table.png',
     models: [getWayfairTableModel()],
     hasFloor: false,
@@ -18,10 +17,9 @@ export function createWayfairTable(id: number): ProductItem {
   };
 }
 
-export function createWayfairChair(id: number): ProductItem {
+export function createWayfairChair(): ProductItem {
   return {
-    id,
-    name: 'chair',
+    id: 'chair',
     thumbnail: 'assets/models/pbr/thumbnail_wayfair_chair.png',
     models: [getWayfairChairModel()],
     hasFloor: false,
@@ -34,10 +32,9 @@ export function createWayfairChair(id: number): ProductItem {
 }
 
 // That typo... well it's fun to keep using it for this little example.
-export function createIkeaChear(id: number): ProductItem {
+export function createIkeaChear(): ProductItem {
   const ikeaChearProduct: ProductItem = {
-    id,
-    name: 'chear',
+    id: 'chear',
     thumbnail: 'assets/models/pbr/thumbnail_ikea_chair.png',
     models: [getIkeaChearModel()],
     hasFloor: false,
@@ -86,10 +83,9 @@ export function createIkeaChear(id: number): ProductItem {
   return ikeaChearProduct;
 }
 
-export function createIkeaTable(id: number): ProductItem {
+export function createIkeaTable(): ProductItem {
   return {
-    id,
-    name: 'table2',
+    id: 'table2',
     thumbnail: 'assets/models/pbr/thumbnail_ikea_table.png',
     models: [getIkeaTableModel()],
     hasFloor: false,

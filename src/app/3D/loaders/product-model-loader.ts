@@ -22,7 +22,7 @@ export class ProductModelLoader {
     const promise = new Promise<ModelLoadedEventData>((resolve) => {
       const modelLoader = this.getModelLoader(model);
 
-      const promise = modelLoader?.load(model.filename, model.materialInfo) ?? Promise.resolve(undefined);
+      const promise = modelLoader?.load(model.path, model.materialInfo) ?? Promise.resolve(undefined);
       promise.then((object) => {
         resolve({
           object,
@@ -34,7 +34,7 @@ export class ProductModelLoader {
   }
 
   private getModelLoader(model: Model3D): ProductModelFiletypeLoader | undefined {
-    const fileParts: string[] = model.filename.split('.');
+    const fileParts: string[] = model.path.split('.');
     const fileExtension = fileParts[fileParts.length - 1].toLowerCase();
 
     switch (fileExtension) {

@@ -24,14 +24,14 @@ export class ToolbarSubitemContainerComponent implements OnChanges, AfterViewIni
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (this.isViewInitialized && changes.productItem) {
-      this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
+      this.productItemElement = this.productConfiguratorService.getSelectedProductHTMLElement(this.productItem);
       this.calculatePosition();
     }
   }
 
   public ngAfterViewInit(): void {
     this.isViewInitialized = true;
-    this.productItemElement = this.productConfiguratorService.getSelectedProductElement(this.productItem);
+    this.productItemElement = this.productConfiguratorService.getSelectedProductHTMLElement(this.productItem);
     this.calculatePosition();
   }
 

@@ -3,14 +3,12 @@ import { createFlowerPot, createRose, createWuffels } from './unrealistic-items'
 import { createIkeaChear, createIkeaTable, createWayfairChair, createWayfairTable } from './realistic-items';
 
 export function loadMockData(productConfiguratorService: ProductConfiguratorService): void {
-  let id = 0;
-
   // Who needs a database!
-  productConfiguratorService.items.push(createFlowerPot(id++));
-  productConfiguratorService.items.push(createRose(id++));
-  productConfiguratorService.items.push(createWuffels(id++));
-  productConfiguratorService.items.push(createWayfairTable(id++));
-  productConfiguratorService.items.push(createWayfairChair(id++));
-  productConfiguratorService.items.push(createIkeaChear(id++));
-  productConfiguratorService.items.push(createIkeaTable(id++));
+  productConfiguratorService.items.push(createFlowerPot());
+  productConfiguratorService.items.push(createRose());
+  productConfiguratorService.items.push(createWuffels());
+  productConfiguratorService.items.push(createWayfairTable());
+  productConfiguratorService.items.push(createWayfairChair());
+  productConfiguratorService.items.push(createIkeaChear());
+  productConfiguratorService.items.push(createIkeaTable());
 }

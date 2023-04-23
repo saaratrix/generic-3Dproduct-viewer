@@ -115,7 +115,7 @@ describe('ProductItemPickingAttacherService Tests', () => {
 
   describe('setupPickingActions()', () => {
     it('should work with empty data.', () => {
-      service.setupPickingActions([], []);
+      service.setupPickingActionsForObjects([], []);
       expect(true).withContext('Did not throw!').toBeTrue();
     });
 
@@ -131,7 +131,7 @@ describe('ProductItemPickingAttacherService Tests', () => {
         <any> { name: 'B', userData: {} },
       ];
 
-      service.setupPickingActions(objects, actions);
+      service.setupPickingActionsForObjects(objects, actions);
 
       for (const action of actions) {
         expect(action.objects).not.toBeUndefined();
@@ -154,7 +154,7 @@ describe('ProductItemPickingAttacherService Tests', () => {
 
       actions[1].objects!.add(objects[1]);
 
-      service.setupPickingActions(objects, actions);
+      service.setupPickingActionsForObjects(objects, actions);
 
       // Tests first action
       let action = actions[0];
@@ -181,7 +181,7 @@ describe('ProductItemPickingAttacherService Tests', () => {
         <any> { name: 'B', userData: {} },
       ];
 
-      service.setupPickingActions(objects, actions);
+      service.setupPickingActionsForObjects(objects, actions);
 
       for (const object of objects) {
         const userData = object.userData as PickingUserdata;
@@ -211,7 +211,7 @@ describe('ProductItemPickingAttacherService Tests', () => {
       ];
       actions[0].objects = new Set([objects[0]]);
 
-      service.setupPickingActions(objects, actions);
+      service.setupPickingActionsForObjects(objects, actions);
 
       for (const object of objects) {
         const userData = object.userData as PickingUserdata;
@@ -242,7 +242,7 @@ describe('ProductItemPickingAttacherService Tests', () => {
       ];
       extraAction.objects!.add(objects[0]);
 
-      service.setupPickingActions(objects, actions);
+      service.setupPickingActionsForObjects(objects, actions);
 
       let object = objects[0];
       let userData = object.userData as PickingUserdata;

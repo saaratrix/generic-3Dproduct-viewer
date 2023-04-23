@@ -7,7 +7,7 @@ import type { PickingSetupItem } from './picking-setup-item';
 import type { Object3D } from 'three';
 import { isPolygonalObject3D } from '../../3D/3rd-party/three/types/is-three-js-custom-type';
 import type { PickingAction } from '../../3D/picking/picking-action';
-import { addActionsToObjects } from '../../3D/picking/add-actions-to-objects';
+import { createPickingUserDataAndAddActions } from '../../3D/picking/create-picking-user-data-and-add-actions';
 
 @Injectable({
   providedIn: 'root',
@@ -35,19 +35,23 @@ export class ProductItemPickingAttacherService implements OnDestroy {
     }
 
     const intersectableObjects: Set<PolygonalObject3D> = new Set<PolygonalObject3D>();
+
     for (const pickingSetupItem of product.pickingSetupItems) {
       if (!pickingSetupItem.actions?.length) {
         continue;
       }
 
       const objects = this.getObjects(pickingSetupItem, product.object3D);
-      this.setupPickingActions(objects, pickingSetupItem.actions);
+      this.setupPickingActionsForObjects(objects, pickingSetupItem.actions);
       objects.forEach(o => intersectableObjects.add(o));
     }
 
     product.pickableObjects = Array.from(intersectableObjects.values());
   }
 
+  /**
+   * Get all pickable objects for the input pickingSetupItem.
+   */
   getObjects(pickingSetupItem: PickingSetupItem, rootObject: Object3D): PolygonalObject3D[] {
     const objects: PolygonalObject3D[] = [];
     rootObject.traverse(o => {
@@ -70,7 +74,7 @@ export class ProductItemPickingAttacherService implements OnDestroy {
     return objects;
   }
 
-  setupPickingActions(objects: PolygonalObject3D[], actions: PickingAction[]): void {
-    addActionsToObjects(objects, actions);
+  setupPickingActionsForObjects(objects: PolygonalObject3D[], actions: PickingAction[]): void {
+    createPickingUserDataAndAddActions(objects, actions);
   }
 }
