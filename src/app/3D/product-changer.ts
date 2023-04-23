@@ -81,7 +81,7 @@ export class ProductChanger {
     // Update camera position
     this.updateCameraPosition(obj, product.hasFloor);
 
-    const urlParts = ['model', product.name];
+    const urlParts = ['model', product.id];
     if (product.selectedSubItem) {
       const selectedSubItem = product.selectedSubItem as SubProductItem;
       urlParts.push(selectedSubItem.id.toString());

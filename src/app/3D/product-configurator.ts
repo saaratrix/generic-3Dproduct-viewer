@@ -137,7 +137,7 @@ export class ProductConfigurator {
   public loadInitialItem(): void {
     const snapshot = this.activatedRoute.snapshot;
     const name = snapshot.paramMap.get('name')?.toLowerCase() ?? '';
-    const selectedItem = this.productConfiguratorService.items.find(i => i.name.toLowerCase() === name) || this.productConfiguratorService.items[0];
+    const selectedItem = this.productConfiguratorService.items.find(i => i.id.toLowerCase() === name) || this.productConfiguratorService.items[0];
     this.productChanger.changeProduct(selectedItem).then();
   }
 

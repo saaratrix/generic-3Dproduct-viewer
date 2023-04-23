@@ -9,7 +9,7 @@ import { MaterialEditingSpecificColorComponent } from '../app/sidebar-items/mate
 import type { MaterialEditingAction } from '../app/sidebar-items/material-editing/material-editing-action';
 import type { MaterialEditingSpecificColorsModel } from '../app/sidebar-items/material-editing/material-editing-specific-color/material-editing-specific-colors.model';
 
-export function createFlowerPot(id: number): ProductItem {
+export function createFlowerPot(): ProductItem {
   const freeColorAction: MaterialEditingAction = {
     type: 'material-editing-free',
     sidebarComponent: MaterialEditingFreeColorComponent,
@@ -26,8 +26,7 @@ export function createFlowerPot(id: number): ProductItem {
   };
 
   return {
-    id,
-    name: 'flowerpot',
+    id: 'flowerpot',
     thumbnail: 'assets/models/thumbnail_pot.png',
     models: [getFlowerPotModel()],
     hasFloor: false,
@@ -48,7 +47,7 @@ export function createFlowerPot(id: number): ProductItem {
   };
 }
 
-export function createRose(id: number): ProductItem {
+export function createRose(): ProductItem {
   const rose1 = getRoseModel();
   const rose2 = getRoseModel();
   const centerRose = getRoseModel();
@@ -85,13 +84,12 @@ export function createRose(id: number): ProductItem {
   };
 
   return {
-    id,
-    name: 'roses',
+    id: 'roses',
     thumbnail: 'assets/models/thumbnail_rose.png',
     models: [rose1, rose2, centerRose, rose4, rose5],
     hasFloor: false,
     useGammaSpace: false,
-    tooltip: 'A special gift a long time ago.',
+    tooltip: 'A bouquet of roses.',
     subItems: [],
     pickingSetupItems: [{
       actions: [action],
@@ -100,10 +98,9 @@ export function createRose(id: number): ProductItem {
   };
 }
 
-export function createWuffels(id: number): ProductItem {
+export function createWuffels(): ProductItem {
   return {
-    id,
-    name: 'Wuffels',
+    id: 'Wuffels',
     thumbnail: 'assets/models/thumbnail_wuffels.png',
     models: [getWuffelsModel()],
     hasFloor: true,

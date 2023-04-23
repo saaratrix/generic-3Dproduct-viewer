@@ -98,7 +98,7 @@ export class ProductConfiguratorService implements OnDestroy {
       return undefined;
     }
 
-    return this.itemElements[product.name];
+    return this.itemElements[product.id];
   }
 
   private createSubject<T>(eventType: ProductConfigurationEvent): Subject<T> {
