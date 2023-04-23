@@ -4,6 +4,7 @@ import type { PickingUserdata } from './picking-userdata';
 
 /**
  * Creates or uses an existing picking user data object and adds the input actions.
+ * If an existing picking object exists it will attempt to combine them.
  */
 export function createPickingUserDataAndAddActions(objects: PolygonalObject3D[], actions: PickingAction[]): void {
   for (const action of actions!) {
