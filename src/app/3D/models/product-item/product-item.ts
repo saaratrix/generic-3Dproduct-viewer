@@ -6,11 +6,10 @@ import type { ActiveProductItemEvent } from './active-product-item-event';
 import type { PolygonalObject3D } from '../../3rd-party/three/types/polygonal-object-3D';
 
 export interface ProductItem {
-  id: number;
   /**
-   * A unique name used to identify the product item from routing.
+   * A unique id used for example to identify the product item from routing.
    */
-  name: string;
+  id: string;
   thumbnail: string;
   models: Model3D[];
   /**

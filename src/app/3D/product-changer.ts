@@ -37,39 +37,11 @@ export class ProductChanger {
     }
 
     this.productConfiguratorService.selectedProduct = product;
-    const modelLoader = new ProductModelLoader(this.productConfiguratorService, this.environmentMapLoader);
+
 
     let obj: Object3D | undefined = product.object3D;
     if (!obj) {
-      this.productConfiguratorService.loadingStarted.next();
-
-      obj = new Object3D();
-      const promises: Promise<ModelLoadedEventData>[] = [];
-
-      for (const model of product.models) {
-        promises.push(modelLoader.loadModel(model));
-      }
-
-      const loadedModels: ModelLoadedEventData[] = await Promise.all(promises);
-
-      for (const loadedModel of loadedModels) {
-        if (!loadedModel.object) {
-          continue;
-        }
-
-        this.setObject3DTransform(loadedModel.object, loadedModel.model);
-        obj.attach(loadedModel.object);
-      }
-      // Finally set the whole object at origin.
-      this.setObjectAtOrigin(obj);
-
-      this.productConfiguratorService.loadingFinished.next();
-      product.object3D = obj;
-
-      this.productConfiguratorService.productLoadingFinished.next({
-        product,
-        isSelectedProduct: this.productConfiguratorService.selectedProduct === product,
-      });
+      obj = await this.loadProduct(product);
     }
 
     // For example if a user clicks 2 items while they are loading it would add both causing a visual bug!
@@ -89,6 +61,41 @@ export class ProductChanger {
 
     this.productConfiguratorService.selectedProductChanged.next(this.productConfiguratorService.selectedProduct);
     this.productConfigurator.router.navigate(urlParts).then();
+  }
+
+  private async loadProduct(product: ProductItem): Promise<Object3D> {
+    const modelLoader = new ProductModelLoader(this.productConfiguratorService, this.environmentMapLoader);
+    this.productConfiguratorService.loadingStarted.next();
+
+    const object = new Object3D();
+    const promises: Promise<ModelLoadedEventData>[] = [];
+
+    for (const model of product.models) {
+      promises.push(modelLoader.loadModel(model));
+    }
+
+    const loadedModels: ModelLoadedEventData[] = await Promise.all(promises);
+
+    for (const loadedModel of loadedModels) {
+      if (!loadedModel.object) {
+        continue;
+      }
+
+      this.setObject3DTransform(loadedModel.object, loadedModel.model);
+      object.attach(loadedModel.object);
+    }
+    // Finally set the whole object at origin.
+    this.setObjectAtOrigin(object);
+
+    this.productConfiguratorService.loadingFinished.next();
+    product.object3D = object;
+
+    this.productConfiguratorService.productLoadingFinished.next({
+      product,
+      isSelectedProduct: this.productConfiguratorService.selectedProduct === product,
+    });
+
+    return object;
   }
 
   /**
