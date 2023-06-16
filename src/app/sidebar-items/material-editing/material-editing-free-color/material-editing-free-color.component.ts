@@ -29,7 +29,7 @@ export class MaterialEditingFreeColorComponent implements OnInit, SidebarItem {
     const materials = getMaterialsFromObject(this.object3D);
     for (const material of materials) {
       if ('color' in material) {
-        const color = material['color'] as Color;
+        const color = material.color as Color;
         this.initialColor = `#${color.getHexString()}`;
         break;
       }

@@ -52,7 +52,7 @@ export class MaterialEditingSpecificTextureComponent implements OnInit, SidebarI
 
     for (const material of materials) {
       if ('map' in material) {
-        const texture = material['map'] as Texture;
+        const texture = material.map as Texture;
         imageSrc = texture.image.src ?? '';
         break;
       }

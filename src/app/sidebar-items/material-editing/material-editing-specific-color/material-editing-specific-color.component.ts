@@ -46,7 +46,7 @@ export class MaterialEditingSpecificColorComponent implements OnInit, SidebarIte
     this.currentValue = '';
     for (const material of materials) {
       if ('color' in material) {
-        const color = material['color'] as Color;
+        const color = material.color as Color;
         this.currentValue = `#${color.getHexString()}`;
         break;
       }
