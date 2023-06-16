@@ -28,8 +28,8 @@ export class MaterialEditingFreeColorComponent implements OnInit, SidebarItem {
   ngOnInit(): void {
     const materials = getMaterialsFromObject(this.object3D);
     for (const material of materials) {
-      const color = material['color'] as Color;
-      if (color) {
+      if ('color' in material) {
+        const color = material.color as Color;
         this.initialColor = `#${color.getHexString()}`;
         break;
       }

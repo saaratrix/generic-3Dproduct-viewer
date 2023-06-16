@@ -1,4 +1,4 @@
-import type { OnDestroy, OnInit, Type } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { ChangeDetectorRef, Component, ComponentRef, ElementRef, NgZone, ViewChild, ViewContainerRef } from '@angular/core';
 import type { AnimationEvent } from '@angular/animations';
 import { animate, state, style, transition, trigger } from '@angular/animations';

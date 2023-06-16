@@ -8,6 +8,7 @@ import { addActiveEventItem, createAnimation } from './create-animation';
 import { ActiveProductItemEventType } from '../models/product-item/active-product-item-event-type';
 import { clearEvents } from '../utility/product-item-event-utility';
 import { isPolygonalObject3D } from '../3rd-party/three/types/is-three-js-custom-type';
+import type { MapMaterial } from '../3rd-party/three/types/map-material';
 
 const showDebugCanvas: boolean = false;
 
@@ -16,8 +17,8 @@ interface DebugCanvas {
   debugCanvasContext: CanvasRenderingContext2D | undefined;
 }
 
-interface AnimatedMaterial {
-  material: Material;
+interface AnimatedMaterial<T = Material> {
+  material: T;
   originalTexture: Texture;
 }
 
@@ -90,7 +91,7 @@ export class MaterialTextureChanger {
       // TODO: Try and merge the two active events? This system got a bit complex, should look into a better one most likely.
       event.productItem.activeEvents.splice(indexOf, 1);
 
-      const animatedMaterials = this.getMaterials(event, texture);
+      const animatedMaterials = this.getMaterials<MapMaterial>(event, texture);
       // If duration is 0 just instantly set the new texture.
       // Or if length is 0, to be lazy and use the same early exit!
       if (duration === 0 || animatedMaterials.length === 0) {
@@ -168,17 +169,18 @@ export class MaterialTextureChanger {
     });
   }
 
-  private getMaterials(event: MaterialTextureSwapEventData, newTexture: Texture): AnimatedMaterial[] {
-    const materials: AnimatedMaterial[] = [];
+  private getMaterials<T = Material>(event: MaterialTextureSwapEventData, newTexture: Texture): AnimatedMaterial<T>[] {
+    const materials: AnimatedMaterial<T>[] = [];
 
     if (event.materials) {
       for (const material of event.materials) {
-        if (material[event.textureSlot]) {
+        if (event.textureSlot in material) {
+          const texture = material[event.textureSlot] as Texture;
           materials.push({
-            material,
-            originalTexture: material[event.textureSlot],
+            material: material as T,
+            originalTexture: texture,
           });
-          newTexture.flipY = material[event.textureSlot].flipY;
+          newTexture.flipY = texture.flipY;
         }
       }
     } else {
@@ -189,12 +191,13 @@ export class MaterialTextureChanger {
 
         const objectMaterials = Array.isArray(o.material) ? o.material : [o.material];
         for (const material of objectMaterials) {
-          if (material[event.textureSlot]) {
+          if (event.textureSlot in material) {
+            const texture = material[event.textureSlot] as Texture;
             materials.push({
-              material,
-              originalTexture: material[event.textureSlot],
+              material: material as T,
+              originalTexture: texture,
             });
-            newTexture.flipY = material[event.textureSlot].flipY;
+            newTexture.flipY = texture.flipY;
           }
         }
       });

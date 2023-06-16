@@ -12,6 +12,8 @@ $container-margin: 5px;
   margin-bottom: $container-margin;
   width: 100%;
   background-color: antiquewhite;
+  // Generated from a complementary colour and darkened.
+  color: #082626;
   // just disable blue outline if user text selects on the X
   user-select: none;
 

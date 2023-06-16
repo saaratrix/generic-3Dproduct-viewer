@@ -10,7 +10,6 @@ import { ActiveProductItemEventType } from '../../../3D/models/product-item/acti
 import type { PolygonalObject3D } from '../../../3D/3rd-party/three/types/polygonal-object-3D';
 import type { SidebarItem } from '../../../sidebar/sidebar-item';
 import type { HexColor } from '../../../shared/models/hex-color';
-import { PickingUserdata } from '../../../3D/picking/picking-userdata';
 import { getRelatedObjects } from '../../../3D/picking/get-related-objects';
 
 @Component({
@@ -46,8 +45,8 @@ export class MaterialEditingSpecificColorComponent implements OnInit, SidebarIte
     const materials = getMaterialsFromObject(this.object3D);
     this.currentValue = '';
     for (const material of materials) {
-      const color = material['color'] as Color;
-      if (color) {
+      if ('color' in material) {
+        const color = material.color as Color;
         this.currentValue = `#${color.getHexString()}`;
         break;
       }

@@ -19,7 +19,7 @@ export class ToolbarProductItemComponent implements AfterViewInit {
   ) { }
 
   public ngAfterViewInit(): void {
-    this.productConfiguratorService.setProductItemHTMLElement(this.item, this.containerRef.nativeElement)
+    this.productConfiguratorService.setProductItemHTMLElement(this.item, this.containerRef.nativeElement);
   }
 
   public changeProduct(): void {
