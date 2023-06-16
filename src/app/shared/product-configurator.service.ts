@@ -27,7 +27,7 @@ export class ProductConfiguratorService implements OnDestroy {
    */
   selectedProduct: ProductItem | null = null;
 
-  private subjects: Record<ProductConfigurationEvent, Subject<unknown>> = {} as Record<ProductConfigurationEvent, Subject<unknown>>;
+  private subjects = new Map<ProductConfigurationEvent, Subject<unknown>>();
 
   readonly canvasResized: Subject<Vector2>;
 
@@ -72,17 +72,11 @@ export class ProductConfiguratorService implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    const keys = Object.keys(this.subjects);
-    for (const key of keys) {
-      const subject = this.subjects[key] as Subject<unknown>;
-      if (!subject) {
-        continue;
-      }
-
+    for (const subject of this.subjects.values()) {
       subject.complete();
       subject.unsubscribe();
-      delete this.subjects[key];
     }
+    this.subjects.clear();
   }
 
   public setProductItemHTMLElement(item: ProductItem, element: HTMLElement): void {
@@ -90,11 +84,11 @@ export class ProductConfiguratorService implements OnDestroy {
   }
 
   public dispatch<T = unknown>(eventType: ProductConfigurationEvent, data?: T): void {
-    if (!this.subjects[eventType]) {
+    if (!this.subjects.has(eventType)) {
       return;
     }
 
-    this.subjects[eventType].next(data);
+    this.subjects.get(eventType)!.next(data);
   }
 
   public getSelectedProductHTMLElement(product: ProductItem): HTMLElement | undefined {
@@ -107,7 +101,7 @@ export class ProductConfiguratorService implements OnDestroy {
 
   private createSubject<T>(eventType: ProductConfigurationEvent): Subject<T> {
     const subject = new Subject<T>();
-    this.subjects[eventType] = subject as Subject<unknown>;
+    this.subjects.set(eventType, subject as Subject<unknown>);
     return subject;
   }
 }
