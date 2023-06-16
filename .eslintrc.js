@@ -103,7 +103,7 @@ module.exports = {
       SwitchCase: 1,
     }],
     'keyword-spacing': 'off',
-    '@typescript-eslint/keyword-spacing': ['error'],
+    '@typescript-eslint/keyword-spacing': 'error',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
     'semi': 'off',
@@ -116,5 +116,13 @@ module.exports = {
     }],
     'space-infix-ops': 'off',
     '@typescript-eslint/space-infix-ops': ['error', { int32Hint: true }],
-  }
+  },
+  overrides: [
+    {
+      files: ['*.spec.ts'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+  ],
 };
